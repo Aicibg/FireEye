@@ -12,8 +12,8 @@ public class EmailRunner extends TestRunner{
                     "(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+" +
                     "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
 
-    public EmailRunner(){
-        super("请输入有效的邮件地址！");
+    public EmailRunner(String message){
+        super(message);
     }
 
     @Override

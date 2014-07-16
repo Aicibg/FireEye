@@ -8,8 +8,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class CreditCardRunner extends TestRunner{
 
-    public CreditCardRunner(){
-        super("请输入有效的信用卡号码！");
+    public CreditCardRunner(String message){
+        super(message);
     }
 
     @Override

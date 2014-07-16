@@ -10,8 +10,8 @@ import android.text.TextUtils;
 public class DigitsRunner extends TestRunner{
 
 
-    public DigitsRunner(){
-        super("只能输入数字！");
+    public DigitsRunner(String message){
+        super(message);
     }
 
     @Override

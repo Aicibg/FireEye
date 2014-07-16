@@ -9,8 +9,8 @@ public class MobilePhoneRunner extends TestRunner{
 
     static final String PHONE_REGEX = "^(\\+?\\d{2}-?)?(1[0-9])\\d{9}$";
 
-    public MobilePhoneRunner(){
-        super("请输入有效的手机号码！");
+    public MobilePhoneRunner(String message){
+        super(message);
     }
 
     @Override

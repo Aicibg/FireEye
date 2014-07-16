@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation;
 
+import android.content.Context;
+
 import com.github.chenyoca.validation.runners.BuildInRunners;
 import com.github.chenyoca.validation.runners.TestRunner;
 
@@ -15,18 +17,21 @@ public class Config {
 
     public final List<TestRunner> runners = new ArrayList<TestRunner>();
 
+    private final Context context;
     private TestRunner lastRunner;
     private Types lastType;
 
-    private Config(){}
+    private Config(Context context){
+        this.context = context;
+    }
 
     /**
      * Build a config by type
      * @param type Build in type
      * @return Config instance
      */
-    public static Config build(Types type){
-        Config c = new Config();
+    public static Config build(Context context, Types type){
+        Config c = new Config(context);
         c.add(type);
         return c;
     }
@@ -36,8 +41,8 @@ public class Config {
      * @param runner Custom runner
      * @return Config instance
      */
-    public static Config build(TestRunner runner){
-        Config c = new Config();
+    public static Config build(Context context, TestRunner runner){
+        Config c = new Config(context);
         c.add(runner);
         return c;
     }
@@ -56,12 +61,16 @@ public class Config {
     public Config add(Types type){
         lastType = type;
         autoCommit();
-        lastRunner = BuildInRunners.build(type);
+        lastRunner = BuildInRunners.build(context, type);
         return this;
     }
 
+//    public Config message(Context context, int msgId){
+//        message(context.getResources().getString())
+//    }
+
     public Config message(String message){
-        lastRunner.setValues(message, null, null);
+        lastRunner.setMessage(message);
         return this;
     }
 

@@ -10,8 +10,8 @@ public class HTTPURLRunner extends TestRunner{
     static final String URL_REGEX =
             "^(https?:\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?$";
 
-    public HTTPURLRunner(){
-        super("请输入有效的网址！");
+    public HTTPURLRunner(String message){
+        super(message);
     }
 
     @Override

@@ -9,8 +9,8 @@ import android.text.TextUtils;
  */
 public class NumericRunner extends TestRunner{
 
-    public NumericRunner(){
-        super("请输入有效的数值！");
+    public NumericRunner(String message){
+        super(message);
     }
 
     @Override

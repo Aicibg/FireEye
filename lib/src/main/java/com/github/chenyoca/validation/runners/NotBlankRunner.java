@@ -9,8 +9,8 @@ import android.text.TextUtils;
  */
 public class NotBlankRunner extends TestRunner{
 
-    public NotBlankRunner(){
-        super("输入的内容不能为任何空值！");
+    public NotBlankRunner(String message){
+        super(message);
     }
 
 

@@ -7,8 +7,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class RangeValueRunner extends ValueTestRunner{
 
-    public RangeValueRunner(){
-        super("请输入在[{$1},{$2}]之间的数值！");
+    public RangeValueRunner(String message){
+        super(message);
     }
 
     @Override

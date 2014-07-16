@@ -7,8 +7,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class RangeLengthRunner extends TestRunner{
 
-    public RangeLengthRunner(){
-        super("请输入长度在[{$1},{2$}]之间的内容！");
+    public RangeLengthRunner(String message){
+        super(message);
     }
 
     @Override

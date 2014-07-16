@@ -7,8 +7,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class MaxValueRunner extends ValueTestRunner{
 
-    public MaxValueRunner(){
-        super("请输入小于{$1}的数值！");
+    public MaxValueRunner(String message){
+        super(message);
     }
 
     @Override

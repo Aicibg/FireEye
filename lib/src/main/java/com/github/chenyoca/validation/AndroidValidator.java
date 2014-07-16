@@ -1,5 +1,6 @@
 package com.github.chenyoca.validation;
 
+import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -35,6 +36,8 @@ public class AndroidValidator {
     private MessageDisplay display;
     private ViewGroup form;
 
+    private final Context context;
+
     private SparseArray<String> values = new SparseArray<String>();
 
     public String getMessage(){
@@ -43,8 +46,8 @@ public class AndroidValidator {
 
     private SparseArray<Config> configs = new SparseArray<Config>();
 
-    public AndroidValidator(){
-        this(new MessageDisplay() {
+    public AndroidValidator(Context context){
+        this(context, new MessageDisplay() {
             @Override
             public void dismiss(EditText field) {
                 field.setError(null);
@@ -57,8 +60,9 @@ public class AndroidValidator {
         });
     }
 
-    public AndroidValidator(MessageDisplay display){
+    public AndroidValidator(Context context,MessageDisplay display){
         this.display = display;
+        this.context = context;
     }
 
     /**
@@ -69,7 +73,7 @@ public class AndroidValidator {
      */
     public AndroidValidator putField(int viewId, Types... types){
         if (types.length < 1) throw new IllegalArgumentException("Types array at less 1 parameter !");
-        Config s = Config.build(types[0]).apply();
+        Config s = Config.build(context, types[0]).apply();
         for (int i=1;i<types.length;i++){
             s.add(types[i]).apply();
         }

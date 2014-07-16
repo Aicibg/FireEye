@@ -9,8 +9,8 @@ import android.text.TextUtils;
  */
 public class RequiredRunner extends TestRunner{
 
-    public RequiredRunner(){
-        super("必填选项！");
+    public RequiredRunner(String message){
+        super(message);
     }
 
     @Override

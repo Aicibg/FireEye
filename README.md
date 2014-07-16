@@ -29,7 +29,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:android-validation:2.1-SNAPSHOT'
+        compile 'com.github.chenyoca:android-validation:2.2-SNAPSHOT'
     }
 
 ```
@@ -43,15 +43,15 @@ Add dependency
 * **Host** (主机地址)
 * **URL** (Http URL)
 * **IPv4** (IPv4地址)
-* **LengthInRange** (指定长度范围)
+* **RangeLength** (指定长度范围)
 * **MinLength** (最小长度)
 * **MaxLength** (最大长度)
 * **Numeric** (数值)
 * **CreditCard** (信用卡号)
-* **ValueInRange** (最值范围)
+* **RangeValue** (最值范围)
 * **MinValue** (最小值)
 * **MaxValue** (最大值)
-* **ChineseMobilePhone** (中国的手机号码)
+* **MobilePhone** (中国的手机号码)
 
 ## 如何使用？
 
@@ -65,7 +65,7 @@ Add dependency
     // Apply 用于每次添加校验规则，在 add() 方法中，会自动将保存前一条配置，
     // 但在最后一条规则配置后，记得调用 apply() 确认规则配置完成。
 
-    final Config conf = Config.build(Types.Required).message("必填选项").apply();
+    final Config conf = Config.build(context, Types.Required).message("必填选项").apply();
     conf.add(Types.LengthInMax).values(20).apply();
     conf.add(Types.Email).apply();
     
@@ -104,7 +104,7 @@ Add dependency
         }
     };
 
-    final FormValidator fv = new FormValidator();
+    final FormValidator fv = new FormValidator(context);
     // FormValidator.addField(*Config instance*, *view id for EditText*)
     final Config conf = Config.build(Types.Required).message("必填选项").apply();
     conf.add(Types.LengthInMax).values(20).apply();
@@ -129,22 +129,22 @@ Add dependency
 //      final AndroidValidator av = new AndroidValidator();
 
 //      指定自定义显示出错消息的方式，
-    final AndroidValidator av = new AndroidValidator(messageDisplay);
+    final AndroidValidator av = new AndroidValidator(context, messageDisplay);
     av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
     av.putField(R.id.form_field_2, Types.CreditCard);
     av.putField(R.id.form_field_3, Types.Digits);
     av.putField(R.id.form_field_4, Types.Email);
-    av.putField(R.id.form_field_5, Config.build(Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
+    av.putField(R.id.form_field_5, Config.build(context, Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
     av.putField(R.id.form_field_6, Types.Host);
     av.putField(R.id.form_field_7, Types.URL);
-    av.putField(R.id.form_field_8, Config.build(Types.MaxLength).values(5).apply());
-    av.putField(R.id.form_field_9, Config.build(Types.MinLength).values(4).apply());
-    av.putField(R.id.form_field_10, Config.build(Types.RangeLength).values(4,8).apply());
+    av.putField(R.id.form_field_8, Config.build(context, Types.MaxLength).values(5).apply());
+    av.putField(R.id.form_field_9, Config.build(context, Types.MinLength).values(4).apply());
+    av.putField(R.id.form_field_10, Config.build(context, Types.RangeLength).values(4,8).apply());
     av.putField(R.id.form_field_11, Types.NotBlank);
     av.putField(R.id.form_field_12, Types.Numeric);
-    av.putField(R.id.form_field_13, Config.build(Types.MaxValue).values(100).apply());
-    av.putField(R.id.form_field_14, Config.build(Types.MinValue).values(20).apply());
-    av.putField(R.id.form_field_15, Config.build(Types.RangeValue).values(18, 30).apply());
+    av.putField(R.id.form_field_13, Config.build(context, Types.MaxValue).values(100).apply());
+    av.putField(R.id.form_field_14, Config.build(context, Types.MinValue).values(20).apply());
+    av.putField(R.id.form_field_15, Config.build(context, Types.RangeValue).values(18, 30).apply());
         
 ```
 

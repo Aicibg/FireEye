@@ -7,8 +7,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class MinLengthRunner extends TestRunner{
 
-    public MinLengthRunner(){
-        super("请输入长度大于{$1}的内容！");
+    public MinLengthRunner(String message){
+        super(message);
     }
 
     @Override

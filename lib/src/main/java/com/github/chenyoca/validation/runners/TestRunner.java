@@ -42,35 +42,6 @@ public abstract class TestRunner {
 
     protected abstract boolean test(String inputValue);
 
-//    protected boolean dispatch(CharSequence inputValue){
-//        //
-////        if (NumericRunner.isNumeric(String.valueOf(inputValue))){
-////            System.out.println(">>> 输入的内容为数值型：" + inputValue);
-////            System.out.println(">>> 参数类型为：" + valuesType.name());
-////            if (ValuesType.Int.equals(valuesType)){
-////                return performIntInput(inputValue);
-////            }else{
-////                return performDoubleInput(inputValue);
-////            }
-////        }else{
-////            System.out.println(">>> 输入的内容不是数值型！！！");
-////            return false;
-////        }
-//        //
-//        switch (valuesType){
-//            case Int:
-//                return performIntInput(inputValue);
-//
-//            case Float:
-//                return performDoubleInput(inputValue);
-//
-//            case String:
-//                return testStringValue(String.valueOf(inputValue), strValue1, strValue2);
-//
-//            default: return false;
-//        }
-//    }
-
     protected void checkIntFlowValues(String name){
         if (ValuesType.String.equals(valuesType))
             throw new IllegalArgumentException(name + " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
