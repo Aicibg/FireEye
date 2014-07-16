@@ -258,7 +258,7 @@ public class AndroidValidator {
         }else if (TextUtils.isEmpty(input)){
             return new ResultWrapper(true, "NO_INPUT_BUT_NOT_REQUIRED", String.valueOf(input));
         }
-        
+
         if ( ! passed){
             if (display != null) display.show(field, message);
             return new ResultWrapper(false, message, null);
