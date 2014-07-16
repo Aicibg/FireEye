@@ -19,7 +19,7 @@ public class IPv4Runner extends TestRunner{
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return match(IPV4_REGEX, inputValue);
+        return isMatched(IPV4_REGEX, inputValue);
     }
 
 }

@@ -38,9 +38,9 @@ public abstract class TestRunner {
 
     protected boolean dispatch(CharSequence inputValue){
         performLazyLoader();
+        formatMessage();
         switch (usingValuesType){
             case USING_INTEGER_VALUES:
-                if (message != null) message = String.format(message, iValue1, iValue2);
                 int iInputValue = 0;
                 try{
                     iInputValue = Integer.valueOf(inputValue.toString());
@@ -50,7 +50,6 @@ public abstract class TestRunner {
                 return testIntValue(iInputValue, iValue1,iValue2);
 
             case USING_DOUBLE_VALUES:
-                if (message != null) message = String.format(message, dValue1, dValue2);
                 double dInputValue = 0;
                 try{
                     dInputValue = Double.valueOf(inputValue.toString());
@@ -60,10 +59,24 @@ public abstract class TestRunner {
                 return testDoubleValue(dInputValue, dValue1, dValue2);
 
             case USING_STRING_VALUES:
-                if (message != null) message = String.format(message, sValue1, sValue2);
                 return testStringValue(String.valueOf(inputValue), sValue1, sValue2);
 
             default: return false;
+        }
+    }
+
+    protected void formatMessage(){
+        if (message == null) return;
+        switch (usingValuesType){
+            case USING_DOUBLE_VALUES:
+                message = message.replace("{$1}",""+dValue1).replace("{$2}",""+dValue2);
+                break;
+            case USING_INTEGER_VALUES:
+                message = message.replace("{$1}",""+iValue1).replace("{$2}",""+iValue2);
+                break;
+            case USING_STRING_VALUES:
+                message = message.replace("{$1}",sValue1).replace("{$2}",sValue2);
+                break;
         }
     }
 
@@ -110,7 +123,7 @@ public abstract class TestRunner {
     protected boolean testDoubleValue(double inputValue, double val1, double val2){ return false; }
     protected boolean testStringValue(String inputValue, String val1, String bal2){ return false; }
 
-    protected static boolean match(String regex, CharSequence inputValue){
+    protected static boolean isMatched(String regex, CharSequence inputValue){
         Pattern p = Pattern.compile(regex);
         return p.matcher(inputValue).matches();
     }

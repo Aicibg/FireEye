@@ -16,7 +16,7 @@ public class CreditCardRunner extends TestRunner{
     @Override
     public boolean test(CharSequence inputValue) {
         // accept only spaces, digits and dashes
-        if ( ! match("[\\d -]*", inputValue) ) {
+        if ( ! isMatched("[\\d -]*", inputValue) ) {
             return false;
         }
 

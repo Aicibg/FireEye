@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.github.chenyoca.validation.AndroidValidator;
-import com.github.chenyoca.validation.Display;
+import com.github.chenyoca.validation.MessageDisplay;
 import com.github.chenyoca.validation.supports.EditTextLazyLoader;
 import com.github.chenyoca.validation.Types;
 import com.github.chenyoca.validation.Config;
@@ -17,7 +17,10 @@ import com.github.chenyoca.validation.ResultWrapper;
 
 public class MainActivity extends Activity {
 
-    Display testDisplay = new Display() {
+    /**
+     * 自定义显示出错消息的方式，默认是在 EditText 右边显示一个浮动提示框。
+     */
+    MessageDisplay messageDisplay = new MessageDisplay() {
         @Override
         public void dismiss(EditText field) {
             field.setError(null);
@@ -45,7 +48,7 @@ public class MainActivity extends Activity {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResultWrapper rw = AndroidValidator.testField(test, conf, testDisplay);
+                ResultWrapper rw = AndroidValidator.testField(test, conf, messageDisplay);
                 int color = rw.passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 commit.setTextColor(getResources().getColor(color));
@@ -53,22 +56,27 @@ public class MainActivity extends Activity {
         });
 
         final LinearLayout form = (LinearLayout) findViewById(R.id.form);
-        final AndroidValidator av = new AndroidValidator(testDisplay);
-        av.putField(R.id.form_field_1, Types.ChineseMobilePhone, Types.Required);
+
+//      默认是在 EditText 右边显示一个浮动提示框。
+//      final AndroidValidator av = new AndroidValidator();
+
+//      指定自定义显示出错消息的方式，
+        final AndroidValidator av = new AndroidValidator(messageDisplay);
+        av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
         av.putField(R.id.form_field_2, Types.CreditCard);
         av.putField(R.id.form_field_3, Types.Digits);
         av.putField(R.id.form_field_4, Types.Email);
         av.putField(R.id.form_field_5, Config.build(Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
         av.putField(R.id.form_field_6, Types.Host);
         av.putField(R.id.form_field_7, Types.URL);
-        av.putField(R.id.form_field_8, Types.MaxLength);
-        av.putField(R.id.form_field_9, Types.MinLength);
-        av.putField(R.id.form_field_10, Types.LengthInRange);
+        av.putField(R.id.form_field_8, Config.build(Types.MaxLength).values(5).apply());
+        av.putField(R.id.form_field_9, Config.build(Types.MinLength).values(4).apply());
+        av.putField(R.id.form_field_10, Config.build(Types.RangeLength).values(4,8).apply());
         av.putField(R.id.form_field_11, Types.NotBlank);
         av.putField(R.id.form_field_12, Types.Numeric);
         av.putField(R.id.form_field_13, Config.build(Types.MaxValue).values(100).apply());
         av.putField(R.id.form_field_14, Config.build(Types.MinValue).values(20).apply());
-        av.putField(R.id.form_field_15, Config.build(Types.ValueInRange).values(18, 30).apply());
+        av.putField(R.id.form_field_15, Config.build(Types.RangeValue).values(18, 30).apply());
 
         av.bind(form)
           .applyInputType();

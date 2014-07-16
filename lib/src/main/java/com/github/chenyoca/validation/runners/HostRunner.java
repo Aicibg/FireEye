@@ -16,7 +16,7 @@ public class HostRunner extends IPv4Runner{
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return super.test(inputValue) || match(HOST_REGEX, inputValue);
+        return super.test(inputValue) || isMatched(HOST_REGEX, inputValue);
     }
 
 }
