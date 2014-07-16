@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.ChineseMobilePhoneRunner;
+import com.github.chenyoca.validation.runners.MobilePhoneRunner;
 import com.github.chenyoca.validation.runners.CreditCardRunner;
 import com.github.chenyoca.validation.runners.DigitsRunner;
 import com.github.chenyoca.validation.runners.EmailRunner;
 import com.github.chenyoca.validation.runners.HTTPURLRunner;
 import com.github.chenyoca.validation.runners.HostRunner;
 import com.github.chenyoca.validation.runners.IPv4Runner;
-import com.github.chenyoca.validation.runners.LengthInMaxRunner;
-import com.github.chenyoca.validation.runners.LengthInRangeRunner;
+import com.github.chenyoca.validation.runners.MaxLengthRunner;
+import com.github.chenyoca.validation.runners.RangeLengthRunner;
 import com.github.chenyoca.validation.runners.NumericRunner;
 import com.github.chenyoca.validation.runners.RequiredRunner;
 import com.github.chenyoca.validation.runners.TestRunner;
@@ -28,7 +28,7 @@ import com.github.chenyoca.validation.runners.TestRunner;
 public class AndroidValidator {
 
     private String message;
-    private Display display;
+    private MessageDisplay display;
     private ViewGroup form;
 
     private SparseArray<String> values = new SparseArray<String>();
@@ -40,7 +40,7 @@ public class AndroidValidator {
     private SparseArray<Config> configs = new SparseArray<Config>();
 
     public AndroidValidator(){
-        this(new Display() {
+        this(new MessageDisplay() {
             @Override
             public void dismiss(EditText field) {
                 field.setError(null);
@@ -53,7 +53,7 @@ public class AndroidValidator {
         });
     }
 
-    public AndroidValidator(Display display){
+    public AndroidValidator(MessageDisplay display){
         this.display = display;
     }
 
@@ -109,7 +109,7 @@ public class AndroidValidator {
                 if (conf == null) continue;
                 int inputType = InputType.TYPE_CLASS_TEXT;
                 for (TestRunner r : conf.runners){
-                    if (r instanceof ChineseMobilePhoneRunner){
+                    if (r instanceof MobilePhoneRunner){
                         inputType = InputType.TYPE_CLASS_PHONE;
                     }else if (r instanceof CreditCardRunner || r instanceof NumericRunner){
                         inputType = InputType.TYPE_CLASS_NUMBER;
@@ -120,9 +120,9 @@ public class AndroidValidator {
                         item.setSingleLine(true);
                     }else if (r instanceof HostRunner || r instanceof HTTPURLRunner || r instanceof IPv4Runner){
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
-                    }else if (r instanceof LengthInMaxRunner){
+                    }else if (r instanceof MaxLengthRunner){
                         item.setMaxHeight(r.iValue1);
-                    }else if (r instanceof LengthInRangeRunner){
+                    }else if (r instanceof RangeLengthRunner){
                         item.setMaxHeight(r.iValue2);
                     }
                 }
@@ -225,7 +225,7 @@ public class AndroidValidator {
      * Set a custom display interface.
      * @param display display interface
      */
-    public void setDisplay(Display display){
+    public void setDisplay(MessageDisplay display){
         this.display = display;
     }
 
@@ -235,7 +235,7 @@ public class AndroidValidator {
      * @param conf Test configuration .
      * @return Test result wrapper.
      */
-    public static ResultWrapper testField(EditText field, Config conf, Display display){
+    public static ResultWrapper testField(EditText field, Config conf, MessageDisplay display){
         if (conf == null) return new ResultWrapper(false,"Field configuration CANNOT BE NULL !!", null);
         boolean passed = true;
         String message = null;

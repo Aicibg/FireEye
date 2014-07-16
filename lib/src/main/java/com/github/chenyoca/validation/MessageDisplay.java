@@ -7,7 +7,7 @@ import android.widget.EditText;
  * YooJia.Chen@gmail.com
  * 2014-07-14
  */
-public interface Display {
+public interface MessageDisplay {
     /**
      * Dismiss the message
      * @param field Target view.

@@ -18,7 +18,7 @@ public class EmailRunner extends TestRunner{
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return match(EMAIL_REGEX, inputValue);
+        return isMatched(EMAIL_REGEX, inputValue);
     }
 
 }

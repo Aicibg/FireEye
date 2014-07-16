@@ -5,10 +5,10 @@ package com.github.chenyoca.validation.runners;
  * Date: 2014-06-26
  * Value in max
  */
-public class ValueInMaxRunner extends TestRunner{
+public class MaxValueRunner extends TestRunner{
 
-    public ValueInMaxRunner(){
-        super("请输入小于%0f的数值！");
+    public MaxValueRunner(){
+        super("请输入小于{$1}的数值！");
     }
 
     @Override
@@ -28,6 +28,6 @@ public class ValueInMaxRunner extends TestRunner{
 
     @Override
     protected boolean testStringValue(String inputValue, String val1, String bal2) {
-        throw new IllegalArgumentException("MaxValue Test ONLY accept int/double/float parameters!");
+        throw new IllegalArgumentException("MaxValue Test ONLY accept int/double/float values!");
     }
 }

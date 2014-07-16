@@ -90,6 +90,20 @@ Add dependency
 
 ```java
 
+    // 自定义显示出错消息的方式，默认是在 EditText 右边显示一个浮动提示框。
+    MessageDisplay messageDisplay = new MessageDisplay() {
+        @Override
+        public void dismiss(EditText field) {
+            field.setError(null);
+        }
+
+        @Override
+        public void show(EditText field, String message) {
+            field.setError(message);
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
+    };
+
     final FormValidator fv = new FormValidator();
     // FormValidator.addField(*Config instance*, *view id for EditText*)
     final Config conf = Config.build(Types.Required).message("必填选项").apply();
@@ -110,23 +124,27 @@ Add dependency
     });
 
     final LinearLayout form = (LinearLayout) findViewById(R.id.form);
-    final AndroidValidator av = new AndroidValidator(testDisplay);
 
-    av.putField(R.id.form_field_1, Types.ChineseMobilePhone, Types.Required);
+//      默认是在 EditText 右边显示一个浮动提示框。
+//      final AndroidValidator av = new AndroidValidator();
+
+//      指定自定义显示出错消息的方式，
+    final AndroidValidator av = new AndroidValidator(messageDisplay);
+    av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
     av.putField(R.id.form_field_2, Types.CreditCard);
     av.putField(R.id.form_field_3, Types.Digits);
     av.putField(R.id.form_field_4, Types.Email);
-    av.putField(R.id.form_field_5, Config.build(Types.EqualTo).loader(new EditTextLazyLoader(test)).apply());
+    av.putField(R.id.form_field_5, Config.build(Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
     av.putField(R.id.form_field_6, Types.Host);
-    av.putField(R.id.form_field_7, Types.HTTPURL);
-    av.putField(R.id.form_field_8, Types.LengthInMax);
-    av.putField(R.id.form_field_9, Types.LengthInMin);
-    av.putField(R.id.form_field_10, Types.LengthInRange);
+    av.putField(R.id.form_field_7, Types.URL);
+    av.putField(R.id.form_field_8, Config.build(Types.MaxLength).values(5).apply());
+    av.putField(R.id.form_field_9, Config.build(Types.MinLength).values(4).apply());
+    av.putField(R.id.form_field_10, Config.build(Types.RangeLength).values(4,8).apply());
     av.putField(R.id.form_field_11, Types.NotBlank);
     av.putField(R.id.form_field_12, Types.Numeric);
-    av.putField(R.id.form_field_13, Config.build(Types.ValueInMax).values(100).apply());
-    av.putField(R.id.form_field_14, Config.build(Types.ValueInMin).values(20).apply());
-    av.putField(R.id.form_field_15, Config.build(Types.ValueInRange).values(18, 30).apply());
+    av.putField(R.id.form_field_13, Config.build(Types.MaxValue).values(100).apply());
+    av.putField(R.id.form_field_14, Config.build(Types.MinValue).values(20).apply());
+    av.putField(R.id.form_field_15, Config.build(Types.RangeValue).values(18, 30).apply());
         
 ```
 
@@ -152,7 +170,7 @@ Add dependency
 
     // 先绑定校验表单
     fv.bind(form)
-          .applyTypeToView(); // 将校验规则应用到EditText中，使得输入法根据校验配置，显示不同的布局。
+          .applyInputType(); // 将校验规则应用到EditText中，使得输入法根据校验配置，显示不同的布局。
           
     fv.test();
     // Or fv.testAll();
