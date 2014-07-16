@@ -15,7 +15,7 @@ public class NotBlankRunner extends TestRunner{
 
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         boolean empty = TextUtils.isEmpty(inputValue);
         return ! empty && ! isMatched("^\\s*$", inputValue);
     }

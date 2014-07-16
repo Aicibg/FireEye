@@ -12,10 +12,9 @@ public class MinLengthRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
-        if (usingValuesType != USING_INTEGER_VALUES) throw new IllegalArgumentException("RangeLength Test ONLY accept int parameters!");
-        formatMessage();
-        int minLength = iValue1;
+    public boolean test(String inputValue) {
+        checkIntValues("MinLength Test");
+        int minLength = intValue1;
         return inputValue.length() >= minLength;
     }
 

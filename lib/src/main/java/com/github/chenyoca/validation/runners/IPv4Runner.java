@@ -9,16 +9,12 @@ public class IPv4Runner extends TestRunner{
 
     static final String IPV4_REGEX = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
-    protected IPv4Runner(String message){
-        super(message);
-    }
-
     public IPv4Runner(){
         super("请输入有效的IP地址！");
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         return isMatched(IPV4_REGEX, inputValue);
     }
 

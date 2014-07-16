@@ -8,19 +8,18 @@ package com.github.chenyoca.validation.runners;
  */
 public class CreditCardRunner extends TestRunner{
 
-
     public CreditCardRunner(){
         super("请输入有效的信用卡号码！");
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         // accept only spaces, digits and dashes
         if ( ! isMatched("[\\d -]*", inputValue) ) {
             return false;
         }
 
-        String value = String.valueOf(inputValue).replaceAll("\\D", "");
+        String value = inputValue.replaceAll("\\D", "");
 
         // Basing min and max length on
         // http://developer.ean.com/general_info/Valid_Credit_Card_Types

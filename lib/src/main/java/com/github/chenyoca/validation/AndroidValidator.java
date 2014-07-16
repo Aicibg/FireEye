@@ -1,5 +1,6 @@
 package com.github.chenyoca.validation;
 
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -8,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.MobilePhoneRunner;
 import com.github.chenyoca.validation.runners.CreditCardRunner;
 import com.github.chenyoca.validation.runners.DigitsRunner;
 import com.github.chenyoca.validation.runners.EmailRunner;
@@ -16,8 +16,12 @@ import com.github.chenyoca.validation.runners.HTTPURLRunner;
 import com.github.chenyoca.validation.runners.HostRunner;
 import com.github.chenyoca.validation.runners.IPv4Runner;
 import com.github.chenyoca.validation.runners.MaxLengthRunner;
-import com.github.chenyoca.validation.runners.RangeLengthRunner;
+import com.github.chenyoca.validation.runners.MaxValueRunner;
+import com.github.chenyoca.validation.runners.MinValueRunner;
+import com.github.chenyoca.validation.runners.MobilePhoneRunner;
 import com.github.chenyoca.validation.runners.NumericRunner;
+import com.github.chenyoca.validation.runners.RangeLengthRunner;
+import com.github.chenyoca.validation.runners.RangeValueRunner;
 import com.github.chenyoca.validation.runners.RequiredRunner;
 import com.github.chenyoca.validation.runners.TestRunner;
 
@@ -109,21 +113,25 @@ public class AndroidValidator {
                 if (conf == null) continue;
                 int inputType = InputType.TYPE_CLASS_TEXT;
                 for (TestRunner r : conf.runners){
-                    if (r instanceof MobilePhoneRunner){
-                        inputType = InputType.TYPE_CLASS_PHONE;
-                    }else if (r instanceof CreditCardRunner || r instanceof NumericRunner){
-                        inputType = InputType.TYPE_CLASS_NUMBER;
-                    }else if (r instanceof DigitsRunner){
-                        inputType = InputType.TYPE_NUMBER_FLAG_SIGNED;
+                    if (r instanceof MobilePhoneRunner
+                            || r instanceof NumericRunner
+                            || r instanceof DigitsRunner
+                            || r instanceof MaxValueRunner
+                            || r instanceof MinValueRunner
+                            || r instanceof RangeValueRunner
+                            || r instanceof IPv4Runner
+                            || r instanceof CreditCardRunner
+                            ){
+                        inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL;
                     }else if (r instanceof EmailRunner){
                         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                         item.setSingleLine(true);
-                    }else if (r instanceof HostRunner || r instanceof HTTPURLRunner || r instanceof IPv4Runner){
+                    }else if (r instanceof HTTPURLRunner || r instanceof HostRunner){
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
                     }else if (r instanceof MaxLengthRunner){
-                        item.setMaxHeight(r.iValue1);
+                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue1)});
                     }else if (r instanceof RangeLengthRunner){
-                        item.setMaxHeight(r.iValue2);
+                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue2)});
                     }
                 }
                 item.setInputType(inputType);
@@ -136,7 +144,7 @@ public class AndroidValidator {
      * Set all fields `single line`
      * @return AndroidValidator instance.
      */
-    public AndroidValidator singleLine(){
+    public AndroidValidator setSingleLine(){
         checkBindForm();
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
@@ -239,17 +247,18 @@ public class AndroidValidator {
         if (conf == null) return new ResultWrapper(false,"Field configuration CANNOT BE NULL !!", null);
         boolean passed = true;
         String message = null;
-        CharSequence input = field.getText();
+        String input = String.valueOf(field.getText());
         if (display != null) display.dismiss(field);
 
         // If required
         TestRunner firstRunner = conf.runners.get(0);
         if (firstRunner instanceof RequiredRunner){
-            passed = firstRunner.test(input);
+            passed = firstRunner.perform(input);
             message = firstRunner.getMessage();
         }else if (TextUtils.isEmpty(input)){
             return new ResultWrapper(true, "NO_INPUT_BUT_NOT_REQUIRED", String.valueOf(input));
         }
+
         if ( ! passed){
             if (display != null) display.show(field, message);
             return new ResultWrapper(false, message, null);
@@ -257,7 +266,7 @@ public class AndroidValidator {
 
         for (TestRunner r : conf.runners){
             if (r instanceof RequiredRunner) continue;
-            passed = r.test(input);
+            passed = r.perform(input);
             message = r.getMessage();
             if ( !passed){
                 if (display != null) display.show(field, message);

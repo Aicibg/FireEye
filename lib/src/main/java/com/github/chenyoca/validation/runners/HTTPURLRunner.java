@@ -15,7 +15,7 @@ public class HTTPURLRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         return isMatched(URL_REGEX, inputValue);
     }
 
