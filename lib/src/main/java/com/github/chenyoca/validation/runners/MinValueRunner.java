@@ -18,12 +18,12 @@ public class MinValueRunner extends TestRunner{
 
     @Override
     protected boolean testIntValue(int inputValue, int val1, int val2) {
-        return inputValue >= val1;
+        return inputValue >= val1 || inputValue >= dValue1;
     }
 
     @Override
     protected boolean testDoubleValue(double inputValue, double val1, double val2) {
-        return inputValue >= val1;
+        return inputValue >= val1 || inputValue >= iValue1;
     }
 
     @Override

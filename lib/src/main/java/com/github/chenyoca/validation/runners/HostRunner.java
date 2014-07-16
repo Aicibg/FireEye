@@ -5,7 +5,7 @@ package com.github.chenyoca.validation.runners;
  * Date: 2014-06-26
  * Host
  */
-public class HostRunner extends IPv4Runner{
+public class HostRunner extends TestRunner{
 
     static final String HOST_REGEX = "^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,65}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$";
 
@@ -16,7 +16,7 @@ public class HostRunner extends IPv4Runner{
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return super.test(inputValue) || isMatched(HOST_REGEX, inputValue);
+        return isMatched(IPv4Runner.IPV4_REGEX, inputValue) || isMatched(HOST_REGEX, inputValue);
     }
 
 }

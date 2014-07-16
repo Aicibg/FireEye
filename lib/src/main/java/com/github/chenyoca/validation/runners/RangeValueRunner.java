@@ -18,12 +18,14 @@ public class RangeValueRunner extends TestRunner{
 
     @Override
     protected boolean testIntValue(int inputValue, int min, int max) {
-        return min <= inputValue && inputValue <= max;
+        return (min <= inputValue && inputValue <= max)
+                || dValue1 <= inputValue && inputValue <= dValue2;
     }
 
     @Override
     protected boolean testDoubleValue(double inputValue, double min, double max) {
-        return min <= inputValue && inputValue <= max;
+        return (min <= inputValue && inputValue <= max) ||
+                iValue1 <= inputValue && inputValue <= iValue2;
     }
 
     @Override
