@@ -14,13 +14,13 @@ public enum Types {
     Host,
     URL,
     IPv4,
-    LengthInRange,
+    RangeLength,
     MinLength,
     MaxLength,
     Numeric,
     CreditCard,
-    ValueInRange,
+    RangeValue,
     MinValue,
     MaxValue,
-    ChineseMobilePhone
+    MobilePhone
 }

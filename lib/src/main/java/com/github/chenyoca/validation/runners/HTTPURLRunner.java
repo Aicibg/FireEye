@@ -16,7 +16,7 @@ public class HTTPURLRunner extends TestRunner{
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return match(URL_REGEX, inputValue);
+        return isMatched(URL_REGEX, inputValue);
     }
 
 }

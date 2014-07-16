@@ -5,10 +5,10 @@ package com.github.chenyoca.validation.runners;
  * Date: 2014-06-26
  * Value in range
  */
-public class ValueInRangeRunner extends TestRunner{
+public class RangeValueRunner extends TestRunner{
 
-    public ValueInRangeRunner(){
-        super("请输入在[%0f,%0f]的数值！");
+    public RangeValueRunner(){
+        super("请输入在[{$1},{$2}]的数值！");
     }
 
     @Override
@@ -28,6 +28,6 @@ public class ValueInRangeRunner extends TestRunner{
 
     @Override
     protected boolean testStringValue(String inputValue, String val1, String bal2) {
-        throw new IllegalArgumentException("ValueInRange Test ONLY accept int/double/float parameters!");
+        throw new IllegalArgumentException("RangeValue Test ONLY accept int/double/float values!");
     }
 }

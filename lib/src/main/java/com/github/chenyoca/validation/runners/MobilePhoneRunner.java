@@ -5,17 +5,17 @@ package com.github.chenyoca.validation.runners;
  * Date: 2014-06-26
  * Chinese mobile phone
  */
-public class ChineseMobilePhoneRunner extends TestRunner{
+public class MobilePhoneRunner extends TestRunner{
 
     static final String PHONE_REGEX = "^(\\+?\\d{2}-?)?(1[0-9])\\d{9}$";
 
-    public ChineseMobilePhoneRunner(){
+    public MobilePhoneRunner(){
         super("请输入有效的手机号码！");
     }
 
     @Override
     public boolean test(CharSequence inputValue) {
-        return match(PHONE_REGEX, inputValue);
+        return isMatched(PHONE_REGEX, inputValue);
     }
 
 }
