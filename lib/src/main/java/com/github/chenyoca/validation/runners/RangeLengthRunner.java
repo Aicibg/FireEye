@@ -14,8 +14,8 @@ public class RangeLengthRunner extends TestRunner{
     @Override
     public boolean test(String inputValue) {
         checkIntValues("RangeLength Test");
-        int minLength = extraIntValue1;
-        int maxLength = extraIntValue2;
+        int minLength = extraInt[0];
+        int maxLength = extraInt[1];
         int length = inputValue.length();
         return minLength <= length && length <= maxLength;
     }

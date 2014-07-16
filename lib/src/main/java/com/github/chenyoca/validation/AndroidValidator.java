@@ -131,9 +131,13 @@ public class AndroidValidator {
                     }else if (r instanceof HTTPURLRunner || r instanceof HostRunner){
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
                     }else if (r instanceof MaxLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.extraIntValue1)});
+                        item.setFilters(
+                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[0])}
+                        );
                     }else if (r instanceof RangeLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.extraIntValue2)});
+                        item.setFilters(
+                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[1])}
+                        );
                     }
                 }
                 item.setInputType(inputType);

@@ -19,8 +19,8 @@ public abstract class TestRunner {
 
     protected String message;
 
-    protected final double[] extraFloatValues = new double[2];
-    protected final int[] extraIntValues = new int[2];
+    protected final double[] extraFloat = new double[2];
+    public final int[] extraInt = new int[2];// InputType used this properties.
     protected final String[] extraStringValues = new String[2];
 
     private LazyLoader lazyLoader;
@@ -53,12 +53,12 @@ public abstract class TestRunner {
         if (message == null) return;
         switch (valuesType){
             case Float:
-                message = message.replace("{$1}","" + extraFloatValues[0])
-                        .replace("{$2}","" + extraFloatValues[1]);
+                message = message.replace("{$1}","" + extraFloat[0])
+                        .replace("{$2}","" + extraFloat[1]);
                 break;
             case Int:
-                message = message.replace("{$1}","" + extraIntValues[0])
-                        .replace("{$2}","" + extraIntValues[1]);
+                message = message.replace("{$1}","" + extraInt[0])
+                        .replace("{$2}","" + extraInt[1]);
                 break;
             case String:
                 if (extraStringValues[0] != null){
@@ -100,10 +100,10 @@ public abstract class TestRunner {
         valuesType = ValuesType.Int;
         if (values.length > 0){
             if ( 1 == values.length){
-                extraIntValues[0] = values[0];
+                extraInt[0] = values[0];
             }else if ( 2 == values.length){
-                extraIntValues[0] = values[0];
-                extraIntValues[1] = values[1];
+                extraInt[0] = values[0];
+                extraInt[1] = values[1];
             }
         }
     }
@@ -124,10 +124,10 @@ public abstract class TestRunner {
         valuesType = ValuesType.Float;
         if (values.length > 0){
             if ( 1 == values.length){
-                extraFloatValues[0] = values[0];
+                extraFloat[0] = values[0];
             }else if ( 2 == values.length){
-                extraFloatValues[0] = values[0];
-                extraFloatValues[1] = values[1];
+                extraFloat[0] = values[0];
+                extraFloat[1] = values[1];
             }
         }
     }
