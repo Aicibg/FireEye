@@ -12,10 +12,9 @@ public class MaxLengthRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
-        if (usingValuesType != USING_INTEGER_VALUES) throw new IllegalArgumentException("MaxLength Test ONLY accept int values!");
-        formatMessage();
-        int maxLength = iValue1;
+    public boolean test(String inputValue) {
+        checkIntValues("MaxLength Test");
+        int maxLength = intValue1;
         return inputValue.length() <= maxLength;
     }
 

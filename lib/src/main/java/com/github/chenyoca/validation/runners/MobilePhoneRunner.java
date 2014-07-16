@@ -14,7 +14,7 @@ public class MobilePhoneRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         return isMatched(PHONE_REGEX, inputValue);
     }
 

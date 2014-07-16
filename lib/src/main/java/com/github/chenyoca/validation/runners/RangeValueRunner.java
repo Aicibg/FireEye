@@ -5,31 +5,19 @@ package com.github.chenyoca.validation.runners;
  * Date: 2014-06-26
  * Value in range
  */
-public class RangeValueRunner extends TestRunner{
+public class RangeValueRunner extends ValueTestRunner{
 
     public RangeValueRunner(){
         super("请输入在[{$1},{$2}]的数值！");
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
-        return dispatch(inputValue);
+    protected boolean testWithIntValues(double inputValue) {
+        return intValue1 <= inputValue && inputValue <= intValue2;
     }
 
     @Override
-    protected boolean testIntValue(int inputValue, int min, int max) {
-        return (min <= inputValue && inputValue <= max)
-                || dValue1 <= inputValue && inputValue <= dValue2;
-    }
-
-    @Override
-    protected boolean testDoubleValue(double inputValue, double min, double max) {
-        return (min <= inputValue && inputValue <= max) ||
-                iValue1 <= inputValue && inputValue <= iValue2;
-    }
-
-    @Override
-    protected boolean testStringValue(String inputValue, String val1, String bal2) {
-        throw new IllegalArgumentException("RangeValue Test ONLY accept int/double/float values!");
+    protected boolean testWithFloatValues(double inputValue) {
+        return floatValue1 <= inputValue && inputValue <= floatValue2;
     }
 }

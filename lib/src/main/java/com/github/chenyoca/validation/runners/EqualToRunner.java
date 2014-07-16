@@ -12,22 +12,14 @@ public class EqualToRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
-        return dispatch(inputValue);
+    public boolean test(String inputValue) {
+        String value = null;
+        switch (valuesType){
+            case Int: value = String.valueOf(intValue1); break;
+            case Float: value = String.valueOf(floatValue1); break;
+            case String: value = strValue1; break;
+        }
+        return inputValue.equals(value);
     }
 
-    @Override
-    protected boolean testIntValue(int inputValue, int val1, int val2) {
-        return inputValue == val1;
-    }
-
-    @Override
-    protected boolean testDoubleValue(double inputValue, double val1, double val2) {
-        return inputValue == val2;
-    }
-
-    @Override
-    protected boolean testStringValue(String inputValue, String val1, String bal2) {
-        return inputValue.equals(val1);
-    }
 }

@@ -14,7 +14,7 @@ public class RequiredRunner extends TestRunner{
     }
 
     @Override
-    public boolean test(CharSequence inputValue) {
+    public boolean test(String inputValue) {
         return ! TextUtils.isEmpty(inputValue);
     }
 }

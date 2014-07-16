@@ -11,22 +11,22 @@ import java.util.regex.Pattern;
  */
 public abstract class TestRunner {
 
-    protected static final int USING_INTEGER_VALUES = 0;
-    protected static final int USING_STRING_VALUES = 1;
-    protected static final int USING_DOUBLE_VALUES = 2;
+    protected enum ValuesType{
+        Int, Float, String
+    }
 
-    protected int usingValuesType = -1;
+    protected ValuesType valuesType = ValuesType.String;
 
     protected String message;
 
-    protected double dValue1 = 0;
-    protected double dValue2 = 0;
+    protected double floatValue1 = 0;
+    protected double floatValue2 = 0;
 
-    public int iValue1 = 0;
-    public int iValue2 = 0;
+    public int intValue1 = 0;
+    public int intValue2 = 0;
 
-    protected String sValue1 = null;
-    protected String sValue2 = null;
+    protected String strValue1 = null;
+    protected String strValue2 = null;
 
     private LazyLoader lazyLoader;
 
@@ -34,48 +34,65 @@ public abstract class TestRunner {
         this.message = message;
     }
 
-    public abstract boolean test(CharSequence inputValue);
-
-    protected boolean dispatch(CharSequence inputValue){
+    public boolean perform(String input){
         performLazyLoader();
         formatMessage();
-        switch (usingValuesType){
-            case USING_INTEGER_VALUES:
-                int iInputValue = 0;
-                try{
-                    iInputValue = Integer.valueOf(inputValue.toString());
-                }catch (Exception e){
-                    message = e.getMessage();
-                }
-                return testIntValue(iInputValue, iValue1,iValue2);
+        return test(input);
+    }
 
-            case USING_DOUBLE_VALUES:
-                double dInputValue = 0;
-                try{
-                    dInputValue = Double.valueOf(inputValue.toString());
-                }catch (Exception e){
-                    message = e.getMessage();
-                }
-                return testDoubleValue(dInputValue, dValue1, dValue2);
+    protected abstract boolean test(String inputValue);
 
-            case USING_STRING_VALUES:
-                return testStringValue(String.valueOf(inputValue), sValue1, sValue2);
+//    protected boolean dispatch(CharSequence inputValue){
+//        //
+////        if (NumericRunner.isNumeric(String.valueOf(inputValue))){
+////            System.out.println(">>> 输入的内容为数值型：" + inputValue);
+////            System.out.println(">>> 参数类型为：" + valuesType.name());
+////            if (ValuesType.Int.equals(valuesType)){
+////                return performIntInput(inputValue);
+////            }else{
+////                return performDoubleInput(inputValue);
+////            }
+////        }else{
+////            System.out.println(">>> 输入的内容不是数值型！！！");
+////            return false;
+////        }
+//        //
+//        switch (valuesType){
+//            case Int:
+//                return performIntInput(inputValue);
+//
+//            case Float:
+//                return performDoubleInput(inputValue);
+//
+//            case String:
+//                return testStringValue(String.valueOf(inputValue), strValue1, strValue2);
+//
+//            default: return false;
+//        }
+//    }
 
-            default: return false;
-        }
+    protected void checkIntFlowValues(String name){
+        if (ValuesType.String.equals(valuesType))
+            throw new IllegalArgumentException(name + " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
+    }
+
+    protected void checkIntValues(String name){
+        if (!ValuesType.Int.equals(valuesType))
+            throw new IllegalArgumentException(name + " ONLY accept Int values( set by 'setValues(...)' ) !");
     }
 
     protected void formatMessage(){
         if (message == null) return;
-        switch (usingValuesType){
-            case USING_DOUBLE_VALUES:
-                message = message.replace("{$1}",""+dValue1).replace("{$2}",""+dValue2);
+        switch (valuesType){
+            case Float:
+                message = message.replace("{$1}","" + floatValue1).replace("{$2}","" + floatValue2);
                 break;
-            case USING_INTEGER_VALUES:
-                message = message.replace("{$1}",""+iValue1).replace("{$2}",""+iValue2);
+            case Int:
+                message = message.replace("{$1}","" + intValue1).replace("{$2}","" + intValue2);
                 break;
-            case USING_STRING_VALUES:
-                message = message.replace("{$1}",sValue1).replace("{$2}",sValue2);
+            case String:
+                if (strValue1 != null) message = message.replace("{$1}", strValue1);
+                if (strValue2 != null) message = message.replace("{$2}", strValue2);
                 break;
         }
     }
@@ -87,41 +104,37 @@ public abstract class TestRunner {
             String[] sVs = lazyLoader.stringValues();
 
             if (iVs.length != 0) {
-                usingValuesType = USING_INTEGER_VALUES;
+                valuesType = ValuesType.Int;
                 if (iVs.length == 2){
-                    iValue1 = iVs[0];
-                    iValue2 = iVs[1];
+                    intValue1 = iVs[0];
+                    intValue2 = iVs[1];
                 }else if (iVs.length == 1){
-                    iValue1 = iVs[0];
+                    intValue1 = iVs[0];
                 }
             }
 
             if (dVs.length != 0){
-                usingValuesType = USING_DOUBLE_VALUES;
+                valuesType = ValuesType.Float;
                 if (dVs.length == 2){
-                    dValue1 = dVs[0];
-                    dValue2 = dVs[1];
+                    floatValue1 = dVs[0];
+                    floatValue2 = dVs[1];
                 }else if (dVs.length == 1){
-                    dValue1 = dVs[0];
+                    floatValue1 = dVs[0];
                 }
             }
 
             if (sVs.length != 0){
-                usingValuesType = USING_STRING_VALUES;
+               valuesType = ValuesType.String;
                 if (sVs.length == 2){
-                    sValue1 = sVs[0];
-                    sValue1 = sVs[1];
+                    strValue1 = sVs[0];
+                    strValue1 = sVs[1];
                 }else if (sVs.length == 1){
-                    sValue1 = sVs[0];
+                    strValue1 = sVs[0];
                 }
             }
 
         }
     }
-
-    protected boolean testIntValue(int inputValue, int val1, int val2){ return false; }
-    protected boolean testDoubleValue(double inputValue, double val1, double val2){ return false; }
-    protected boolean testStringValue(String inputValue, String val1, String bal2){ return false; }
 
     protected static boolean isMatched(String regex, CharSequence inputValue){
         Pattern p = Pattern.compile(regex);
@@ -141,37 +154,37 @@ public abstract class TestRunner {
     }
 
     public void setValues(int... values){
-        usingValuesType = USING_INTEGER_VALUES;
+        valuesType = ValuesType.Int;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.iValue1 = values[0];
+                this.intValue1 = values[0];
             }else if ( 2 == values.length){
-                this.iValue1 = values[0];
-                this.iValue2 = values[1];
+                this.intValue1 = values[0];
+                this.intValue2 = values[1];
             }
         }
     }
 
     public void setValues(String... values){
-        usingValuesType = USING_STRING_VALUES;
+        valuesType = ValuesType.String;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.sValue1 = values[0];
+                this.strValue1 = values[0];
             }else if ( 2 == values.length){
-                this.sValue1 = values[0];
-                this.sValue2 = values[1];
+                this.strValue1 = values[0];
+                this.strValue2 = values[1];
             }
         }
     }
 
     public void setValues(double... values){
-        usingValuesType = USING_DOUBLE_VALUES;
+        valuesType = ValuesType.Float;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.dValue1 = values[0];
+                this.floatValue1 = values[0];
             }else if ( 2 == values.length){
-                this.dValue1 = values[0];
-                this.dValue2 = values[1];
+                this.floatValue1 = values[0];
+                this.floatValue2 = values[1];
             }
         }
     }
