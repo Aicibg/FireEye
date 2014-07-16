@@ -14,7 +14,7 @@ public class MinLengthRunner extends TestRunner{
     @Override
     public boolean test(String inputValue) {
         checkIntValues("MinLength Test");
-        int minLength = intValue1;
+        int minLength = extraIntValue1;
         return inputValue.length() >= minLength;
     }
 

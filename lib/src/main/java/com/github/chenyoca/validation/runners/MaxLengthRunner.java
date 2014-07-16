@@ -14,7 +14,7 @@ public class MaxLengthRunner extends TestRunner{
     @Override
     public boolean test(String inputValue) {
         checkIntValues("MaxLength Test");
-        int maxLength = intValue1;
+        int maxLength = extraIntValue1;
         return inputValue.length() <= maxLength;
     }
 

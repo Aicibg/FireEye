@@ -13,11 +13,11 @@ public class MinValueRunner extends ValueTestRunner{
 
     @Override
     protected boolean testWithIntValues(double inputValue) {
-        return inputValue >= intValue1;
+        return inputValue >= extraIntValue1;
     }
 
     @Override
     protected boolean testWithFloatValues(double inputValue) {
-        return inputValue >= intValue2;
+        return inputValue >= extraIntValue2;
     }
 }

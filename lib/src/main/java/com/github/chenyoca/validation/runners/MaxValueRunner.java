@@ -13,11 +13,11 @@ public class MaxValueRunner extends ValueTestRunner{
 
     @Override
     protected boolean testWithIntValues(double inputValue) {
-        return inputValue <= intValue1;
+        return inputValue <= extraIntValue1;
     }
 
     @Override
     protected boolean testWithFloatValues(double inputValue) {
-        return inputValue <= floatValue1;
+        return inputValue <= extraFloatValue1;
     }
 }

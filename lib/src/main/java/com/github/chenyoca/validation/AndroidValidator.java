@@ -29,22 +29,20 @@ import com.github.chenyoca.validation.runners.TestRunner;
 /**
  * User: YooJia.Chen@gmail.com
  * Date: 2014-06-25
+ * Android Validator
  */
 public class AndroidValidator {
 
-    private String message;
     private MessageDisplay display;
     private ViewGroup form;
 
     private final Context context;
 
+    // Values of fields
     private SparseArray<String> values = new SparseArray<String>();
 
-    public String getMessage(){
-        return message;
-    }
-
-    private SparseArray<Config> configs = new SparseArray<Config>();
+    // Configs of the form
+    private SparseArray<Config> formConfigArray = new SparseArray<Config>();
 
     public AndroidValidator(Context context){
         this(context, new MessageDisplay() {
@@ -77,7 +75,7 @@ public class AndroidValidator {
         for (int i=1;i<types.length;i++){
             s.add(types[i]).apply();
         }
-        configs.put(viewId, s);
+        formConfigArray.put(viewId, s);
         return this;
     }
 
@@ -88,7 +86,7 @@ public class AndroidValidator {
      * @return AndroidValidator instance.
      */
     public AndroidValidator putField(int viewId, Config config){
-        configs.put(viewId, config);
+        formConfigArray.put(viewId, config);
         return this;
     }
 
@@ -113,7 +111,7 @@ public class AndroidValidator {
             View c = form.getChildAt(i);
             if (c instanceof EditText){
                 EditText item = (EditText) c;
-                Config conf = configs.get(item.getId());
+                Config conf = formConfigArray.get(item.getId());
                 if (conf == null) continue;
                 int inputType = InputType.TYPE_CLASS_TEXT;
                 for (TestRunner r : conf.runners){
@@ -133,9 +131,9 @@ public class AndroidValidator {
                     }else if (r instanceof HTTPURLRunner || r instanceof HostRunner){
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
                     }else if (r instanceof MaxLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue1)});
+                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.extraIntValue1)});
                     }else if (r instanceof RangeLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue2)});
+                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.extraIntValue2)});
                     }
                 }
                 item.setInputType(inputType);
@@ -194,11 +192,10 @@ public class AndroidValidator {
             if (c instanceof EditText){
                 EditText item = (EditText) c;
                 int viewId = item.getId();
-                Config conf = configs.get(viewId);
+                Config conf = formConfigArray.get(viewId);
                 if (conf == null) continue;
                 ResultWrapper rs = testField(item, conf, display);
                 testPassed &= rs.passed;
-                message = rs.message;
                 values.put(viewId, rs.value);
                 if (! continueTest && ! testPassed) break;
             }
@@ -260,7 +257,7 @@ public class AndroidValidator {
             passed = firstRunner.perform(input);
             message = firstRunner.getMessage();
         }else if (TextUtils.isEmpty(input)){
-            return new ResultWrapper(true, "NO_INPUT_BUT_NOT_REQUIRED", String.valueOf(input));
+            return new ResultWrapper(true, "NO-INPUT-VALUE-AND-IS-NOT-REQUIRED", String.valueOf(input));
         }
 
         if ( ! passed){
@@ -277,10 +274,13 @@ public class AndroidValidator {
                 break;
             }
         }
+
         return new ResultWrapper(passed, message, String.valueOf(input));
     }
 
     private void checkBindForm(){
-        if (form == null) throw new IllegalStateException("Form is NULL ! Call 'bind(form)' First !");
+        if (form == null){
+            throw new IllegalStateException("FormView is NULL ! Did you call 'bind(form)' ?");
+        }
     }
 }

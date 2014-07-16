@@ -5,7 +5,7 @@ import com.github.chenyoca.validation.LazyLoader;
 import java.util.regex.Pattern;
 
 /**
- * AUTH: chenyoca (Yoojia.Chen@gmail.com)
+ * AUTH: YooJia.Chen (Yoojia.Chen@gmail.com)
  * DATE: 2014-06-25
  * Test runner.
  */
@@ -19,14 +19,9 @@ public abstract class TestRunner {
 
     protected String message;
 
-    protected double floatValue1 = 0;
-    protected double floatValue2 = 0;
-
-    public int intValue1 = 0;
-    public int intValue2 = 0;
-
-    protected String strValue1 = null;
-    protected String strValue2 = null;
+    protected final double[] extraFloatValues = new double[2];
+    protected final int[] extraIntValues = new int[2];
+    protected final String[] extraStringValues = new String[2];
 
     private LazyLoader lazyLoader;
 
@@ -44,66 +39,43 @@ public abstract class TestRunner {
 
     protected void checkIntFlowValues(String name){
         if (ValuesType.String.equals(valuesType))
-            throw new IllegalArgumentException(name + " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
+            throw new IllegalArgumentException(name +
+                    " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
     }
 
     protected void checkIntValues(String name){
         if (!ValuesType.Int.equals(valuesType))
-            throw new IllegalArgumentException(name + " ONLY accept Int values( set by 'setValues(...)' ) !");
+            throw new IllegalArgumentException(name +
+                    " ONLY accept Int values( set by 'setValues(...)' ) !");
     }
 
     protected void formatMessage(){
         if (message == null) return;
         switch (valuesType){
             case Float:
-                message = message.replace("{$1}","" + floatValue1).replace("{$2}","" + floatValue2);
+                message = message.replace("{$1}","" + extraFloatValues[0])
+                        .replace("{$2}","" + extraFloatValues[1]);
                 break;
             case Int:
-                message = message.replace("{$1}","" + intValue1).replace("{$2}","" + intValue2);
+                message = message.replace("{$1}","" + extraIntValues[0])
+                        .replace("{$2}","" + extraIntValues[1]);
                 break;
             case String:
-                if (strValue1 != null) message = message.replace("{$1}", strValue1);
-                if (strValue2 != null) message = message.replace("{$2}", strValue2);
+                if (extraStringValues[0] != null){
+                    message = message.replace("{$1}", extraStringValues[0]);
+                }
+                if (extraStringValues[1] != null){
+                    message = message.replace("{$2}", extraStringValues[1]);
+                }
                 break;
         }
     }
 
     private void performLazyLoader(){
         if (lazyLoader != null){
-            int[] iVs = lazyLoader.intValues();
-            double[] dVs = lazyLoader.doubleValues();
-            String[] sVs = lazyLoader.stringValues();
-
-            if (iVs.length != 0) {
-                valuesType = ValuesType.Int;
-                if (iVs.length == 2){
-                    intValue1 = iVs[0];
-                    intValue2 = iVs[1];
-                }else if (iVs.length == 1){
-                    intValue1 = iVs[0];
-                }
-            }
-
-            if (dVs.length != 0){
-                valuesType = ValuesType.Float;
-                if (dVs.length == 2){
-                    floatValue1 = dVs[0];
-                    floatValue2 = dVs[1];
-                }else if (dVs.length == 1){
-                    floatValue1 = dVs[0];
-                }
-            }
-
-            if (sVs.length != 0){
-               valuesType = ValuesType.String;
-                if (sVs.length == 2){
-                    strValue1 = sVs[0];
-                    strValue1 = sVs[1];
-                }else if (sVs.length == 1){
-                    strValue1 = sVs[0];
-                }
-            }
-
+            setValues(lazyLoader.intValues());
+            setValues(lazyLoader.doubleValues());
+            setValues(lazyLoader.stringValues());
         }
     }
 
@@ -128,10 +100,10 @@ public abstract class TestRunner {
         valuesType = ValuesType.Int;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.intValue1 = values[0];
+                extraIntValues[0] = values[0];
             }else if ( 2 == values.length){
-                this.intValue1 = values[0];
-                this.intValue2 = values[1];
+                extraIntValues[0] = values[0];
+                extraIntValues[1] = values[1];
             }
         }
     }
@@ -140,10 +112,10 @@ public abstract class TestRunner {
         valuesType = ValuesType.String;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.strValue1 = values[0];
+                extraStringValues[0] = values[0];
             }else if ( 2 == values.length){
-                this.strValue1 = values[0];
-                this.strValue2 = values[1];
+                extraStringValues[0] = values[0];
+                extraStringValues[1] = values[1];
             }
         }
     }
@@ -152,10 +124,10 @@ public abstract class TestRunner {
         valuesType = ValuesType.Float;
         if (values.length > 0){
             if ( 1 == values.length){
-                this.floatValue1 = values[0];
+                extraFloatValues[0] = values[0];
             }else if ( 2 == values.length){
-                this.floatValue1 = values[0];
-                this.floatValue2 = values[1];
+                extraFloatValues[0] = values[0];
+                extraFloatValues[1] = values[1];
             }
         }
     }
