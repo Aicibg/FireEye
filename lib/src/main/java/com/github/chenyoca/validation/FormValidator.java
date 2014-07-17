@@ -114,7 +114,7 @@ public class FormValidator {
                 Config conf = formConfigArray.get(item.getId());
                 if (conf == null) continue;
                 int inputType = InputType.TYPE_CLASS_TEXT;
-                for (TestRunner r : conf.runners){
+                for (TestRunner r : conf.runnerArray){
                     if (r instanceof MobilePhoneRunner
                             || r instanceof NumericRunner
                             || r instanceof DigitsRunner
@@ -256,7 +256,7 @@ public class FormValidator {
         if (display != null) display.dismiss(field);
 
         // If required
-        TestRunner firstRunner = conf.runners.get(0);
+        TestRunner firstRunner = conf.runnerArray.get(0);
         if (firstRunner instanceof RequiredRunner){
             passed = firstRunner.perform(input);
             message = firstRunner.getMessage();
@@ -269,7 +269,7 @@ public class FormValidator {
             return new ResultWrapper(false, message, null);
         }
 
-        for (TestRunner r : conf.runners){
+        for (TestRunner r : conf.runnerArray){
             if (r instanceof RequiredRunner) continue;
             passed = r.perform(input);
             message = r.getMessage();

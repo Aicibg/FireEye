@@ -13,11 +13,12 @@ public class RangeLengthRunner extends TestRunner{
 
     @Override
     public boolean test(String inputValue) {
-        checkIntValues("RangeLength Test");
-        int minLength = extraInt[0];
-        int maxLength = extraInt[1];
         int length = inputValue.length();
-        return minLength <= length && length <= maxLength;
+        return extraInt[0] <= length && length <= extraInt[1];
     }
 
+    @Override
+    public void onAdded() {
+        checkIntValues("RangeLength Test");
+    }
 }

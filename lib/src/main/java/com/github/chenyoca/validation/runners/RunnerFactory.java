@@ -11,7 +11,7 @@ import com.github.chenyoca.validation.Types;
  * YooJia.Chen@gmail.com
  * 2014-07-15
  */
-public class BuildInRunners {
+public class RunnerFactory {
 
     public static TestRunner build(Context c,Types type){
         Resources res = c.getResources();

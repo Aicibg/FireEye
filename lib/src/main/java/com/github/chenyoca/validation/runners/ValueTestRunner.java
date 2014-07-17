@@ -13,7 +13,6 @@ public abstract class ValueTestRunner extends TestRunner {
 
     @Override
     protected boolean test(String input) {
-        checkIntFlowValues("ValueTest ");
         double inputValue = 0;
         try{
             inputValue = Double.valueOf(input);
@@ -26,6 +25,11 @@ public abstract class ValueTestRunner extends TestRunner {
         }else{
             return withExtraFloat(inputValue);
         }
+    }
+
+    @Override
+    public void onAdded() {
+        checkIntFlowValues("ValueTest ");
     }
 
     protected abstract boolean withExtraInt(double inputValue);
