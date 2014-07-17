@@ -12,12 +12,12 @@ public class RangeValueRunner extends ValueTestRunner{
     }
 
     @Override
-    protected boolean testWithIntValues(double inputValue) {
-        return intValue1 <= inputValue && inputValue <= intValue2;
+    protected boolean withExtraInt(double inputValue) {
+        return extraInt[0] <= inputValue && inputValue <= extraInt[1];
     }
 
     @Override
-    protected boolean testWithFloatValues(double inputValue) {
-        return floatValue1 <= inputValue && inputValue <= floatValue2;
+    protected boolean withExtraFloat(double inputValue) {
+        return extraFloat[0] <= inputValue && inputValue <= extraFloat[1];
     }
 }

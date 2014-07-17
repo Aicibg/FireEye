@@ -65,10 +65,6 @@ public class Config {
         return this;
     }
 
-//    public Config message(Context context, int msgId){
-//        message(context.getResources().getString())
-//    }
-
     public Config message(String message){
         lastRunner.setMessage(message);
         return this;

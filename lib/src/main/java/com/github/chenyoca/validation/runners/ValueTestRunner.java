@@ -22,12 +22,12 @@ public abstract class ValueTestRunner extends TestRunner {
             return false;
         }
         if (ValuesType.Int.equals(valuesType)){
-            return testWithIntValues(inputValue);
+            return withExtraInt(inputValue);
         }else{
-            return testWithFloatValues(inputValue);
+            return withExtraFloat(inputValue);
         }
     }
 
-    protected abstract boolean testWithIntValues(double inputValue);
-    protected abstract boolean testWithFloatValues(double inputValue);
+    protected abstract boolean withExtraInt(double inputValue);
+    protected abstract boolean withExtraFloat(double inputValue);
 }
