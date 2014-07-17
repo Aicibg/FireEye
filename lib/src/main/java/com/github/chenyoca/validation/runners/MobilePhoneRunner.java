@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -9,8 +11,8 @@ public class MobilePhoneRunner extends TestRunner{
 
     static final String PHONE_REGEX = "^(\\+?\\d{2}-?)?(1[0-9])\\d{9}$";
 
-    public MobilePhoneRunner(String message){
-        super(message);
+    public MobilePhoneRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override

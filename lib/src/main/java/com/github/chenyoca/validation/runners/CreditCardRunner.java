@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -8,8 +10,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class CreditCardRunner extends TestRunner{
 
-    public CreditCardRunner(String message){
-        super(message);
+    public CreditCardRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override

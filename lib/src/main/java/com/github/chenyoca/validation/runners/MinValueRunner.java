@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,8 +9,8 @@ package com.github.chenyoca.validation.runners;
  */
 public class MinValueRunner extends ValueTestRunner{
 
-    public MinValueRunner(String message){
-        super(message);
+    public MinValueRunner(Type testType, String message){
+        super(testType,message);
     }
 
     @Override

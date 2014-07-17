@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -10,8 +12,8 @@ public class HTTPURLRunner extends TestRunner{
     static final String URL_REGEX =
             "^(https?:\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?$";
 
-    public HTTPURLRunner(String message){
-        super(message);
+    public HTTPURLRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override

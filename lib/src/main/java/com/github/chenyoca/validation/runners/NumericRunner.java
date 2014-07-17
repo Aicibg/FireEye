@@ -2,6 +2,8 @@ package com.github.chenyoca.validation.runners;
 
 import android.text.TextUtils;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -9,8 +11,8 @@ import android.text.TextUtils;
  */
 public class NumericRunner extends TestRunner{
 
-    public NumericRunner(String message){
-        super(message);
+    public NumericRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override

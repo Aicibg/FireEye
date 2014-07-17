@@ -69,7 +69,7 @@ public class FormValidator {
      * @param types Build in types
      * @return AndroidValidator instance.
      */
-    public FormValidator putField(int viewId, Types... types){
+    public FormValidator putField(int viewId, Type... types){
         if (types.length < 1) throw new IllegalArgumentException("Types array at less 1 parameter !");
         Config s = Config.build(context, types[0]).apply();
         for (int i=1;i<types.length;i++){
@@ -109,39 +109,42 @@ public class FormValidator {
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
             View c = form.getChildAt(i);
-            if (c instanceof EditText){
-                EditText item = (EditText) c;
-                Config conf = formConfigArray.get(item.getId());
-                if (conf == null) continue;
-                int inputType = InputType.TYPE_CLASS_TEXT;
-                for (TestRunner r : conf.runnerArray){
-                    if (r instanceof MobilePhoneRunner
-                            || r instanceof NumericRunner
-                            || r instanceof DigitsRunner
-                            || r instanceof MaxValueRunner
-                            || r instanceof MinValueRunner
-                            || r instanceof RangeValueRunner
-                            || r instanceof IPv4Runner
-                            || r instanceof CreditCardRunner
-                            ){
+            if ( ! (c instanceof EditText)) continue;
+            EditText item = (EditText) c;
+            Config conf = formConfigArray.get(item.getId());
+            if (conf == null) continue;
+            int inputType = InputType.TYPE_CLASS_TEXT;
+            for (TestRunner r : conf.runnerArray){
+                switch (r.testType){
+                    case MobilePhone:
+                    case Numeric:
+                    case Digits:
+                    case MaxValue:
+                    case MinValue:
+                    case RangeValue:
+                    case IPv4:
+                    case CreditCard:
                         inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL;
-                    }else if (r instanceof EmailRunner){
+                        break;
+                    case Email:
                         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                         item.setSingleLine(true);
-                    }else if (r instanceof HTTPURLRunner || r instanceof HostRunner){
+                        break;
+                    case URL:
+                    case Host:
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
-                    }else if (r instanceof MaxLengthRunner){
+                        break;
+                    case MaxLength:
+                    case RangeLength:
+                        int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
                         item.setFilters(
-                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[0])}
+                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[index])}
                         );
-                    }else if (r instanceof RangeLengthRunner){
-                        item.setFilters(
-                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[1])}
-                        );
-                    }
+                        break;
+                    default: inputType = InputType.TYPE_CLASS_TEXT;
                 }
-                item.setInputType(inputType);
             }
+            item.setInputType(inputType);
         }
         return this;
     }

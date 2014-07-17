@@ -1,6 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.LazyLoader;
+import com.github.chenyoca.validation.Type;
 
 import java.util.regex.Pattern;
 
@@ -11,23 +12,27 @@ import java.util.regex.Pattern;
  */
 public abstract class TestRunner {
 
-    protected enum ValuesType{
+    protected enum ExtraType {
         Int, Float, String
     }
 
-    protected ValuesType valuesType = ValuesType.String;
-
-    protected String message;
-
+    public final Type testType;
     protected final double[] extraFloat = new double[2];
-
     // Access Level : Public, For InputType used this properties.
     public final int[] extraInt = new int[2];
     protected final String[] extraStringValues = new String[2];
 
+    protected ExtraType extraType = ExtraType.String;
+    protected String message;
     private LazyLoader lazyLoader;
 
+    protected TestRunner(Type testType, String message){
+        this.testType = testType;
+        this.message = message;
+    }
+
     public TestRunner(String message){
+        this.testType = Type.Custom;
         this.message = message;
     }
 
@@ -54,7 +59,7 @@ public abstract class TestRunner {
      * @param name Name of test runner
      */
     protected void checkIntFlowValues(String name){
-        if (ValuesType.String.equals(valuesType))
+        if (ExtraType.String.equals(extraType))
             throw new IllegalArgumentException(name +
                     " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
     }
@@ -64,7 +69,7 @@ public abstract class TestRunner {
      * @param name Name of test runner
      */
     protected void checkIntValues(String name){
-        if (!ValuesType.Int.equals(valuesType))
+        if (!ExtraType.Int.equals(extraType))
             throw new IllegalArgumentException(name +
                     " ONLY accept Int values( set by 'setValues(...)' ) !");
     }
@@ -74,7 +79,7 @@ public abstract class TestRunner {
      */
     protected void formatMessage(){
         if (message == null) return;
-        switch (valuesType){
+        switch (extraType){
             case Float:
                 message = message.replace("{$1}","" + extraFloat[0])
                         .replace("{$2}","" + extraFloat[1]);
@@ -111,7 +116,6 @@ public abstract class TestRunner {
      */
     public void onAdded(){}
 
-
     public String getMessage(){
         return message == null? "" : message;
     }
@@ -130,7 +134,7 @@ public abstract class TestRunner {
      */
     public void setValues(int... values){
         checkValuesLength(values.length);
-        valuesType = ValuesType.Int;
+        extraType = ExtraType.Int;
         if ( 1 == values.length){
             extraInt[0] = values[0];
         }else{
@@ -145,7 +149,7 @@ public abstract class TestRunner {
      */
     public void setValues(String... values){
         checkValuesLength(values.length);
-        valuesType = ValuesType.String;
+        extraType = ExtraType.String;
         if ( 1 == values.length){
             extraStringValues[0] = values[0];
         }else{
@@ -160,7 +164,7 @@ public abstract class TestRunner {
      */
     public void setValues(double... values){
         checkValuesLength(values.length);
-        valuesType = ValuesType.Float;
+        extraType = ExtraType.Float;
         if ( 1 == values.length){
             extraFloat[0] = values[0];
         }else if ( 2 == values.length){

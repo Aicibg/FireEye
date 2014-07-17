@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,14 +9,14 @@ package com.github.chenyoca.validation.runners;
  */
 public class EqualsToRunner extends TestRunner{
 
-    public EqualsToRunner(String message){
-        super(message);
+    public EqualsToRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override
     public boolean test(String inputValue) {
         String value = null;
-        switch (valuesType){
+        switch (extraType){
             case Int: value = String.valueOf(extraInt[0]); break;
             case Float: value = String.valueOf(extraFloat[0]); break;
             case String: value = extraStringValues[0]; break;

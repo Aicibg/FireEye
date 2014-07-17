@@ -2,6 +2,8 @@ package com.github.chenyoca.validation.runners;
 
 import android.text.TextUtils;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * AUTH: chenyoca (chenyoca@gmail.com)
  * DATE: 2014-06-25
@@ -9,8 +11,8 @@ import android.text.TextUtils;
  */
 public class NotBlankRunner extends TestRunner{
 
-    public NotBlankRunner(String message){
-        super(message);
+    public NotBlankRunner(Type testType, String message){
+        super(testType, message);
     }
 
 

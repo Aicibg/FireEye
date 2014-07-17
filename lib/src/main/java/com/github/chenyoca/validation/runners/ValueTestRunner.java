@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
@@ -7,8 +9,8 @@ package com.github.chenyoca.validation.runners;
  */
 public abstract class ValueTestRunner extends TestRunner {
 
-    public ValueTestRunner(String message) {
-        super(message);
+    public ValueTestRunner(Type testType, String message) {
+        super(testType, message);
     }
 
     @Override
@@ -20,7 +22,7 @@ public abstract class ValueTestRunner extends TestRunner {
             message = e.getMessage();
             return false;
         }
-        if (ValuesType.Int.equals(valuesType)){
+        if (ExtraType.Int.equals(extraType)){
             return withExtraInt(inputValue);
         }else{
             return withExtraFloat(inputValue);

@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.github.chenyoca.validation.FormValidator;
 import com.github.chenyoca.validation.MessageDisplay;
+import com.github.chenyoca.validation.Type;
 import com.github.chenyoca.validation.supports.EditTextLazyLoader;
-import com.github.chenyoca.validation.Types;
 import com.github.chenyoca.validation.Config;
 import com.github.chenyoca.validation.ResultWrapper;
 
@@ -38,9 +38,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Config conf = Config.build(this, Types.Required).message("必填选项").apply();
-        conf.add(Types.MaxLength).values(20).apply();
-        conf.add(Types.Email).apply();
+        final Config conf = Config.build(this, Type.Required).message("必填选项").apply();
+        conf.add(Type.MaxLength).values(20).apply();
+        conf.add(Type.Email).apply();
 
         final EditText test = (EditText) findViewById(R.id.single_test);
 
@@ -62,21 +62,21 @@ public class MainActivity extends Activity {
 
 //      指定自定义显示出错消息的方式，
         final FormValidator av = new FormValidator(this, messageDisplay);
-        av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
-        av.putField(R.id.form_field_2, Types.CreditCard);
-        av.putField(R.id.form_field_3, Types.Digits);
-        av.putField(R.id.form_field_4, Types.Email);
-        av.putField(R.id.form_field_5, Config.build(this, Types.EqualsTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
-        av.putField(R.id.form_field_6, Types.Host);
-        av.putField(R.id.form_field_7, Types.URL);
-        av.putField(R.id.form_field_8, Config.build(this, Types.MaxLength).values(5).apply());
-        av.putField(R.id.form_field_9, Config.build(this, Types.MinLength).values(4).apply());
-        av.putField(R.id.form_field_10, Config.build(this, Types.RangeLength).values(4,8).apply());
-        av.putField(R.id.form_field_11, Types.NotBlank);
-        av.putField(R.id.form_field_12, Types.Numeric);
-        av.putField(R.id.form_field_13, Config.build(this, Types.MaxValue).values(100).apply());
-        av.putField(R.id.form_field_14, Config.build(this, Types.MinValue).values(20).apply());
-        av.putField(R.id.form_field_15, Config.build(this, Types.RangeValue).values(18, 30).apply());
+        av.putField(R.id.form_field_1, Type.MobilePhone, Type.Required);
+        av.putField(R.id.form_field_2, Type.CreditCard);
+        av.putField(R.id.form_field_3, Type.Digits);
+        av.putField(R.id.form_field_4, Type.Email);
+        av.putField(R.id.form_field_5, Config.build(this, Type.EqualsTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
+        av.putField(R.id.form_field_6, Type.Host);
+        av.putField(R.id.form_field_7, Type.URL);
+        av.putField(R.id.form_field_8, Config.build(this, Type.MaxLength).values(5).apply());
+        av.putField(R.id.form_field_9, Config.build(this, Type.MinLength).values(4).apply());
+        av.putField(R.id.form_field_10, Config.build(this, Type.RangeLength).values(4,8).apply());
+        av.putField(R.id.form_field_11, Type.NotBlank);
+        av.putField(R.id.form_field_12, Type.Numeric);
+        av.putField(R.id.form_field_13, Config.build(this, Type.MaxValue).values(100).apply());
+        av.putField(R.id.form_field_14, Config.build(this, Type.MinValue).values(20).apply());
+        av.putField(R.id.form_field_15, Config.build(this, Type.RangeValue).values(18, 30).apply());
 
         av.bind(form)
           .applyInputType();
