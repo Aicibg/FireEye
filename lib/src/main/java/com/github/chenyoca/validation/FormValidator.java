@@ -10,20 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.CreditCardRunner;
-import com.github.chenyoca.validation.runners.DigitsRunner;
-import com.github.chenyoca.validation.runners.EmailRunner;
-import com.github.chenyoca.validation.runners.HTTPURLRunner;
-import com.github.chenyoca.validation.runners.HostRunner;
-import com.github.chenyoca.validation.runners.IPv4Runner;
-import com.github.chenyoca.validation.runners.MaxLengthRunner;
-import com.github.chenyoca.validation.runners.MaxValueRunner;
-import com.github.chenyoca.validation.runners.MinValueRunner;
-import com.github.chenyoca.validation.runners.MobilePhoneRunner;
-import com.github.chenyoca.validation.runners.NumericRunner;
-import com.github.chenyoca.validation.runners.RangeLengthRunner;
-import com.github.chenyoca.validation.runners.RangeValueRunner;
-import com.github.chenyoca.validation.runners.RequiredRunner;
 import com.github.chenyoca.validation.runners.TestRunner;
 
 /**
@@ -39,7 +25,7 @@ public class FormValidator {
     private final Context context;
 
     // Values of fields
-    private SparseArray<String> values = new SparseArray<String>();
+    private SparseArray<String> valuesOfFields = new SparseArray<String>();
 
     // Configs of the form
     private SparseArray<Config> formConfigArray = new SparseArray<Config>();
@@ -137,9 +123,8 @@ public class FormValidator {
                     case MaxLength:
                     case RangeLength:
                         int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
-                        item.setFilters(
-                                new InputFilter[]{new InputFilter.LengthFilter(r.extraInt[index])}
-                        );
+                        item.setFilters(new InputFilter[]{
+                                new InputFilter.LengthFilter(r.extraInt[index])} );
                         break;
                     default: inputType = InputType.TYPE_CLASS_TEXT;
                 }
@@ -193,7 +178,7 @@ public class FormValidator {
     private boolean testForm(ViewGroup form, boolean continueTest){
         int childrenCount = form.getChildCount();
         boolean testPassed = true;
-        values.clear();
+        valuesOfFields.clear();
         for (int i = 0; i < childrenCount; i++){
             View c = form.getChildAt(i);
             if (c instanceof EditText){
@@ -203,7 +188,7 @@ public class FormValidator {
                 if (conf == null) continue;
                 ResultWrapper rs = testField(item, conf, display);
                 testPassed &= rs.passed;
-                values.put(viewId, rs.value);
+                valuesOfFields.put(viewId, rs.value);
                 if (! continueTest && ! testPassed) break;
             }
         }
@@ -224,7 +209,7 @@ public class FormValidator {
      * @return String value in view.
      */
     public String getValue(int viewId){
-        return values.get(viewId);
+        return valuesOfFields.get(viewId);
     }
 
     /**
@@ -259,10 +244,10 @@ public class FormValidator {
         if (display != null) display.dismiss(field);
 
         // If required
-        TestRunner firstRunner = conf.runnerArray.get(0);
-        if (firstRunner instanceof RequiredRunner){
-            passed = firstRunner.perform(input);
-            message = firstRunner.getMessage();
+        TestRunner first = conf.runnerArray.get(0);
+        if (Type.Required.equals(first.testType)){
+            passed = first.perform(input);
+            message = first.getMessage();
         }else if (TextUtils.isEmpty(input)){
             return new ResultWrapper(true, "NO-INPUT-VALUE-AND-IS-NOT-REQUIRED", String.valueOf(input));
         }
@@ -273,7 +258,7 @@ public class FormValidator {
         }
 
         for (TestRunner r : conf.runnerArray){
-            if (r instanceof RequiredRunner) continue;
+            if (Type.Required.equals(r.testType)) continue;
             passed = r.perform(input);
             message = r.getMessage();
             if ( !passed){
