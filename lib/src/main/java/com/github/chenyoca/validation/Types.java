@@ -10,7 +10,7 @@ public enum Types {
     NotBlank,
     Digits,
     Email,
-    EqualTo,
+    EqualsTo,
     Host,
     URL,
     IPv4,

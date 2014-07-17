@@ -21,7 +21,7 @@ public class BuildInRunners {
             case CreditCard: runner = new CreditCardRunner(res.getString(R.string.validation_error_msg_credit_card)); break;
             case Digits: runner = new DigitsRunner(res.getString(R.string.validation_error_msg_digits)); break;
             case Email: runner = new EmailRunner(res.getString(R.string.validation_error_msg_email)); break;
-            case EqualTo: runner = new EqualToRunner(res.getString(R.string.validation_error_msg_equals)); break;
+            case EqualsTo: runner = new EqualsToRunner(res.getString(R.string.validation_error_msg_equals)); break;
             case Host: runner = new HostRunner(res.getString(R.string.validation_error_msg_host)); break;
             case URL: runner = new HTTPURLRunner(res.getString(R.string.validation_error_msg_http_url)); break;
             case IPv4: runner = new IPv4Runner(res.getString(R.string.validation_error_msg_ipv4)); break;

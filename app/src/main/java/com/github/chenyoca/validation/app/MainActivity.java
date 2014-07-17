@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         av.putField(R.id.form_field_2, Types.CreditCard);
         av.putField(R.id.form_field_3, Types.Digits);
         av.putField(R.id.form_field_4, Types.Email);
-        av.putField(R.id.form_field_5, Config.build(this, Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
+        av.putField(R.id.form_field_5, Config.build(this, Types.EqualsTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
         av.putField(R.id.form_field_6, Types.Host);
         av.putField(R.id.form_field_7, Types.URL);
         av.putField(R.id.form_field_8, Config.build(this, Types.MaxLength).values(5).apply());
