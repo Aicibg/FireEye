@@ -129,7 +129,7 @@ Add dependency
 //      final AndroidValidator av = new AndroidValidator();
 
 //      指定自定义显示出错消息的方式，
-    final AndroidValidator av = new AndroidValidator(context, messageDisplay);
+    final FormValidator av = new FormValidator(context, messageDisplay);
     av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
     av.putField(R.id.form_field_2, Types.CreditCard);
     av.putField(R.id.form_field_3, Types.Digits);

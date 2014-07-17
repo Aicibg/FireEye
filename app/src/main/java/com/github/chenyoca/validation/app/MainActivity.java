@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.github.chenyoca.validation.AndroidValidator;
+import com.github.chenyoca.validation.FormValidator;
 import com.github.chenyoca.validation.MessageDisplay;
 import com.github.chenyoca.validation.supports.EditTextLazyLoader;
 import com.github.chenyoca.validation.Types;
@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResultWrapper rw = AndroidValidator.testField(test, conf, messageDisplay);
+                ResultWrapper rw = FormValidator.testField(test, conf, messageDisplay);
                 int color = rw.passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 commit.setTextColor(getResources().getColor(color));
@@ -58,10 +58,10 @@ public class MainActivity extends Activity {
         final LinearLayout form = (LinearLayout) findViewById(R.id.form);
 
 //      默认是在 EditText 右边显示一个浮动提示框。
-//      final AndroidValidator av = new AndroidValidator();
+//      final FormValidator av = new FormValidator();
 
 //      指定自定义显示出错消息的方式，
-        final AndroidValidator av = new AndroidValidator(this, messageDisplay);
+        final FormValidator av = new FormValidator(this, messageDisplay);
         av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
         av.putField(R.id.form_field_2, Types.CreditCard);
         av.putField(R.id.form_field_3, Types.Digits);

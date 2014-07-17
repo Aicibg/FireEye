@@ -30,7 +30,7 @@ import com.github.chenyoca.validation.runners.TestRunner;
  * User: YooJia.Chen@gmail.com
  * Date: 2014-06-25
  */
-public class AndroidValidator {
+public class FormValidator {
 
     private String message;
     private MessageDisplay display;
@@ -46,7 +46,7 @@ public class AndroidValidator {
 
     private SparseArray<Config> configs = new SparseArray<Config>();
 
-    public AndroidValidator(Context context){
+    public FormValidator(Context context){
         this(context, new MessageDisplay() {
             @Override
             public void dismiss(EditText field) {
@@ -60,7 +60,7 @@ public class AndroidValidator {
         });
     }
 
-    public AndroidValidator(Context context,MessageDisplay display){
+    public FormValidator(Context context, MessageDisplay display){
         this.display = display;
         this.context = context;
     }
@@ -71,7 +71,7 @@ public class AndroidValidator {
      * @param types Build in types
      * @return AndroidValidator instance.
      */
-    public AndroidValidator putField(int viewId, Types... types){
+    public FormValidator putField(int viewId, Types... types){
         if (types.length < 1) throw new IllegalArgumentException("Types array at less 1 parameter !");
         Config s = Config.build(context, types[0]).apply();
         for (int i=1;i<types.length;i++){
@@ -87,7 +87,7 @@ public class AndroidValidator {
      * @param config Config
      * @return AndroidValidator instance.
      */
-    public AndroidValidator putField(int viewId, Config config){
+    public FormValidator putField(int viewId, Config config){
         configs.put(viewId, config);
         return this;
     }
@@ -97,7 +97,7 @@ public class AndroidValidator {
      * @param form Target form layout
      * @return AndroidValidator instance.
      */
-    public AndroidValidator bind(ViewGroup form){
+    public FormValidator bind(ViewGroup form){
         this.form = form;
         return this;
     }
@@ -106,7 +106,7 @@ public class AndroidValidator {
      * Apply InputType to EditText.
      * @return AndroidValidator instance.
      */
-    public AndroidValidator applyInputType(){
+    public FormValidator applyInputType(){
         checkBindForm();
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
@@ -148,7 +148,7 @@ public class AndroidValidator {
      * Set all fields `single line`
      * @return AndroidValidator instance.
      */
-    public AndroidValidator setSingleLine(){
+    public FormValidator setSingleLine(){
         checkBindForm();
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
