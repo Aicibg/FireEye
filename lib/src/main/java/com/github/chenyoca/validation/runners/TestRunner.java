@@ -1,145 +1,120 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.LazyLoader;
+import com.github.chenyoca.validation.Type;
 
 import java.util.regex.Pattern;
 
 /**
- * AUTH: chenyoca (Yoojia.Chen@gmail.com)
+ * AUTH: YooJia.Chen (Yoojia.Chen@gmail.com)
  * DATE: 2014-06-25
  * Test runner.
  */
 public abstract class TestRunner {
 
-    protected enum ValuesType{
+    protected enum ExtraType {
         Int, Float, String
     }
 
-    protected ValuesType valuesType = ValuesType.String;
+    public final Type testType;
+    protected final double[] extraFloat = new double[2];
+    // Access Level : Public, For InputType used this properties.
+    public final int[] extraInt = new int[2];
+    protected final String[] extraStringValues = new String[2];
 
+    protected ExtraType extraType = ExtraType.String;
     protected String message;
-
-    protected double floatValue1 = 0;
-    protected double floatValue2 = 0;
-
-    public int intValue1 = 0;
-    public int intValue2 = 0;
-
-    protected String strValue1 = null;
-    protected String strValue2 = null;
-
     private LazyLoader lazyLoader;
 
-    public TestRunner(String message){
+    protected TestRunner(Type testType, String message){
+        this.testType = testType;
         this.message = message;
     }
 
+    public TestRunner(String message){
+        this.testType = Type.Custom;
+        this.message = message;
+    }
+
+    /**
+     * Perform Test
+     * @param input Input value
+     * @return True if passed, false otherwise.
+     */
     public boolean perform(String input){
         performLazyLoader();
         formatMessage();
         return test(input);
     }
 
+    /**
+     * Test implement for sub class
+     * @param inputValue Input value
+     * @return True if passed, false otherwise.
+     */
     protected abstract boolean test(String inputValue);
 
-//    protected boolean dispatch(CharSequence inputValue){
-//        //
-////        if (NumericRunner.isNumeric(String.valueOf(inputValue))){
-////            System.out.println(">>> 输入的内容为数值型：" + inputValue);
-////            System.out.println(">>> 参数类型为：" + valuesType.name());
-////            if (ValuesType.Int.equals(valuesType)){
-////                return performIntInput(inputValue);
-////            }else{
-////                return performDoubleInput(inputValue);
-////            }
-////        }else{
-////            System.out.println(">>> 输入的内容不是数值型！！！");
-////            return false;
-////        }
-//        //
-//        switch (valuesType){
-//            case Int:
-//                return performIntInput(inputValue);
-//
-//            case Float:
-//                return performDoubleInput(inputValue);
-//
-//            case String:
-//                return testStringValue(String.valueOf(inputValue), strValue1, strValue2);
-//
-//            default: return false;
-//        }
-//    }
-
+    /**
+     * Check if set Int/Flow extra values for test
+     * @param name Name of test runner
+     */
     protected void checkIntFlowValues(String name){
-        if (ValuesType.String.equals(valuesType))
-            throw new IllegalArgumentException(name + " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
+        if (ExtraType.String.equals(extraType))
+            throw new IllegalArgumentException(name +
+                    " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
     }
 
+    /**
+     * Check if set Int extra values for test
+     * @param name Name of test runner
+     */
     protected void checkIntValues(String name){
-        if (!ValuesType.Int.equals(valuesType))
-            throw new IllegalArgumentException(name + " ONLY accept Int values( set by 'setValues(...)' ) !");
+        if (!ExtraType.Int.equals(extraType))
+            throw new IllegalArgumentException(name +
+                    " ONLY accept Int values( set by 'setValues(...)' ) !");
     }
 
+    /**
+     * Format the message with extra values
+     */
     protected void formatMessage(){
         if (message == null) return;
-        switch (valuesType){
+        switch (extraType){
             case Float:
-                message = message.replace("{$1}","" + floatValue1).replace("{$2}","" + floatValue2);
+                message = message.replace("{$1}","" + extraFloat[0])
+                        .replace("{$2}","" + extraFloat[1]);
                 break;
             case Int:
-                message = message.replace("{$1}","" + intValue1).replace("{$2}","" + intValue2);
+                message = message.replace("{$1}","" + extraInt[0])
+                        .replace("{$2}","" + extraInt[1]);
                 break;
             case String:
-                if (strValue1 != null) message = message.replace("{$1}", strValue1);
-                if (strValue2 != null) message = message.replace("{$2}", strValue2);
+                if (extraStringValues[0] != null){
+                    message = message.replace("{$1}", extraStringValues[0]);
+                }
+                if (extraStringValues[1] != null){
+                    message = message.replace("{$2}", extraStringValues[1]);
+                }
                 break;
         }
     }
 
+    /**
+     * Reload extra values from lazy loader
+     */
     private void performLazyLoader(){
         if (lazyLoader != null){
-            int[] iVs = lazyLoader.intValues();
-            double[] dVs = lazyLoader.doubleValues();
-            String[] sVs = lazyLoader.stringValues();
-
-            if (iVs.length != 0) {
-                valuesType = ValuesType.Int;
-                if (iVs.length == 2){
-                    intValue1 = iVs[0];
-                    intValue2 = iVs[1];
-                }else if (iVs.length == 1){
-                    intValue1 = iVs[0];
-                }
-            }
-
-            if (dVs.length != 0){
-                valuesType = ValuesType.Float;
-                if (dVs.length == 2){
-                    floatValue1 = dVs[0];
-                    floatValue2 = dVs[1];
-                }else if (dVs.length == 1){
-                    floatValue1 = dVs[0];
-                }
-            }
-
-            if (sVs.length != 0){
-               valuesType = ValuesType.String;
-                if (sVs.length == 2){
-                    strValue1 = sVs[0];
-                    strValue1 = sVs[1];
-                }else if (sVs.length == 1){
-                    strValue1 = sVs[0];
-                }
-            }
-
+            setValues(lazyLoader.intValues());
+            setValues(lazyLoader.doubleValues());
+            setValues(lazyLoader.stringValues());
         }
     }
 
-    protected static boolean isMatched(String regex, CharSequence inputValue){
-        Pattern p = Pattern.compile(regex);
-        return p.matcher(inputValue).matches();
-    }
+    /**
+     * Call when test runner finish configuration and added to runners array.
+     * In this method, Impl Runner can check extra values and values type.
+     */
+    public void onAdded(){}
 
     public String getMessage(){
         return message == null? "" : message;
@@ -153,39 +128,59 @@ public abstract class TestRunner {
         if (message != null) this.message = message;
     }
 
+    /**
+     * Set Int extra values for test runner.
+     * @param values Int extra
+     */
     public void setValues(int... values){
-        valuesType = ValuesType.Int;
-        if (values.length > 0){
-            if ( 1 == values.length){
-                this.intValue1 = values[0];
-            }else if ( 2 == values.length){
-                this.intValue1 = values[0];
-                this.intValue2 = values[1];
-            }
+        checkValuesLength(values.length);
+        extraType = ExtraType.Int;
+        if ( 1 == values.length){
+            extraInt[0] = values[0];
+        }else{
+            extraInt[0] = values[0];
+            extraInt[1] = values[1];
         }
     }
 
+    /**
+     * Set String extra values for test runner.
+     * @param values String extra
+     */
     public void setValues(String... values){
-        valuesType = ValuesType.String;
-        if (values.length > 0){
-            if ( 1 == values.length){
-                this.strValue1 = values[0];
-            }else if ( 2 == values.length){
-                this.strValue1 = values[0];
-                this.strValue2 = values[1];
-            }
+        checkValuesLength(values.length);
+        extraType = ExtraType.String;
+        if ( 1 == values.length){
+            extraStringValues[0] = values[0];
+        }else{
+            extraStringValues[0] = values[0];
+            extraStringValues[1] = values[1];
         }
     }
 
+    /**
+     * Set Flow/Double extra values for test runner.
+     * @param values Flow/Double extra
+     */
     public void setValues(double... values){
-        valuesType = ValuesType.Float;
-        if (values.length > 0){
-            if ( 1 == values.length){
-                this.floatValue1 = values[0];
-            }else if ( 2 == values.length){
-                this.floatValue1 = values[0];
-                this.floatValue2 = values[1];
-            }
+        checkValuesLength(values.length);
+        extraType = ExtraType.Float;
+        if ( 1 == values.length){
+            extraFloat[0] = values[0];
+        }else if ( 2 == values.length){
+            extraFloat[0] = values[0];
+            extraFloat[1] = values[1];
         }
+    }
+
+    private void checkValuesLength(int length){
+        if (length == 0 || length > 2){
+            throw new IllegalArgumentException("Test extra values ONLY accept 1 or 2 values.");
+        }
+    }
+
+    protected static boolean isMatched(String regex, CharSequence inputValue){
+        Pattern p = Pattern.compile(regex);
+        return p.matcher(inputValue).matches();
     }
 }

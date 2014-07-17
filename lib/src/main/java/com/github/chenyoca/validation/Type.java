@@ -5,12 +5,13 @@ package com.github.chenyoca.validation;
  * DATE: 2014-06-25
  * Test types.
  */
-public enum Types {
+public enum Type {
+    Custom,
     Required,
     NotBlank,
     Digits,
     Email,
-    EqualTo,
+    EqualsTo,
     Host,
     URL,
     IPv4,

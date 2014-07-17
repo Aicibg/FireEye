@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,17 +9,18 @@ package com.github.chenyoca.validation.runners;
  */
 public class RangeLengthRunner extends TestRunner{
 
-    public RangeLengthRunner(){
-        super("请输入长度在[{$1},{2$}]之间的内容！");
+    public RangeLengthRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override
     public boolean test(String inputValue) {
-        checkIntValues("RangeLength Test");
-        int minLength = intValue1;
-        int maxLength = intValue2;
         int length = inputValue.length();
-        return minLength <= length && length <= maxLength;
+        return extraInt[0] <= length && length <= extraInt[1];
     }
 
+    @Override
+    public void onAdded() {
+        checkIntValues("RangeLength Test");
+    }
 }

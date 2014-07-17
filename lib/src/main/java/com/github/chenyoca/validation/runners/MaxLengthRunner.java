@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,15 +9,17 @@ package com.github.chenyoca.validation.runners;
  */
 public class MaxLengthRunner extends TestRunner{
 
-    public MaxLengthRunner(){
-        super("请输入长度小于{$1}的内容！");
+    public MaxLengthRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override
     public boolean test(String inputValue) {
-        checkIntValues("MaxLength Test");
-        int maxLength = intValue1;
-        return inputValue.length() <= maxLength;
+        return inputValue.length() <= extraInt[0];
     }
 
+    @Override
+    public void onAdded() {
+        checkIntValues("MaxLength Test");
+    }
 }

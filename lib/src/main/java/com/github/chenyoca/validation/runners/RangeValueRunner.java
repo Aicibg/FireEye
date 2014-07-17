@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,17 +9,17 @@ package com.github.chenyoca.validation.runners;
  */
 public class RangeValueRunner extends ValueTestRunner{
 
-    public RangeValueRunner(){
-        super("请输入在[{$1},{$2}]之间的数值！");
+    public RangeValueRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override
-    protected boolean testWithIntValues(double inputValue) {
-        return intValue1 <= inputValue && inputValue <= intValue2;
+    protected boolean withExtraInt(double inputValue) {
+        return extraInt[0] <= inputValue && inputValue <= extraInt[1];
     }
 
     @Override
-    protected boolean testWithFloatValues(double inputValue) {
-        return floatValue1 <= inputValue && inputValue <= floatValue2;
+    protected boolean withExtraFloat(double inputValue) {
+        return extraFloat[0] <= inputValue && inputValue <= extraFloat[1];
     }
 }

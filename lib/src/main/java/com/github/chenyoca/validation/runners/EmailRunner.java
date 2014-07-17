@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -12,8 +14,8 @@ public class EmailRunner extends TestRunner{
                     "(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+" +
                     "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
 
-    public EmailRunner(){
-        super("请输入有效的邮件地址！");
+    public EmailRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override

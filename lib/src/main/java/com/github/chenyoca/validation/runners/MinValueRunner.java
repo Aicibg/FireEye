@@ -1,5 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
@@ -7,17 +9,17 @@ package com.github.chenyoca.validation.runners;
  */
 public class MinValueRunner extends ValueTestRunner{
 
-    public MinValueRunner(){
-        super("请输入大于{$1}的数值！");
+    public MinValueRunner(Type testType, String message){
+        super(testType,message);
     }
 
     @Override
-    protected boolean testWithIntValues(double inputValue) {
-        return inputValue >= intValue1;
+    protected boolean withExtraInt(double inputValue) {
+        return inputValue >= extraInt[0];
     }
 
     @Override
-    protected boolean testWithFloatValues(double inputValue) {
-        return inputValue >= intValue2;
+    protected boolean withExtraFloat(double inputValue) {
+        return inputValue >= extraFloat[0];
     }
 }

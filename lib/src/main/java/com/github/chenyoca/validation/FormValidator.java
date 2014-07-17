@@ -1,5 +1,6 @@
 package com.github.chenyoca.validation;
 
+import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -9,42 +10,28 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.CreditCardRunner;
-import com.github.chenyoca.validation.runners.DigitsRunner;
-import com.github.chenyoca.validation.runners.EmailRunner;
-import com.github.chenyoca.validation.runners.HTTPURLRunner;
-import com.github.chenyoca.validation.runners.HostRunner;
-import com.github.chenyoca.validation.runners.IPv4Runner;
-import com.github.chenyoca.validation.runners.MaxLengthRunner;
-import com.github.chenyoca.validation.runners.MaxValueRunner;
-import com.github.chenyoca.validation.runners.MinValueRunner;
-import com.github.chenyoca.validation.runners.MobilePhoneRunner;
-import com.github.chenyoca.validation.runners.NumericRunner;
-import com.github.chenyoca.validation.runners.RangeLengthRunner;
-import com.github.chenyoca.validation.runners.RangeValueRunner;
-import com.github.chenyoca.validation.runners.RequiredRunner;
 import com.github.chenyoca.validation.runners.TestRunner;
 
 /**
  * User: YooJia.Chen@gmail.com
  * Date: 2014-06-25
+ * Android Validator
  */
-public class AndroidValidator {
+public class FormValidator {
 
-    private String message;
     private MessageDisplay display;
     private ViewGroup form;
 
-    private SparseArray<String> values = new SparseArray<String>();
+    private final Context context;
 
-    public String getMessage(){
-        return message;
-    }
+    // Values of fields
+    private SparseArray<String> valuesOfFields = new SparseArray<String>();
 
-    private SparseArray<Config> configs = new SparseArray<Config>();
+    // Configs of the form
+    private SparseArray<Config> formConfigArray = new SparseArray<Config>();
 
-    public AndroidValidator(){
-        this(new MessageDisplay() {
+    public FormValidator(Context context){
+        this(context, new MessageDisplay() {
             @Override
             public void dismiss(EditText field) {
                 field.setError(null);
@@ -57,8 +44,9 @@ public class AndroidValidator {
         });
     }
 
-    public AndroidValidator(MessageDisplay display){
+    public FormValidator(Context context, MessageDisplay display){
         this.display = display;
+        this.context = context;
     }
 
     /**
@@ -67,13 +55,13 @@ public class AndroidValidator {
      * @param types Build in types
      * @return AndroidValidator instance.
      */
-    public AndroidValidator putField(int viewId, Types... types){
+    public FormValidator putField(int viewId, Type... types){
         if (types.length < 1) throw new IllegalArgumentException("Types array at less 1 parameter !");
-        Config s = Config.build(types[0]).apply();
+        Config s = Config.build(context, types[0]).apply();
         for (int i=1;i<types.length;i++){
             s.add(types[i]).apply();
         }
-        configs.put(viewId, s);
+        formConfigArray.put(viewId, s);
         return this;
     }
 
@@ -83,8 +71,8 @@ public class AndroidValidator {
      * @param config Config
      * @return AndroidValidator instance.
      */
-    public AndroidValidator putField(int viewId, Config config){
-        configs.put(viewId, config);
+    public FormValidator putField(int viewId, Config config){
+        formConfigArray.put(viewId, config);
         return this;
     }
 
@@ -93,7 +81,7 @@ public class AndroidValidator {
      * @param form Target form layout
      * @return AndroidValidator instance.
      */
-    public AndroidValidator bind(ViewGroup form){
+    public FormValidator bind(ViewGroup form){
         this.form = form;
         return this;
     }
@@ -102,40 +90,46 @@ public class AndroidValidator {
      * Apply InputType to EditText.
      * @return AndroidValidator instance.
      */
-    public AndroidValidator applyInputType(){
+    public FormValidator applyInputType(){
         checkBindForm();
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
             View c = form.getChildAt(i);
-            if (c instanceof EditText){
-                EditText item = (EditText) c;
-                Config conf = configs.get(item.getId());
-                if (conf == null) continue;
-                int inputType = InputType.TYPE_CLASS_TEXT;
-                for (TestRunner r : conf.runners){
-                    if (r instanceof MobilePhoneRunner
-                            || r instanceof NumericRunner
-                            || r instanceof DigitsRunner
-                            || r instanceof MaxValueRunner
-                            || r instanceof MinValueRunner
-                            || r instanceof RangeValueRunner
-                            || r instanceof IPv4Runner
-                            || r instanceof CreditCardRunner
-                            ){
+            if ( ! (c instanceof EditText)) continue;
+            EditText item = (EditText) c;
+            Config conf = formConfigArray.get(item.getId());
+            if (conf == null) continue;
+            int inputType = InputType.TYPE_CLASS_TEXT;
+            for (TestRunner r : conf.runnerArray){
+                switch (r.testType){
+                    case MobilePhone:
+                    case Numeric:
+                    case Digits:
+                    case MaxValue:
+                    case MinValue:
+                    case RangeValue:
+                    case IPv4:
+                    case CreditCard:
                         inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL;
-                    }else if (r instanceof EmailRunner){
+                        break;
+                    case Email:
                         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                         item.setSingleLine(true);
-                    }else if (r instanceof HTTPURLRunner || r instanceof HostRunner){
+                        break;
+                    case URL:
+                    case Host:
                         inputType = InputType.TYPE_TEXT_VARIATION_URI;
-                    }else if (r instanceof MaxLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue1)});
-                    }else if (r instanceof RangeLengthRunner){
-                        item.setFilters(new InputFilter[]{new InputFilter.LengthFilter(r.intValue2)});
-                    }
+                        break;
+                    case MaxLength:
+                    case RangeLength:
+                        int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
+                        item.setFilters(new InputFilter[]{
+                                new InputFilter.LengthFilter(r.extraInt[index])} );
+                        break;
+                    default: inputType = InputType.TYPE_CLASS_TEXT;
                 }
-                item.setInputType(inputType);
             }
+            item.setInputType(inputType);
         }
         return this;
     }
@@ -144,7 +138,7 @@ public class AndroidValidator {
      * Set all fields `single line`
      * @return AndroidValidator instance.
      */
-    public AndroidValidator setSingleLine(){
+    public FormValidator setSingleLine(){
         checkBindForm();
         int childrenCount = form.getChildCount();
         for (int i = 0; i < childrenCount; i++){
@@ -184,18 +178,17 @@ public class AndroidValidator {
     private boolean testForm(ViewGroup form, boolean continueTest){
         int childrenCount = form.getChildCount();
         boolean testPassed = true;
-        values.clear();
+        valuesOfFields.clear();
         for (int i = 0; i < childrenCount; i++){
             View c = form.getChildAt(i);
             if (c instanceof EditText){
                 EditText item = (EditText) c;
                 int viewId = item.getId();
-                Config conf = configs.get(viewId);
+                Config conf = formConfigArray.get(viewId);
                 if (conf == null) continue;
                 ResultWrapper rs = testField(item, conf, display);
                 testPassed &= rs.passed;
-                message = rs.message;
-                values.put(viewId, rs.value);
+                valuesOfFields.put(viewId, rs.value);
                 if (! continueTest && ! testPassed) break;
             }
         }
@@ -216,7 +209,7 @@ public class AndroidValidator {
      * @return String value in view.
      */
     public String getValue(int viewId){
-        return values.get(viewId);
+        return valuesOfFields.get(viewId);
     }
 
     /**
@@ -251,12 +244,12 @@ public class AndroidValidator {
         if (display != null) display.dismiss(field);
 
         // If required
-        TestRunner firstRunner = conf.runners.get(0);
-        if (firstRunner instanceof RequiredRunner){
-            passed = firstRunner.perform(input);
-            message = firstRunner.getMessage();
+        TestRunner first = conf.runnerArray.get(0);
+        if (Type.Required.equals(first.testType)){
+            passed = first.perform(input);
+            message = first.getMessage();
         }else if (TextUtils.isEmpty(input)){
-            return new ResultWrapper(true, "NO_INPUT_BUT_NOT_REQUIRED", String.valueOf(input));
+            return new ResultWrapper(true, "NO-INPUT-VALUE-AND-IS-NOT-REQUIRED", String.valueOf(input));
         }
 
         if ( ! passed){
@@ -264,8 +257,8 @@ public class AndroidValidator {
             return new ResultWrapper(false, message, null);
         }
 
-        for (TestRunner r : conf.runners){
-            if (r instanceof RequiredRunner) continue;
+        for (TestRunner r : conf.runnerArray){
+            if (Type.Required.equals(r.testType)) continue;
             passed = r.perform(input);
             message = r.getMessage();
             if ( !passed){
@@ -273,10 +266,13 @@ public class AndroidValidator {
                 break;
             }
         }
+
         return new ResultWrapper(passed, message, String.valueOf(input));
     }
 
     private void checkBindForm(){
-        if (form == null) throw new IllegalStateException("Form is NULL ! Call 'bind(form)' First !");
+        if (form == null){
+            throw new IllegalStateException("FormView is NULL ! Did you call 'bind(form)' ?");
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.github.chenyoca.validation.runners;
 
 import android.text.TextUtils;
 
+import com.github.chenyoca.validation.Type;
+
 /**
  * AUTH: chenyoca (chenyoca@gmail.com)
  * DATE: 2014-06-25
@@ -9,8 +11,8 @@ import android.text.TextUtils;
  */
 public class RequiredRunner extends TestRunner{
 
-    public RequiredRunner(){
-        super("必填选项！");
+    public RequiredRunner(Type testType, String message){
+        super(testType, message);
     }
 
     @Override
