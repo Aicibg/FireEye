@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,14 @@ public class FormValidator {
         this.context = context;
     }
 
+    public static void enableDebug(){
+        _.DebugEnabled = true;
+    }
+
+    public static void disableDebug(){
+        _.DebugEnabled = false;
+    }
+
     /**
      * Add test fields by types and view id.
      * @param viewId View id for the test field.
@@ -92,13 +101,28 @@ public class FormValidator {
      */
     public FormValidator applyInputType(){
         checkBindForm();
-        int childrenCount = form.getChildCount();
+        applyInputTypeToChildren(form);
+        return this;
+    }
+
+    private void applyInputTypeToChildren(ViewGroup parent){
+        int childrenCount = parent.getChildCount();
         for (int i = 0; i < childrenCount; i++){
-            View c = form.getChildAt(i);
-            if ( ! (c instanceof EditText)) continue;
-            EditText item = (EditText) c;
+            View child = parent.getChildAt(i);
+            if ( ! (child instanceof EditText)){
+                if (child instanceof ViewGroup) {
+                    if (_.DebugEnabled) Log.i("Validator","[I] Found a ViewGroup child !");
+                    applyInputTypeToChildren((ViewGroup) child);
+                }
+                // YES
+                continue;
+            }
+            EditText item = (EditText) child;
             Config conf = formConfigArray.get(item.getId());
-            if (conf == null) continue;
+            if (conf == null){
+                if (_.DebugEnabled) Log.w("Validator","[W] Apply InputType. A EditText child in Form without test config !");
+                continue;
+            }
             int inputType = InputType.TYPE_CLASS_TEXT;
             for (TestRunner r : conf.runnerArray){
                 switch (r.testType){
@@ -131,7 +155,6 @@ public class FormValidator {
             }
             item.setInputType(inputType);
         }
-        return this;
     }
 
     /**
@@ -176,20 +199,33 @@ public class FormValidator {
      * @return True when test passed .
      */
     private boolean testForm(ViewGroup form, boolean continueTest){
-        int childrenCount = form.getChildCount();
-        boolean testPassed = true;
         valuesOfFields.clear();
+        return testChildrenView(form, continueTest);
+    }
+
+    private boolean testChildrenView(ViewGroup parent, boolean continueTest){
+        int childrenCount = parent.getChildCount();
+        boolean testPassed = true;
         for (int i = 0; i < childrenCount; i++){
-            View c = form.getChildAt(i);
-            if (c instanceof EditText){
-                EditText item = (EditText) c;
+            View child = parent.getChildAt(i);
+            if (child instanceof EditText){
+                EditText item = (EditText) child;
                 int viewId = item.getId();
                 Config conf = formConfigArray.get(viewId);
-                if (conf == null) continue;
+                if (conf == null){
+                    if (_.DebugEnabled) Log.w("Validator","[W] Running Test. A EditText child in Form without test config !");
+                    continue;
+                }
                 ResultWrapper rs = testField(item, conf, display);
                 testPassed &= rs.passed;
                 valuesOfFields.put(viewId, rs.value);
+                if (_.DebugEnabled) Log.i("Validator","[I] A field tested! Result:{ passed:"+testPassed +", message:"+rs.message +", value:"+rs.value+" }");
                 if (! continueTest && ! testPassed) break;
+            }else if ( child instanceof ViewGroup){
+                if (_.DebugEnabled) Log.i("Validator","[I] Found a ViewGroup child !");
+                testPassed &= testChildrenView((ViewGroup) child, continueTest);
+            }else {
+                if (_.DebugEnabled) Log.w("Validator","[W] A child in Form is NOT EditText !");
             }
         }
         return testPassed;
