@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
         formCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int color = av.testFormAll(form) ?
+                int color = av.testAll() ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 formCommit.setTextColor(getResources().getColor(color));
 
