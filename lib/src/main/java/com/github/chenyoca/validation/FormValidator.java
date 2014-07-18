@@ -31,6 +31,8 @@ public class FormValidator {
     // Configs of the form
     private SparseArray<Config> formConfigArray = new SparseArray<Config>();
 
+    private int[] inputTypeExcludeViewIdArray;
+
     public FormValidator(Context context){
         this(context, new MessageDisplay() {
             @Override
@@ -105,6 +107,18 @@ public class FormValidator {
         return this;
     }
 
+    /**
+     * Apply InputType to EditText exclude some view with IDs.
+     * @param excludeViewIds View IDs not apply InputType
+     * @return FormValidator instance.
+     */
+    public FormValidator applyInputType(int... excludeViewIds){
+        checkBindForm();
+        inputTypeExcludeViewIdArray = excludeViewIds;
+        applyInputTypeToChildren(form);
+        return this;
+    }
+
     private void applyInputTypeToChildren(ViewGroup parent){
         int childrenCount = parent.getChildCount();
         for (int i = 0; i < childrenCount; i++){
@@ -116,6 +130,16 @@ public class FormValidator {
                 }
                 // YES
                 continue;
+            }
+            if (inputTypeExcludeViewIdArray != null){
+                boolean excludeFlag = false;
+                for (int id : inputTypeExcludeViewIdArray) {
+                    if (child.getId() == id) {
+                        excludeFlag = true;
+                        break;
+                    }
+                }
+                if (excludeFlag) continue;
             }
             EditText item = (EditText) child;
             Config conf = formConfigArray.get(item.getId());
