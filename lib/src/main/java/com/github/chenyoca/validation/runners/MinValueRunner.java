@@ -15,7 +15,7 @@ public class MinValueRunner extends ValueTestRunner{
 
     @Override
     protected boolean withExtraInt(double inputValue) {
-        return inputValue >= extraInt[0];
+        return inputValue >= extraLong[0];
     }
 
     @Override

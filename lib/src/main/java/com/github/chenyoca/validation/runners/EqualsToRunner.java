@@ -17,9 +17,9 @@ public class EqualsToRunner extends TestRunner{
     public boolean test(String inputValue) {
         String value = null;
         switch (extraType){
-            case Int: value = String.valueOf(extraInt[0]); break;
+            case Int: value = String.valueOf(extraLong[0]); break;
             case Float: value = String.valueOf(extraFloat[0]); break;
-            case String: value = extraStringValues[0]; break;
+            case String: value = extraString[0]; break;
         }
         return inputValue.equals(value);
     }

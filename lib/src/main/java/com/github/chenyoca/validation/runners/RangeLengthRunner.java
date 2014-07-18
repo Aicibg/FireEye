@@ -16,7 +16,7 @@ public class RangeLengthRunner extends TestRunner{
     @Override
     public boolean test(String inputValue) {
         int length = inputValue.length();
-        return extraInt[0] <= length && length <= extraInt[1];
+        return extraLong[0] <= length && length <= extraLong[1];
     }
 
     @Override
