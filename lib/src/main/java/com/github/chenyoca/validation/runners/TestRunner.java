@@ -55,13 +55,19 @@ public abstract class TestRunner {
     protected abstract boolean test(String inputValue);
 
     /**
-     * Check if set Int/Flow extra value for test
+     * Call when runner finish config, added the the test runner array.
+     */
+    public void onAdded(){}
+
+    /**
+     * Check if set Int/Float extra value for test
      * @param name Name of test runner
      */
-    protected void checkIntFlowValues(String name){
+    protected void checkIntFloatValues(String name){
         if (ExtraType.String.equals(extraType))
             throw new IllegalArgumentException(name +
-                    " ONLY accept Int/Float/Double values( set by 'setValues(...)' )!");
+                    " ONLY accept Int/Long/Float/Double values." +
+                    " Set by 'Type.Field.value(...) / Type.Field.values(...)'.");
     }
 
     /**
@@ -71,7 +77,8 @@ public abstract class TestRunner {
     protected void checkIntValues(String name){
         if (!ExtraType.Int.equals(extraType))
             throw new IllegalArgumentException(name +
-                    " ONLY accept Int values( set by 'setValues(...)' ) !");
+                    " ONLY accept Int/Long values." +
+                    " Set by 'Type.Field.value(...) / Type.Field.values(...)'.");
     }
 
     /**
@@ -104,17 +111,11 @@ public abstract class TestRunner {
      */
     private void performLazyLoader(){
         if (lazyLoader != null){
-            setValues(lazyLoader.intValues());
-            setValues(lazyLoader.doubleValues());
-            setValues(lazyLoader.stringValues());
+            setIfNeedValues(lazyLoader.intValues(),
+                    lazyLoader.stringValues(),
+                    lazyLoader.doubleValues());
         }
     }
-
-    /**
-     * Call when test runner finish configuration and added to runners array.
-     * In this method, Impl Runner can check extra value and value type.
-     */
-    public void onAdded(){}
 
     public String getMessage(){
         return message == null? "" : message;
@@ -128,12 +129,33 @@ public abstract class TestRunner {
         this.message = message;
     }
 
+    public void setRequiredValues(long[] lVals, String[] sVals, double[] dVals){
+        boolean nullValues = lVals == null || lVals.length ==0;
+        if ( ! nullValues) setValues(lVals);
+        boolean nullDVs = dVals == null || dVals.length == 0;
+        if ( ! nullDVs) setValues(dVals);
+        nullValues &= nullDVs;
+        boolean nullSVs = sVals == null || sVals.length == 0;
+        if ( ! nullSVs) setValues(sVals);
+        nullValues &= nullSVs;
+        if (nullValues){
+            throw
+                    new IllegalArgumentException("Test required 1 or 2 values. " +
+                            "Accept types: Int/Long/Float/Double/String .");
+        }
+    }
+
+    public void setIfNeedValues(long[] lVals, String[] sVals, double[] dVals){
+        if (lVals != null && lVals.length >0) setValues(lVals);
+        if (sVals != null && sVals.length >0) setValues(sVals);
+        if (dVals != null && dVals.length >0) setValues(dVals);
+    }
+
     /**
      * Set Int extra value for test runner.
      * @param values Int extra
      */
-    public void setValues(long... values){
-        checkValuesLength(values.length);
+    private void setValues(long... values){
         extraType = ExtraType.Int;
         if ( 1 == values.length){
             extraLong[0] = values[0];
@@ -147,8 +169,7 @@ public abstract class TestRunner {
      * Set String extra value for test runner.
      * @param values String extra
      */
-    public void setValues(String... values){
-        checkValuesLength(values.length);
+    private void setValues(String... values){
         extraType = ExtraType.String;
         if ( 1 == values.length){
             extraString[0] = values[0];
@@ -162,20 +183,13 @@ public abstract class TestRunner {
      * Set Flow/Double extra value for test runner.
      * @param values Flow/Double extra
      */
-    public void setValues(double... values){
-        checkValuesLength(values.length);
+    private void setValues(double... values){
         extraType = ExtraType.Float;
         if ( 1 == values.length){
             extraFloat[0] = values[0];
-        }else if ( 2 == values.length){
+        }else{
             extraFloat[0] = values[0];
             extraFloat[1] = values[1];
-        }
-    }
-
-    private void checkValuesLength(int length){
-        if (length == 0 || length > 2){
-            throw new IllegalArgumentException("Test extra values ONLY accept 1 or 2 values.");
         }
     }
 

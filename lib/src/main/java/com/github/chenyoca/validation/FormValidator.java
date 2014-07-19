@@ -1,6 +1,8 @@
 package com.github.chenyoca.validation;
 
 import android.content.Context;
+import android.text.InputType;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
@@ -57,7 +59,8 @@ public class FormValidator {
             throw new IllegalArgumentException(
                     String.format("View(id=%d) IS NOT A EditText View !", viewId));
         }
-        item = new _(display, (EditText)field, type);
+        EditText editText = (EditText)field;
+        item = new _(display, editText , type);
         configs.put(viewId, item);
         weakHold.put(viewId, item);
     }
@@ -71,23 +74,29 @@ public class FormValidator {
         return this;
     }
 
-    public ResultWrapper test(){
+    public TestResult test(){
         return test(true);
     }
 
-    public ResultWrapper test(boolean continuous){
-        String message = null;
-        boolean passed = true;
-        String value = null;
+    public TestResult test(boolean continuousTest){
+        boolean passFlag = true;
+        String failedMsg = "NO_TEST_CONFIGURATIONS";
+        String failedVal = null;
+        TestResult r = null;
         int size = configs.size();
         for (int i=0;i<size;i++) {
-            ResultWrapper r = configs.valueAt(i).performTest();
-            passed &= r.passed;
-            message = r.message;
-            value = r.value;
-            if (!continuous && !r.passed)break;
+            r = configs.valueAt(i).performTest();
+            if (debug) Log.i("Test","Tested result: "+r);
+            passFlag &= r.passed;
+            failedMsg = passFlag ? null : r.message;
+            failedVal = r.value;
+            if (!passFlag && !continuousTest) break;
         }
-        return new ResultWrapper(passed, message, value);
+        return new TestResult(r != null && passFlag,failedMsg,failedVal);
     }
 
+    boolean debug = false;
+    public void debug(boolean enable){
+        debug = enable;
+    }
 }

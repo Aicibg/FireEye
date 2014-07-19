@@ -10,8 +10,8 @@ import com.github.chenyoca.validation.LazyLoader;
 public abstract class StringLazyLoader implements LazyLoader {
 
     @Override
-    final public int[] intValues() {
-        return new int[0];
+    final public long[] intValues() {
+        return new long[0];
     }
 
     @Override

@@ -67,7 +67,7 @@ public enum Type {
     }
 
     public Type message(String message){
-
+        this.message = message;
         return this;
     }
 }

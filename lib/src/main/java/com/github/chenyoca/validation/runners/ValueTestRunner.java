@@ -31,7 +31,7 @@ public abstract class ValueTestRunner extends TestRunner {
 
     @Override
     public void onAdded() {
-        checkIntFlowValues("ValueTest ");
+        checkIntFloatValues("ValueTest ");
     }
 
     protected abstract boolean withExtraInt(double inputValue);

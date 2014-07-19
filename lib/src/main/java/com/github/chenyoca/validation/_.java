@@ -29,38 +29,38 @@ public class _ {
         add(field.getContext(), type);
     }
 
-    public ResultWrapper performTest(){
+    public TestResult performTest(){
         String value = String.valueOf(field.getText().toString());
-        boolean passed = true;
-        String message = null;
+        String message;
         TestRunner first = runners.get(0);
+        boolean required = false;
         if (first != null && Type.Required.equals(first.testType)){
-            passed = first.perform(value);
+            required = true;
+            boolean passed = first.perform(value);
             message = first.getMessage();
+            if ( ! passed){
+                display.show(field, message);
+                return new TestResult(false, message, null);
+            }
         }else if (TextUtils.isEmpty(value)){
-            return new ResultWrapper(true, "NO-INPUT-VALUE-AND-IS-NOT-REQUIRED", value);
-        }
-
-        if ( ! passed){
-            if (display != null) display.show(field, message);
-            return new ResultWrapper(false, message, null);
+            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", value);
         }
 
         final int size = runners.size();
-        for (int i=1;i<size;i++){
+        for (int i = required ? 1 : 0;i<size;i++){
             TestRunner r = runners.get(i);
-            passed = r.perform(value);
+            boolean passed = r.perform(value);
             message = r.getMessage();
             if ( !passed){
-                if (display != null) display.show(field, message);
-                break;
+                display.show(field, message);
+                return new TestResult(false, message, value);
             }
         }
-        return new ResultWrapper(passed, message, value);
+        return new TestResult(true, "TEST_PASSED", value);
     }
 
     public void performInputType(){
-        int inputType = InputType.TYPE_CLASS_TEXT;
+        int inputType = field.getInputType();
         for (TestRunner r : runners){
             switch (r.testType){
                 case MobilePhone:
@@ -87,7 +87,6 @@ public class _ {
                     field.setFilters(new InputFilter[]{
                             new InputFilter.LengthFilter((int)r.extraLong[index])} );
                     break;
-                default: inputType = InputType.TYPE_CLASS_TEXT;
             }
         }
         field.setInputType(inputType);
@@ -101,23 +100,36 @@ public class _ {
         }else{
             runners.add(r);
         }
+        r.onAdded();
     }
 
     void setValues(TestRunner r, Type type){
         switch (type){
+            case CreditCard:
+            case Email:
+            case Host:
+            case URL:
+            case IPv4:
+            case MobilePhone:
+            case NotBlank:
+            case Numeric:
+            case Required:
+                //No need values
+                break;
             case MaxLength:
             case MinLength:
             case RangeLength:
-                if (type.longValues != null) r.setValues(type.longValues);
+                //Required values
+                r.setIfNeedValues(type.longValues, null, null);
                 break;
             case MinValue:
             case MaxValue:
             case RangeValue:
-                if (type.longValues != null) r.setValues(type.longValues);
-                if (type.floatValues != null) r.setValues(type.floatValues);
-                if (type.stringValues != null) r.setValues(type.stringValues);
+                r.setRequiredValues(type.longValues, type.stringValues, type.floatValues);
                 break;
-            default: break;
+            default:
+                r.setIfNeedValues(type.longValues, type.stringValues, type.floatValues);
+                break;
         }
         if (type.message != null) r.setMessage(type.message);
         if (type.lazyLoader != null) r.setLazyLoader(type.lazyLoader);
