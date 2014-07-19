@@ -6,6 +6,10 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.github.chenyoca.validation.runners.TestRunner;
+import com.github.chenyoca.validation.supports.RunnerFactory;
 
 /**
  * User: YooJia.Chen@gmail.com
@@ -19,6 +23,7 @@ public class FormValidator {
     final View form;
     final SparseArray<_> configs = new SparseArray<_>();
     final SparseArray<_> weakHold = new SparseArray<_>();
+    final SparseArray<String> values = new SparseArray<String>();
 
     public FormValidator(View form, MessageDisplay display){
         this.form = form;
@@ -41,8 +46,34 @@ public class FormValidator {
         });
     }
 
+    /**
+     * Add validate type to a view with view id.
+     * @param viewId View ID
+     * @param types Validate type
+     * @return FormValidator instance.
+     */
     public FormValidator add(int viewId, Type...types){
         for (Type t : types) add(viewId, t);
+        return this;
+    }
+
+    /**
+     * Add validate runners to a view with view id.
+     * @param viewId View ID
+     * @param runners Test runners
+     * @return FormValidator instance.
+     */
+    public FormValidator add(int viewId, TestRunner...runners){
+        if (runners == null || runners.length == 0){
+            throw new IllegalArgumentException("Required 1 or more runner !");
+        }
+        _ item = configs.get(viewId);
+        if (item != null){
+            for (TestRunner r: runners) item.add(r);
+        }else{
+            item = create(viewId, runners[0]);
+            for (int i=1;i<runners.length;i++) item.add(runners[i]);
+        }
         return this;
     }
 
@@ -54,15 +85,21 @@ public class FormValidator {
             return;
         }
         // NO, create it.
+        create(viewId, RunnerFactory.build(context, type));
+    }
+
+    private _ create(int viewId, TestRunner runner){
         View field = form.findViewById(viewId);
         if ( ! (field instanceof EditText)){
             throw new IllegalArgumentException(
                     String.format("View(id=%d) IS NOT A EditText View !", viewId));
         }
         EditText editText = (EditText)field;
-        item = new _(display, editText , type);
+        _ item = new _(display, editText , runner);
         configs.put(viewId, item);
         weakHold.put(viewId, item);
+        values.put(viewId,"");
+        return item;
     }
 
     public FormValidator applyInputType(int...excludeViewIDs){
@@ -90,9 +127,28 @@ public class FormValidator {
             passFlag &= r.passed;
             failedMsg = passFlag ? null : r.message;
             failedVal = r.value;
+            values.setValueAt(i, r.value);
             if (!passFlag && !continuousTest) break;
         }
         return new TestResult(r != null && passFlag,failedMsg,failedVal);
+    }
+
+    /**
+     * Get an extra value from field that WITHOUT test config by view id.
+     * @param viewId View id WITHOUT test config
+     * @return String value
+     */
+    public String getExtraValue(int viewId){
+        return ((TextView)form.findViewById(viewId)).getText().toString();
+    }
+
+    /**
+     * Get value from test form.
+     * @param viewId View id
+     * @return String value
+     */
+    public String getValue(int viewId){
+        return values.get(viewId);
     }
 
     boolean debug = false;

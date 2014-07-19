@@ -17,19 +17,19 @@ import java.util.List;
  * YooJia.Chen@gmail.com
  * 2014-07-18
  */
-public class _ {
+class _ {
 
     final MessageDisplay display;
     final EditText field;
     List<TestRunner> runners = new ArrayList<TestRunner>(1);
 
-    public _(MessageDisplay display, EditText field, Type type) {
+    _(MessageDisplay display, EditText field, TestRunner runner) {
         this.display = display;
         this.field = field;
-        add(field.getContext(), type);
+        add(runner);
     }
 
-    public TestResult performTest(){
+    TestResult performTest(){
         String value = String.valueOf(field.getText().toString());
         String message;
         TestRunner first = runners.get(0);
@@ -59,7 +59,7 @@ public class _ {
         return new TestResult(true, "TEST_PASSED", value);
     }
 
-    public void performInputType(){
+    void performInputType(){
         int inputType = field.getInputType();
         for (TestRunner r : runners){
             switch (r.testType){
@@ -92,10 +92,14 @@ public class _ {
         field.setInputType(inputType);
     }
 
-    public void add(Context c, Type type){
+    void add(Context c, Type type){
         TestRunner r = RunnerFactory.build(c, type);
         setValues(r, type);
-        if (Type.Required.equals(type)){
+        add(r);
+    }
+
+    void add(TestRunner r){
+        if (Type.Required.equals(r.testType)){
             runners.add(0, r);
         }else{
             runners.add(r);
