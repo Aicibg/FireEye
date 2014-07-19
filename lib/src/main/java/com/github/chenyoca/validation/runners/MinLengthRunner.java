@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Length in min
  */
-public class MinLengthRunner extends TestRunner{
+class MinLengthRunner extends TestRunner {
 
     public MinLengthRunner(Type testType, String message){
         super(testType, message);

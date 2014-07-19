@@ -29,7 +29,7 @@ public enum Type {
     long[] longValues = null;
     double[] floatValues = null;
     String message = null;
-    LazyLoader lazyLoader = null;
+    ValuesLoader valuesLoader = null;
 
     public Type value(String value){
         stringValues = new String[]{value};
@@ -61,8 +61,8 @@ public enum Type {
         return this;
     }
 
-    public Type lazy(LazyLoader lazyLoader){
-        this.lazyLoader = lazyLoader;
+    public Type value(ValuesLoader valuesLoader){
+        this.valuesLoader = valuesLoader;
         return this;
     }
 

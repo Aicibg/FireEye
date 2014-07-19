@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Length in range
  */
-public class RangeLengthRunner extends TestRunner{
+class RangeLengthRunner extends TestRunner {
 
     public RangeLengthRunner(Type testType, String message){
         super(testType, message);

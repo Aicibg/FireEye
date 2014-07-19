@@ -1,28 +1,11 @@
-package com.github.chenyoca.validation.supports;
+package com.github.chenyoca.validation.runners;
 
 import android.content.Context;
 import android.content.res.Resources;
 
 import com.github.chenyoca.validation.R;
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.runners.CreditCardRunner;
-import com.github.chenyoca.validation.runners.DigitsRunner;
-import com.github.chenyoca.validation.runners.EmailRunner;
-import com.github.chenyoca.validation.runners.EqualsToRunner;
-import com.github.chenyoca.validation.runners.HTTPURLRunner;
-import com.github.chenyoca.validation.runners.HostRunner;
-import com.github.chenyoca.validation.runners.IPv4Runner;
-import com.github.chenyoca.validation.runners.MaxLengthRunner;
-import com.github.chenyoca.validation.runners.MaxValueRunner;
-import com.github.chenyoca.validation.runners.MinLengthRunner;
-import com.github.chenyoca.validation.runners.MinValueRunner;
-import com.github.chenyoca.validation.runners.MobilePhoneRunner;
-import com.github.chenyoca.validation.runners.NotBlankRunner;
-import com.github.chenyoca.validation.runners.NumericRunner;
-import com.github.chenyoca.validation.runners.RangeLengthRunner;
-import com.github.chenyoca.validation.runners.RangeValueRunner;
-import com.github.chenyoca.validation.runners.RequiredRunner;
-import com.github.chenyoca.validation.runners.TestRunner;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * Created by YooJia.Chen

@@ -1,15 +1,14 @@
 package com.github.chenyoca.validation;
 
 import android.content.Context;
-import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.TestRunner;
-import com.github.chenyoca.validation.supports.RunnerFactory;
+import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.runners.RunnerFactory;
 
 /**
  * User: YooJia.Chen@gmail.com
@@ -123,7 +122,7 @@ public class FormValidator {
         int size = configs.size();
         for (int i=0;i<size;i++) {
             r = configs.valueAt(i).performTest();
-            if (debug) Log.i("Test","Tested result: "+r);
+            if (debug) Log.i("Test","Field tested: "+r);
             passFlag &= r.passed;
             failedMsg = passFlag ? null : r.message;
             failedVal = r.value;

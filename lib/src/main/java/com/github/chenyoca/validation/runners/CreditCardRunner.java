@@ -1,6 +1,7 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
@@ -8,7 +9,7 @@ import com.github.chenyoca.validation.Type;
  * Credit card
  * !! Copyright -> http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.js
  */
-public class CreditCardRunner extends TestRunner{
+class CreditCardRunner extends TestRunner {
 
     public CreditCardRunner(Type testType, String message){
         super(testType, message);

@@ -7,14 +7,14 @@ import com.github.chenyoca.validation.Type;
  * Date: 2014-06-26
  * Value in max
  */
-public class MaxValueRunner extends ValueTestRunner{
+class MaxValueRunner extends ValueTestRunner{
 
     public MaxValueRunner(Type testType, String message){
         super(testType, message);
     }
 
     @Override
-    protected boolean withExtraInt(double inputValue) {
+    protected boolean withExtraLong(double inputValue) {
         return inputValue <= extraLong[0];
     }
 

@@ -88,7 +88,9 @@ Add dependency
     av.add(R.id.form_field_2, Type.CreditCard);
     av.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
     av.add(R.id.form_field_4, Type.Email);
-    av.add(R.id.form_field_5, Type.EqualsTo.lazy(new EditTextLazyLoader(form,R.id.form_field_4)));
+
+    // 使用`ValuesLoader`使得当校验时，才加载校验参数`values`。
+    av.add(R.id.form_field_5, Type.EqualsTo.values(new EditTextValuesLoader(form,R.id.form_field_4)));
     av.add(R.id.form_field_6, Type.Host);
     av.add(R.id.form_field_7, Type.URL);
     av.add(R.id.form_field_8, Type.MaxLength.value(5));

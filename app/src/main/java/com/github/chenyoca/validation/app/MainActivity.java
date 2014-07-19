@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.github.chenyoca.validation.FormValidator;
 import com.github.chenyoca.validation.MessageDisplay;
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.EditTextLazyLoader;
+import com.github.chenyoca.validation.supports.EditTextValuesLoader;
 
 public class MainActivity extends Activity {
 
@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         av.add(R.id.form_field_2, Type.CreditCard);
         av.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
         av.add(R.id.form_field_4, Type.Email);
-        av.add(R.id.form_field_5, Type.EqualsTo.lazy(new EditTextLazyLoader(form,R.id.form_field_4)));
+        av.add(R.id.form_field_5, Type.EqualsTo.value(new EditTextValuesLoader(form, R.id.form_field_4)));
         av.add(R.id.form_field_6, Type.Host);
         av.add(R.id.form_field_7, Type.URL);
         av.add(R.id.form_field_8, Type.MaxLength.value(5));

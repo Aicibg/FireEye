@@ -7,14 +7,14 @@ import com.github.chenyoca.validation.Type;
  * Date: 2014-06-26
  * Value in range
  */
-public class RangeValueRunner extends ValueTestRunner{
+class RangeValueRunner extends ValueTestRunner{
 
     public RangeValueRunner(Type testType, String message){
         super(testType, message);
     }
 
     @Override
-    protected boolean withExtraInt(double inputValue) {
+    protected boolean withExtraLong(double inputValue) {
         return extraLong[0] <= inputValue && inputValue <= extraLong[1];
     }
 

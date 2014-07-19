@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
  * 2014-07-16
  */
-public abstract class ValueTestRunner extends TestRunner {
+abstract class ValueTestRunner extends TestRunner {
 
     public ValueTestRunner(Type testType, String message) {
         super(testType, message);
@@ -15,7 +16,7 @@ public abstract class ValueTestRunner extends TestRunner {
 
     @Override
     protected boolean test(String input) {
-        double inputValue = 0;
+        double inputValue;
         try{
             inputValue = Double.valueOf(input);
         }catch (Exception e){
@@ -23,7 +24,7 @@ public abstract class ValueTestRunner extends TestRunner {
             return false;
         }
         if (ExtraType.Int.equals(extraType)){
-            return withExtraInt(inputValue);
+            return withExtraLong(inputValue);
         }else{
             return withExtraFloat(inputValue);
         }
@@ -34,6 +35,6 @@ public abstract class ValueTestRunner extends TestRunner {
         checkIntFloatValues("ValueTest ");
     }
 
-    protected abstract boolean withExtraInt(double inputValue);
+    protected abstract boolean withExtraLong(double inputValue);
     protected abstract boolean withExtraFloat(double inputValue);
 }

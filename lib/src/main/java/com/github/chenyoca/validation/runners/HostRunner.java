@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Host
  */
-public class HostRunner extends TestRunner{
+class HostRunner extends TestRunner {
 
     static final String HOST_REGEX = "^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,65}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$";
 

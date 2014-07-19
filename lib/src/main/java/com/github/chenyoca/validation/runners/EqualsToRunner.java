@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Equal to a value
  */
-public class EqualsToRunner extends TestRunner{
+class EqualsToRunner extends TestRunner {
 
     public EqualsToRunner(Type testType, String message){
         super(testType, message);

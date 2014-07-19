@@ -3,13 +3,14 @@ package com.github.chenyoca.validation.runners;
 import android.text.TextUtils;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Numeric
  */
-public class NumericRunner extends TestRunner{
+class NumericRunner extends TestRunner {
 
     public NumericRunner(Type testType, String message){
         super(testType, message);

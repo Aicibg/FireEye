@@ -6,8 +6,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.github.chenyoca.validation.supports.RunnerFactory;
-import com.github.chenyoca.validation.runners.TestRunner;
+import com.github.chenyoca.validation.runners.RunnerFactory;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,7 @@ class _ {
 
     TestResult performTest(){
         String value = String.valueOf(field.getText().toString());
+        display.dismiss(field);
         String message;
         TestRunner first = runners.get(0);
         boolean required = false;
@@ -136,6 +137,6 @@ class _ {
                 break;
         }
         if (type.message != null) r.setMessage(type.message);
-        if (type.lazyLoader != null) r.setLazyLoader(type.lazyLoader);
+        if (type.valuesLoader != null) r.setValuesLoader(type.valuesLoader);
     }
 }

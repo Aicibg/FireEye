@@ -1,13 +1,14 @@
 package com.github.chenyoca.validation.runners;
 
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.supports.TestRunner;
 
 /**
  * User: chenyoca@gmail.com
  * Date: 2014-06-26
  * Email
  */
-public class EmailRunner extends TestRunner{
+class EmailRunner extends TestRunner {
 
     static final String EMAIL_REGEX =
             "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+" +

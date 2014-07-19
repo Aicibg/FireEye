@@ -1,6 +1,6 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.supports;
 
-import com.github.chenyoca.validation.LazyLoader;
+import com.github.chenyoca.validation.ValuesLoader;
 import com.github.chenyoca.validation.Type;
 
 import java.util.regex.Pattern;
@@ -24,7 +24,7 @@ public abstract class TestRunner {
 
     protected ExtraType extraType = ExtraType.String;
     protected String message;
-    private LazyLoader lazyLoader;
+    private ValuesLoader valuesLoader;
 
     protected TestRunner(Type testType, String message){
         this.testType = testType;
@@ -67,7 +67,7 @@ public abstract class TestRunner {
         if (ExtraType.String.equals(extraType))
             throw new IllegalArgumentException(name +
                     " ONLY accept Int/Long/Float/Double values." +
-                    " Set by 'Type.Field.value(...) / Type.Field.values(...)'.");
+                    " Set by 'Type.TYPE.value(...) / Type.TYPE.values(...)'.");
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class TestRunner {
         if (!ExtraType.Int.equals(extraType))
             throw new IllegalArgumentException(name +
                     " ONLY accept Int/Long values." +
-                    " Set by 'Type.Field.value(...) / Type.Field.values(...)'.");
+                    " Set by 'Type.TYPE.value(...) / Type.TYPE.values(...)'.");
     }
 
     /**
@@ -107,13 +107,13 @@ public abstract class TestRunner {
     }
 
     /**
-     * Reload extra value from lazy loader
+     * Reload extra value from value loader
      */
     private void performLazyLoader(){
-        if (lazyLoader != null){
-            setIfNeedValues(lazyLoader.intValues(),
-                    lazyLoader.stringValues(),
-                    lazyLoader.doubleValues());
+        if (valuesLoader != null){
+            setIfNeedValues(valuesLoader.longValues(),
+                    valuesLoader.stringValues(),
+                    valuesLoader.doubleValues());
         }
     }
 
@@ -121,8 +121,8 @@ public abstract class TestRunner {
         return message == null? "" : message;
     }
 
-    public void setLazyLoader(LazyLoader lazyloader){
-        this.lazyLoader = lazyloader;
+    public void setValuesLoader(ValuesLoader valuesLoader){
+        this.valuesLoader = valuesLoader;
     }
 
     public void setMessage(String message){
