@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
  * DATE: 2014-06-25
  * Test runner.
  */
-public abstract class TestRunner {
+public abstract class AbstractValidator {
 
     protected enum ExtraType {
-        Int, Float, String
+        Long, Double, String,None
     }
 
     public final Type testType;
@@ -22,16 +22,16 @@ public abstract class TestRunner {
     public final long[] extraLong = new long[2];
     protected final String[] extraString = new String[2];
 
-    protected ExtraType extraType = ExtraType.String;
+    protected ExtraType extraType = ExtraType.None;
     protected String message;
     private ValuesLoader valuesLoader;
 
-    protected TestRunner(Type testType, String message){
+    protected AbstractValidator(Type testType, String message){
         this.testType = testType;
         this.message = message;
     }
 
-    public TestRunner(String message){
+    public AbstractValidator(String message){
         this.testType = Type.Custom;
         this.message = message;
     }
@@ -60,23 +60,21 @@ public abstract class TestRunner {
     public void onAdded(){}
 
     /**
-     * Check if set Int/Float extra value for test
-     * @param name Name of test runner
+     * Check if set Long/Double extra value for test
      */
-    protected void checkIntFloatValues(String name){
-        if (ExtraType.String.equals(extraType))
-            throw new IllegalArgumentException(name +
+    protected void checkRequiredLongFloatValues(){
+        if (!ExtraType.Long.equals(extraType) || !ExtraType.Double.equals(extraType))
+            throw new IllegalArgumentException(getClass().getSimpleName() +
                     " ONLY accept Int/Long/Float/Double values." +
                     " Set by 'Type.TYPE.value(...) / Type.TYPE.values(...)'.");
     }
 
     /**
-     * Check if set Int extra value for test
-     * @param name Name of test runner
+     * Check if set Long extra value for test
      */
-    protected void checkIntValues(String name){
-        if (!ExtraType.Int.equals(extraType))
-            throw new IllegalArgumentException(name +
+    protected void checkRequiredLongValues(){
+        if (!ExtraType.Long.equals(extraType))
+            throw new IllegalArgumentException(getClass().getSimpleName() +
                     " ONLY accept Int/Long values." +
                     " Set by 'Type.TYPE.value(...) / Type.TYPE.values(...)'.");
     }
@@ -87,11 +85,11 @@ public abstract class TestRunner {
     protected void formatMessage(){
         if (message == null) return;
         switch (extraType){
-            case Float:
+            case Double:
                 message = message.replace("{$1}","" + extraFloat[0])
                         .replace("{$2}","" + extraFloat[1]);
                 break;
-            case Int:
+            case Long:
                 message = message.replace("{$1}","" + extraLong[0])
                         .replace("{$2}","" + extraLong[1]);
                 break;
@@ -152,11 +150,11 @@ public abstract class TestRunner {
     }
 
     /**
-     * Set Int extra value for test runner.
-     * @param values Int extra
+     * Set Long extra value for test runner.
+     * @param values Long extra
      */
     private void setValues(long... values){
-        extraType = ExtraType.Int;
+        extraType = ExtraType.Long;
         if ( 1 == values.length){
             extraLong[0] = values[0];
         }else{
@@ -184,7 +182,7 @@ public abstract class TestRunner {
      * @param values Flow/Double extra
      */
     private void setValues(double... values){
-        extraType = ExtraType.Float;
+        extraType = ExtraType.Double;
         if ( 1 == values.length){
             extraFloat[0] = values[0];
         }else{

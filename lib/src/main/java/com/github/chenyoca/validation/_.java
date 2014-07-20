@@ -6,8 +6,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.github.chenyoca.validation.runners.RunnerFactory;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.validators.ValidatorFactory;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +21,9 @@ class _ {
 
     final MessageDisplay display;
     final EditText field;
-    List<TestRunner> runners = new ArrayList<TestRunner>(1);
+    List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, EditText field, TestRunner runner) {
+    _(MessageDisplay display, EditText field, AbstractValidator runner) {
         this.display = display;
         this.field = field;
         add(runner);
@@ -33,7 +33,7 @@ class _ {
         String value = String.valueOf(field.getText().toString());
         display.dismiss(field);
         String message;
-        TestRunner first = runners.get(0);
+        AbstractValidator first = runners.get(0);
         boolean required = false;
         if (first != null && Type.Required.equals(first.testType)){
             required = true;
@@ -49,7 +49,7 @@ class _ {
 
         final int size = runners.size();
         for (int i = required ? 1 : 0;i<size;i++){
-            TestRunner r = runners.get(i);
+            AbstractValidator r = runners.get(i);
             boolean passed = r.perform(value);
             message = r.getMessage();
             if ( !passed){
@@ -62,7 +62,7 @@ class _ {
 
     void performInputType(){
         int inputType = field.getInputType();
-        for (TestRunner r : runners){
+        for (AbstractValidator r : runners){
             switch (r.testType){
                 case MobilePhone:
                 case Numeric:
@@ -94,12 +94,12 @@ class _ {
     }
 
     void add(Context c, Type type){
-        TestRunner r = RunnerFactory.build(c, type);
+        AbstractValidator r = ValidatorFactory.build(c, type);
         setValues(r, type);
         add(r);
     }
 
-    void add(TestRunner r){
+    void add(AbstractValidator r){
         if (Type.Required.equals(r.testType)){
             runners.add(0, r);
         }else{
@@ -108,7 +108,7 @@ class _ {
         r.onAdded();
     }
 
-    void setValues(TestRunner r, Type type){
+    void setValues(AbstractValidator r, Type type){
         switch (type){
             case CreditCard:
             case Email:

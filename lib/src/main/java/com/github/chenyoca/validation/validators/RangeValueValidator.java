@@ -1,15 +1,15 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Value in range
  */
-class RangeValueRunner extends ValueTestRunner{
+class RangeValueValidator extends ValueAbstractValidator {
 
-    public RangeValueRunner(Type testType, String message){
+    public RangeValueValidator(Type testType, String message){
         super(testType, message);
     }
 

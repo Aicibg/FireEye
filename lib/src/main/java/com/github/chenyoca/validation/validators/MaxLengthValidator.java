@@ -1,16 +1,16 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Length in max
  */
-class MaxLengthRunner extends TestRunner {
+class MaxLengthValidator extends AbstractValidator {
 
-    public MaxLengthRunner(Type testType, String message){
+    public MaxLengthValidator(Type testType, String message){
         super(testType, message);
     }
 
@@ -21,6 +21,6 @@ class MaxLengthRunner extends TestRunner {
 
     @Override
     public void onAdded() {
-        checkIntValues("MaxLength Test");
+        checkRequiredLongValues();
     }
 }

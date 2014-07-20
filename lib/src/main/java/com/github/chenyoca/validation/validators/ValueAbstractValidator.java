@@ -1,16 +1,16 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
  * 2014-07-16
  */
-abstract class ValueTestRunner extends TestRunner {
+abstract class ValueAbstractValidator extends AbstractValidator {
 
-    public ValueTestRunner(Type testType, String message) {
+    public ValueAbstractValidator(Type testType, String message) {
         super(testType, message);
     }
 
@@ -23,7 +23,7 @@ abstract class ValueTestRunner extends TestRunner {
             message = e.getMessage();
             return false;
         }
-        if (ExtraType.Int.equals(extraType)){
+        if (ExtraType.Long.equals(extraType)){
             return withExtraLong(inputValue);
         }else{
             return withExtraFloat(inputValue);
@@ -32,7 +32,7 @@ abstract class ValueTestRunner extends TestRunner {
 
     @Override
     public void onAdded() {
-        checkIntFloatValues("ValueTest ");
+        checkRequiredLongFloatValues();
     }
 
     protected abstract boolean withExtraLong(double inputValue);

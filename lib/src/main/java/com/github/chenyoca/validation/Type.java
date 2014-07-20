@@ -10,6 +10,11 @@ public enum Type {
     Required,
     NotBlank,
     Digits,
+    IsDate,
+    IsDateTime,
+    IsTime,
+    IsFuture,
+    IsPast,
     Email,
     EqualsTo,
     Host,
@@ -30,6 +35,22 @@ public enum Type {
     double[] floatValues = null;
     String message = null;
     ValuesLoader valuesLoader = null;
+
+    public Type format(String format){
+        switch (this){
+            case IsDate:
+            case IsTime:
+            case IsDateTime:
+            case IsFuture:
+            case IsPast:
+                value(format);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Only types of DATE/TIME can call this method to set date format string. ");
+        }
+        return this;
+    }
 
     public Type value(String value){
         stringValues = new String[]{value};

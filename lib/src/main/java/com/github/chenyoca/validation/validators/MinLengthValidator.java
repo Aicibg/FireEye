@@ -1,16 +1,16 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Length in min
  */
-class MinLengthRunner extends TestRunner {
+class MinLengthValidator extends AbstractValidator {
 
-    public MinLengthRunner(Type testType, String message){
+    public MinLengthValidator(Type testType, String message){
         super(testType, message);
     }
 
@@ -21,6 +21,6 @@ class MinLengthRunner extends TestRunner {
 
     @Override
     public void onAdded() {
-        checkIntValues("MinLength Test");
+        checkRequiredLongValues();
     }
 }

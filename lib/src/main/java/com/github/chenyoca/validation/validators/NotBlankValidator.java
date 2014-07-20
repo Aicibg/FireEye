@@ -1,18 +1,18 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import android.text.TextUtils;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * AUTH: chenyoca (chenyoca@gmail.com)
  * DATE: 2014-06-25
  * Not blank runner
  */
-class NotBlankRunner extends TestRunner {
+class NotBlankValidator extends AbstractValidator {
 
-    public NotBlankRunner(Type testType, String message){
+    public NotBlankValidator(Type testType, String message){
         super(testType, message);
     }
 

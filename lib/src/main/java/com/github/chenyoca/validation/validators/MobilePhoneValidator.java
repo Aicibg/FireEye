@@ -1,18 +1,18 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Chinese mobile phone
  */
-class MobilePhoneRunner extends TestRunner {
+class MobilePhoneValidator extends AbstractValidator {
 
     static final String PHONE_REGEX = "^(\\+?\\d{2}-?)?(1[0-9])\\d{9}$";
 
-    public MobilePhoneRunner(Type testType, String message){
+    public MobilePhoneValidator(Type testType, String message){
         super(testType, message);
     }
 

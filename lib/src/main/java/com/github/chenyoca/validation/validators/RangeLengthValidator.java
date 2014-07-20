@@ -1,16 +1,16 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Length in range
  */
-class RangeLengthRunner extends TestRunner {
+class RangeLengthValidator extends AbstractValidator {
 
-    public RangeLengthRunner(Type testType, String message){
+    public RangeLengthValidator(Type testType, String message){
         super(testType, message);
     }
 
@@ -22,6 +22,6 @@ class RangeLengthRunner extends TestRunner {
 
     @Override
     public void onAdded() {
-        checkIntValues("RangeLength Test");
+        checkRequiredLongValues();
     }
 }

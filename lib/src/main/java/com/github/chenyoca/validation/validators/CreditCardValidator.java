@@ -1,17 +1,17 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Credit card
  * !! Copyright -> http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.js
  */
-class CreditCardRunner extends TestRunner {
+class CreditCardValidator extends AbstractValidator {
 
-    public CreditCardRunner(Type testType, String message){
+    public CreditCardValidator(Type testType, String message){
         super(testType, message);
     }
 

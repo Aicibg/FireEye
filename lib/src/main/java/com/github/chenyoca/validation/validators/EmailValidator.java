@@ -1,21 +1,21 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Email
  */
-class EmailRunner extends TestRunner {
+class EmailValidator extends AbstractValidator {
 
     static final String EMAIL_REGEX =
             "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+" +
                     "(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+" +
                     "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
 
-    public EmailRunner(Type testType, String message){
+    public EmailValidator(Type testType, String message){
         super(testType, message);
     }
 

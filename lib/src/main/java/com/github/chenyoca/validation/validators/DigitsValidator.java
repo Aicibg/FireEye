@@ -1,18 +1,18 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import android.text.TextUtils;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * Only digits
  */
-class DigitsRunner extends TestRunner {
+class DigitsValidator extends AbstractValidator {
 
-    public DigitsRunner(Type testType, String message){
+    public DigitsValidator(Type testType, String message){
         super(testType, message);
     }
 

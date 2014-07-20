@@ -1,19 +1,19 @@
-package com.github.chenyoca.validation.runners;
+package com.github.chenyoca.validation.validators;
 
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.TestRunner;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: chenyoca@gmail.com
- * Date: 2014-06-26
+ * IsDate: 2014-06-26
  * HTTP URL
  */
-class HTTPURLRunner extends TestRunner {
+class HTTPURLValidator extends AbstractValidator {
 
     static final String URL_REGEX =
             "^(https?:\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?$";
 
-    public HTTPURLRunner(Type testType, String message){
+    public HTTPURLValidator(Type testType, String message){
         super(testType, message);
     }
 

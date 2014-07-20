@@ -33,25 +33,44 @@ Add dependency
     }
 
 ```
+
+Maven
+
+```xml
+
+    <dependency>
+        <groupId>com.github.chenyoca</groupId>
+        <artifactId>android-validation</artifactId>
+        <version>2.4-SNAPSHOT</version>
+        <type>aar</type>
+        <scope>provided</scope>
+    </dependency>
+
+```
 ## 已内置支持的校验方式
 
-* **Required** (必填)
-* **NotBlank** (非空数据)
-* **Digits** (仅数字)
-* **Email** (电子邮件)
-* **EqualTo** (与指定值相同)
-* **Host** (主机地址)
-* **URL** (Http URL)
-* **IPv4** (IPv4地址)
-* **RangeLength** (指定长度范围)
-* **MinLength** (最小长度)
-* **MaxLength** (最大长度)
-* **Numeric** (数值)
-* **CreditCard** (信用卡号)
-* **RangeValue** (最值范围)
-* **MinValue** (最小值)
-* **MaxValue** (最大值)
-* **MobilePhone** (中国的手机号码)
+* **Required** 必填选项
+* **NotBlank** 非空数据
+* **Digits** 仅数字
+* **IsDate** 是否为有效日期
+* **IsTime** 是否为有效时间
+* **IsDateTime** 是否为有效的日期和时间
+* **IsFuture** 是否为当前时间之后的日期和时间
+* **IsPast** 是否为当前时间之前的日期和时间
+* **Email** 电子邮件
+* **EqualTo** 与指定值相同
+* **Host** 主机地址
+* **URL** Http URL
+* **IPv4** IPv4地
+* **RangeLength** 指定长度范围
+* **MinLength** 最小长度
+* **MaxLength** 最大长度
+* **Numeric** 数值
+* **CreditCard** 信用卡号
+* **RangeValue** 最值范围
+* **MinValue** 最小值
+* **MaxValue** 最大值
+* **MobilePhone** 中国的手机号码
 
 ## 如何使用？
 

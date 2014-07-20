@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.supports.TestRunner;
-import com.github.chenyoca.validation.runners.RunnerFactory;
+import com.github.chenyoca.validation.validators.ValidatorFactory;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: YooJia.Chen@gmail.com
@@ -59,19 +59,19 @@ public class FormValidator {
     /**
      * Add validate runners to a view with view id.
      * @param viewId View ID
-     * @param runners Test runners
+     * @param validators Test validators
      * @return FormValidator instance.
      */
-    public FormValidator add(int viewId, TestRunner...runners){
-        if (runners == null || runners.length == 0){
+    public FormValidator add(int viewId, AbstractValidator...validators){
+        if (validators == null || validators.length == 0){
             throw new IllegalArgumentException("Required 1 or more runner !");
         }
         _ item = configs.get(viewId);
         if (item != null){
-            for (TestRunner r: runners) item.add(r);
+            for (AbstractValidator v: validators) item.add(v);
         }else{
-            item = create(viewId, runners[0]);
-            for (int i=1;i<runners.length;i++) item.add(runners[i]);
+            item = create(viewId, validators[0]);
+            for (int i=1;i<validators.length;i++) item.add(validators[i]);
         }
         return this;
     }
@@ -84,17 +84,17 @@ public class FormValidator {
             return;
         }
         // NO, create it.
-        create(viewId, RunnerFactory.build(context, type));
+        create(viewId, ValidatorFactory.build(context, type));
     }
 
-    private _ create(int viewId, TestRunner runner){
+    private _ create(int viewId, AbstractValidator validator){
         View field = form.findViewById(viewId);
         if ( ! (field instanceof EditText)){
             throw new IllegalArgumentException(
                     String.format("View(id=%d) IS NOT A EditText View !", viewId));
         }
         EditText editText = (EditText)field;
-        _ item = new _(display, editText , runner);
+        _ item = new _(display, editText , validator);
         configs.put(viewId, item);
         weakHold.put(viewId, item);
         values.put(viewId,"");
