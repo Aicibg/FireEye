@@ -20,7 +20,7 @@ class EmailValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isMatched(EMAIL_REGEX, inputValue);
     }
 

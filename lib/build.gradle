@@ -1,4 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.robolectric:robolectric-gradle-plugin:0.11.0'
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'robolectric'
 
 android {
     compileSdkVersion 19
@@ -10,6 +20,11 @@ android {
         targetSdkVersion 11
         versionCode 1
         versionName "1.0"
+
+        testApplicationId "com.github.chenyoca.validation.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testHandleProfiling true
+        testFunctionalTest true
     }
     buildTypes {
         release {
@@ -17,11 +32,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:19.+'
+
+    androidTestCompile 'junit:junit:4.10'
+    androidTestCompile 'org.robolectric:robolectric:2.3'
+    androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
 
-//apply from: 'https://raw.githubusercontent.com/chenyoca/gradle_publish/master/publish_aar.gradle'
+apply from: 'https://raw.githubusercontent.com/chenyoca/gradle_publish/master/publish_aar.gradle'

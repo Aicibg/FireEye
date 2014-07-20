@@ -15,7 +15,7 @@ class MaxLengthValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return inputValue.length() <= extraLong[0];
     }
 

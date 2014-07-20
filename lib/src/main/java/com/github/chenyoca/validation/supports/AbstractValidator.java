@@ -44,7 +44,7 @@ public abstract class AbstractValidator {
     public boolean perform(String input){
         performLazyLoader();
         formatMessage();
-        return test(input);
+        return isValid(input);
     }
 
     /**
@@ -52,15 +52,15 @@ public abstract class AbstractValidator {
      * @param inputValue Input value
      * @return True if passed, false otherwise.
      */
-    protected abstract boolean test(String inputValue);
+    protected abstract boolean isValid(String inputValue);
 
     /**
-     * Call when runner finish config, added the the test runner array.
+     * Call when runner finish config, added the the isValid runner array.
      */
     public void onAdded(){}
 
     /**
-     * Check if set Long/Double extra value for test
+     * Check if set Long/Double extra value for isValid
      */
     protected void checkRequiredLongFloatValues(){
         if (!ExtraType.Long.equals(extraType) || !ExtraType.Double.equals(extraType))
@@ -70,7 +70,7 @@ public abstract class AbstractValidator {
     }
 
     /**
-     * Check if set Long extra value for test
+     * Check if set Long extra value for isValid
      */
     protected void checkRequiredLongValues(){
         if (!ExtraType.Long.equals(extraType))
@@ -150,7 +150,7 @@ public abstract class AbstractValidator {
     }
 
     /**
-     * Set Long extra value for test runner.
+     * Set Long extra value for isValid runner.
      * @param values Long extra
      */
     private void setValues(long... values){
@@ -164,7 +164,7 @@ public abstract class AbstractValidator {
     }
 
     /**
-     * Set String extra value for test runner.
+     * Set String extra value for isValid runner.
      * @param values String extra
      */
     private void setValues(String... values){
@@ -178,7 +178,7 @@ public abstract class AbstractValidator {
     }
 
     /**
-     * Set Flow/Double extra value for test runner.
+     * Set Flow/Double extra value for isValid runner.
      * @param values Flow/Double extra
      */
     private void setValues(double... values){

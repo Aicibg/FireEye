@@ -133,8 +133,8 @@ public class FormValidator {
     }
 
     /**
-     * Get an extra value from field that WITHOUT test config by view id.
-     * @param viewId View id WITHOUT test config
+     * Get an extra value from field that WITHOUT isValid config by view id.
+     * @param viewId View id WITHOUT isValid config
      * @return String value
      */
     public String getExtraValue(int viewId){
@@ -142,7 +142,7 @@ public class FormValidator {
     }
 
     /**
-     * Get value from test form.
+     * Get value from isValid form.
      * @param viewId View id
      * @return String value
      */

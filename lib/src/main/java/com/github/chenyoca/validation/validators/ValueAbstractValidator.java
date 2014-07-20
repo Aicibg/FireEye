@@ -15,7 +15,7 @@ abstract class ValueAbstractValidator extends AbstractValidator {
     }
 
     @Override
-    protected boolean test(String input) {
+    protected boolean isValid(String input) {
         double inputValue;
         try{
             inputValue = Double.valueOf(input);

@@ -18,7 +18,7 @@ class NotBlankValidator extends AbstractValidator {
 
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         boolean empty = TextUtils.isEmpty(inputValue);
         return ! empty && ! isMatched("^\\s*$", inputValue);
     }

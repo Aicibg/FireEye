@@ -17,7 +17,7 @@ class HostValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isMatched(IPv4Validator.IPV4_REGEX, inputValue) || isMatched(HOST_REGEX, inputValue);
     }
 

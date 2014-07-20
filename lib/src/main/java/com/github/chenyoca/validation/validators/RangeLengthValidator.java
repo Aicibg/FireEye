@@ -15,7 +15,7 @@ class RangeLengthValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         int length = inputValue.length();
         return extraLong[0] <= length && length <= extraLong[1];
     }

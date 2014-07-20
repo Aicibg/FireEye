@@ -16,7 +16,7 @@ class CreditCardValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         // accept only spaces, digits and dashes
         if ( ! isMatched("[\\d -]*", inputValue) ) {
             return false;

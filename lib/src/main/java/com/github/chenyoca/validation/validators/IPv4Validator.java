@@ -17,7 +17,7 @@ class IPv4Validator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isMatched(IPV4_REGEX, inputValue);
     }
 

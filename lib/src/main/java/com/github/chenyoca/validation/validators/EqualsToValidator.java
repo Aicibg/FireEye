@@ -15,7 +15,7 @@ class EqualsToValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         String value = null;
         switch (extraType){
             case Long: value = String.valueOf(extraLong[0]); break;

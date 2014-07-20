@@ -17,7 +17,7 @@ class MobilePhoneValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isMatched(PHONE_REGEX, inputValue);
     }
 

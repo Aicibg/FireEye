@@ -18,7 +18,7 @@ class HTTPURLValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isMatched(URL_REGEX, inputValue);
     }
 

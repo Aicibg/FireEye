@@ -145,9 +145,9 @@ Maven
 
     // 添加到已创建的Config中：
     
-    conf.add(R.id.username, new TestRunner("出错时，此消息被返回并显示到EditText中") {
+    conf.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
         @Override
-        public boolean test(CharSequence inputValue) {
+        public boolean test(String inputValue) {
             // 校验通过时返回 true
             return inputValue.equal("AABB");
         }

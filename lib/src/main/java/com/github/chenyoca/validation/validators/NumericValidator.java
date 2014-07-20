@@ -17,7 +17,7 @@ class NumericValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return isNumeric(String.valueOf(inputValue));
     }
 

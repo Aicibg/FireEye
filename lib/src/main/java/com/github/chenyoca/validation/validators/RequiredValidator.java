@@ -17,7 +17,7 @@ class RequiredValidator extends AbstractValidator {
     }
 
     @Override
-    public boolean test(String inputValue) {
+    public boolean isValid(String inputValue) {
         return ! TextUtils.isEmpty(inputValue);
     }
 }
