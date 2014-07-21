@@ -63,8 +63,8 @@ public abstract class AbstractValidator {
      * Check if set Long/Double extra value for isValid
      */
     protected void checkRequiredLongFloatValues(){
-        if (!ExtraType.Long.equals(extraType) || !ExtraType.Double.equals(extraType))
-            throw new IllegalArgumentException(getClass().getSimpleName() +
+        final boolean isLF = ExtraType.Long.equals(extraType) || ExtraType.Double.equals(extraType);
+        if (!isLF) throw new IllegalArgumentException(getClass().getSimpleName() +
                     " ONLY accept Int/Long/Float/Double values." +
                     " Set by 'Type.TYPE.value(...) / Type.TYPE.values(...)'.");
     }
@@ -128,7 +128,7 @@ public abstract class AbstractValidator {
     }
 
     public void setRequiredValues(long[] lVals, String[] sVals, double[] dVals){
-        boolean nullValues = lVals == null || lVals.length ==0;
+        boolean nullValues = lVals == null || lVals.length == 0;
         if ( ! nullValues) setValues(lVals);
         boolean nullDVs = dVals == null || dVals.length == 0;
         if ( ! nullDVs) setValues(dVals);

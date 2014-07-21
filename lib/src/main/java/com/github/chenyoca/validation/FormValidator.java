@@ -70,7 +70,7 @@ public class FormValidator {
         if (item != null){
             for (AbstractValidator v: validators) item.add(v);
         }else{
-            item = create(viewId, validators[0]);
+            item = create(viewId, validators[0], Type.Custom);
             for (int i=1;i<validators.length;i++) item.add(validators[i]);
         }
         return this;
@@ -84,17 +84,18 @@ public class FormValidator {
             return;
         }
         // NO, create it.
-        create(viewId, ValidatorFactory.build(context, type));
+        item = create(viewId, ValidatorFactory.build(context, type), type);
+
     }
 
-    private _ create(int viewId, AbstractValidator validator){
+    private _ create(int viewId, AbstractValidator validator, Type type){
         View field = form.findViewById(viewId);
         if ( ! (field instanceof EditText)){
             throw new IllegalArgumentException(
                     String.format("View(id=%d) IS NOT A EditText View !", viewId));
         }
         EditText editText = (EditText)field;
-        _ item = new _(display, editText , validator);
+        _ item = new _(display, editText , validator, type);
         configs.put(viewId, item);
         weakHold.put(viewId, item);
         values.put(viewId,"");

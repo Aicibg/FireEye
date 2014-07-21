@@ -19,6 +19,8 @@ import static org.junit.Assert.assertTrue;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
+@Config(emulateSdk = 16)
+@RunWith(RobolectricTestRunner.class)
 public class DateTimeTest extends AbstractTest{
 
     public DateTimeValidator dateValidator;
@@ -35,7 +37,9 @@ public class DateTimeTest extends AbstractTest{
         pastValidator = new DateTimeValidator(Type.IsPast,null);
     }
 
-    @Test public void allFailed(){
+    @Test
+    @Override
+    public void shouldAllFailed(){
         // Date
         assertFalse(dateValidator.perform("a"));
         assertFalse(dateValidator.perform("1"));
@@ -91,7 +95,9 @@ public class DateTimeTest extends AbstractTest{
         assertFalse(pastValidator.perform("2088-07-20 21:00:61"));
     }
 
-    @Test public void allPassed(){
+    @Test
+    @Override
+    public void shouldAllPassed(){
         // Date
         assertTrue(dateValidator.perform("2014-07-21"));
         assertTrue(dateValidator.perform("2014-12-31"));

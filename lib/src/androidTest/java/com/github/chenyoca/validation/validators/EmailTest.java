@@ -17,6 +17,8 @@ import static org.junit.Assert.assertTrue;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
+@Config(emulateSdk = 16)
+@RunWith(RobolectricTestRunner.class)
 public class EmailTest extends AbstractTest{
 
     public EmailValidator validator;
@@ -25,14 +27,18 @@ public class EmailTest extends AbstractTest{
         validator = new EmailValidator(Type.Email,null);
     }
 
-    @Test public void allFailed(){
+    @Test
+    @Override
+    public void shouldAllFailed(){
         assertFalse(validator.perform("a"));
         assertFalse(validator.perform("XXXX"));
         assertFalse(validator.perform("电子邮件@qq.com"));
         assertFalse(validator.perform("chenyoca#@gm@ail.com"));
     }
 
-    @Test public void allPassed(){
+    @Test
+    @Override
+    public void shouldAllPassed(){
         assertTrue(validator.perform("chenyoca@gmail.com"));
         assertTrue(validator.perform("chen.yoca@gmail.com"));
         assertTrue(validator.perform("chen.yo-ca@gmail.com"));

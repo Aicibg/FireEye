@@ -18,6 +18,8 @@ import static org.junit.Assert.assertTrue;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
+@Config(emulateSdk = 16)
+@RunWith(RobolectricTestRunner.class)
 public class DigitsTest extends AbstractTest{
 
     public DigitsValidator validator;
@@ -26,7 +28,7 @@ public class DigitsTest extends AbstractTest{
         validator = new DigitsValidator(Type.Digits,null);
     }
 
-    @Test public void allFailed(){
+    @Test public void shouldAllFailed(){
         Assert.assertFalse(validator.perform("aaa123"));
         Assert.assertFalse(validator.perform("###"));
         Assert.assertFalse(validator.perform("123343434L"));
@@ -39,7 +41,9 @@ public class DigitsTest extends AbstractTest{
         Assert.assertFalse(validator.perform("0xFFFF"));
     }
 
-    @Test public void allPassed(){
+    @Test
+    @Override
+    public void shouldAllPassed(){
         Assert.assertTrue(validator.perform("123"));
         Assert.assertTrue(validator.perform("123343434"));
         Assert.assertTrue(validator.perform(""+Integer.MAX_VALUE));

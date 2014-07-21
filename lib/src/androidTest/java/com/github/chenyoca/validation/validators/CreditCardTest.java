@@ -17,6 +17,8 @@ import static org.junit.Assert.assertTrue;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
+@Config(emulateSdk = 16)
+@RunWith(RobolectricTestRunner.class)
 public class CreditCardTest extends AbstractTest{
 
     public CreditCardValidator validator;
@@ -25,7 +27,9 @@ public class CreditCardTest extends AbstractTest{
         validator = new CreditCardValidator(Type.CreditCard,null);
     }
 
-    @Test public void allFailed(){
+    @Test
+    @Override
+    public void shouldAllFailed(){
         assertFalse(validator.perform("a"));
         assertFalse(validator.perform("1"));
         assertFalse(validator.perform("1!!!!!!!!!!!!!!!!!"));
@@ -35,7 +39,9 @@ public class CreditCardTest extends AbstractTest{
         assertFalse(validator.perform("12345678901234567890"));
     }
 
-    @Test public void allPassed(){
+    @Test
+    @Override
+    public void shouldAllPassed(){
         // Card Number from http://www.getcreditcardnumbers.com/
 
         // Mastercard

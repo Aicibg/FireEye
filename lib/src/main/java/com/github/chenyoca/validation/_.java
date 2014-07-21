@@ -23,10 +23,11 @@ class _ {
     final EditText field;
     List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, EditText field, AbstractValidator runner) {
+    _(MessageDisplay display, EditText field, AbstractValidator validator, Type type) {
         this.display = display;
         this.field = field;
-        add(runner);
+        setValues(validator, type);
+        add(validator);
     }
 
     TestResult performTest(){
@@ -99,16 +100,16 @@ class _ {
         add(r);
     }
 
-    void add(AbstractValidator r){
-        if (Type.Required.equals(r.testType)){
-            runners.add(0, r);
+    void add(AbstractValidator v){
+        if (Type.Required.equals(v.testType)){
+            runners.add(0, v);
         }else{
-            runners.add(r);
+            runners.add(v);
         }
-        r.onAdded();
+        v.onAdded();
     }
 
-    void setValues(AbstractValidator r, Type type){
+    void setValues(AbstractValidator v, Type type){
         switch (type){
             case CreditCard:
             case Email:
@@ -125,18 +126,18 @@ class _ {
             case MinLength:
             case RangeLength:
                 //Required values
-                r.setIfNeedValues(type.longValues, null, null);
+                v.setIfNeedValues(type.longValues, null, null);
                 break;
             case MinValue:
             case MaxValue:
             case RangeValue:
-                r.setRequiredValues(type.longValues, type.stringValues, type.floatValues);
+                v.setRequiredValues(type.longValues, type.stringValues, type.floatValues);
                 break;
             default:
-                r.setIfNeedValues(type.longValues, type.stringValues, type.floatValues);
+                v.setIfNeedValues(type.longValues, type.stringValues, type.floatValues);
                 break;
         }
-        if (type.message != null) r.setMessage(type.message);
-        if (type.valuesLoader != null) r.setValuesLoader(type.valuesLoader);
+        if (type.message != null) v.setMessage(type.message);
+        if (type.valuesLoader != null) v.setValuesLoader(type.valuesLoader);
     }
 }
