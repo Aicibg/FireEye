@@ -24,7 +24,7 @@ public class DateTimeValidator extends AbstractValidator {
     @Override
     protected boolean isValid(String inputValue) {
         try{
-            DateFormat sdf;
+            final DateFormat sdf;
             if (!TextUtils.isEmpty(extraString[0])){
                 sdf = new SimpleDateFormat(extraString[0]);
             }else{
@@ -36,6 +36,8 @@ public class DateTimeValidator extends AbstractValidator {
                         sdf = SimpleDateFormat.getTimeInstance();
                         break;
                     case IsDateTime:
+                    case IsFuture:
+                    case IsPast:
                         sdf = SimpleDateFormat.getDateTimeInstance();
                         break;
                     default:
@@ -43,8 +45,12 @@ public class DateTimeValidator extends AbstractValidator {
                         break;
                 }
             }
-            System.out.println(">> InputValue: "+ inputValue);
-            return sdf != null && testDate(sdf.parse(inputValue));
+            if(sdf != null){
+                sdf.setLenient(false);
+                return testDate(sdf.parse(inputValue));
+            }else{
+                return false;
+            }
         }catch (ParseException e){
             e.printStackTrace();
             return false;
@@ -52,13 +58,12 @@ public class DateTimeValidator extends AbstractValidator {
     }
 
     boolean testDate(Date date){
-        System.out.println(">>> Date: "+date);
-        Date now = new Date();
+        final Date now = new Date();
         switch (testType){
             case IsFuture:
-                return now.after(date);
+                return now.before(date);//now.getTime() < date.getTime();
             case IsPast:
-                return now.before(date);
+                return now.after(date);//now.getTime() > date.getTime();
             default:
                 return true;
         }

@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Calendar;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -81,10 +83,16 @@ public class DateTimeTest {
         assertFalse(dateTimeValidator.perform("2014/07/20 21/00/00"));
         assertFalse(dateTimeValidator.perform("2014/07/20 21/00/61"));
         assertFalse(dateTimeValidator.perform("2014/07/20 21:00:61"));
+
+        // Future
+        assertFalse(futureValidator.perform("2000-01-01 00:00:00"));
+        assertFalse(futureValidator.perform("2014-07-20 21:00:61"));
+
+        // Past
+        assertFalse(pastValidator.perform("2088-07-20 21:00:61"));
     }
 
-//    @Test
-    public void allPassed(){
+    @Test public void allPassed(){
         // Date
         assertTrue(dateValidator.perform("2014-07-21"));
         assertTrue(dateValidator.perform("2014-12-31"));
@@ -96,5 +104,12 @@ public class DateTimeTest {
         dateValidator.setIfNeedValues(null,new String[]{"yyyy#MM#dd"}, null);
         assertTrue(dateValidator.perform("2014#07#21"));
         assertTrue(dateValidator.perform("2014#7#21"));
+
+        // Future
+        assertTrue(futureValidator.perform("2088-07-22 00:00:00"));
+        assertTrue(futureValidator.perform("2014-07-21 21:00:00"));
+
+        // Past
+        assertTrue(pastValidator.perform("2014-07-20 21:00:59"));
     }
 }
