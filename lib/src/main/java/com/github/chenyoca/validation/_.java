@@ -49,11 +49,11 @@ class _ {
         }
 
         final int size = runners.size();
-        for (int i = required ? 1 : 0;i<size;i++){
+        for (int i = required ? 1 : 0;i < size;i++){
             AbstractValidator r = runners.get(i);
             boolean passed = r.perform(value);
             message = r.getMessage();
-            if ( !passed){
+            if ( ! passed){
                 display.show(field, message);
                 return new TestResult(false, message, value);
             }
@@ -85,7 +85,7 @@ class _ {
                     break;
                 case MaxLength:
                 case RangeLength:
-                    int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
+                    final int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
                     field.setFilters(new InputFilter[]{
                             new InputFilter.LengthFilter((int)r.extraLong[index])} );
                     break;
