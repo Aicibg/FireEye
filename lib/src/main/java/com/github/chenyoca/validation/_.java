@@ -6,8 +6,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.github.chenyoca.validation.validators.ValidatorFactory;
 import com.github.chenyoca.validation.supports.AbstractValidator;
+import com.github.chenyoca.validation.validators.ValidatorFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +106,7 @@ class _ {
         }else{
             runners.add(v);
         }
-        v.onAdded();
+        v.verifyValues();
     }
 
     void setValues(AbstractValidator v, Type type){

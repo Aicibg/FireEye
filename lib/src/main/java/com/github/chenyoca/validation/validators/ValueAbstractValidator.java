@@ -31,7 +31,7 @@ abstract class ValueAbstractValidator extends AbstractValidator {
     }
 
     @Override
-    public void onAdded() {
+    public void verifyValues() {
         checkRequiredLongFloatValues();
     }
 

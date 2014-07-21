@@ -1,7 +1,7 @@
 package com.github.chenyoca.validation.supports;
 
-import com.github.chenyoca.validation.ValuesLoader;
 import com.github.chenyoca.validation.Type;
+import com.github.chenyoca.validation.ValuesLoader;
 
 import java.util.regex.Pattern;
 
@@ -57,7 +57,7 @@ public abstract class AbstractValidator {
     /**
      * Call when runner finish config, added the the isValid runner array.
      */
-    public void onAdded(){}
+    public void verifyValues(){}
 
     /**
      * Check if set Long/Double extra value for isValid

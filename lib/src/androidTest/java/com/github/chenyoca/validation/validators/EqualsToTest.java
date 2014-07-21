@@ -8,41 +8,29 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
  * YooJia.Chen@gmail.com
  * 2014-07-21
  */
-public class MaxValueTest extends GroupTester {
+public class EqualsToTest extends GroupTester {
 
     @Override
     protected AbstractValidator validator() {
-        return new MaxValueValidator(Type.MaxValue, null);
+        return new EqualsToValidator(Type.EqualsTo, null);
     }
 
     @Override
-    protected long[] longValues() {
-        return new long[]{20};
+    protected String[] stringValues() {
+        return new String[]{"chenyoca"};
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "-30",
-                "-20",
-                "-19",
-                "-1",
-                "0",
-                "5",
-                "10",
-                "19",
-                "20",
+                "chenyoca"
         };
     }
 
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "20.1",
-                "20.2",
-                "21",
-                "29",
-                "29999",
+                "Yoojia.chen"
         };
     }
 }

@@ -8,41 +8,34 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
  * YooJia.Chen@gmail.com
  * 2014-07-21
  */
-public class MaxValueTest extends GroupTester {
+public class TimeTest extends GroupTester{
 
     @Override
     protected AbstractValidator validator() {
-        return new MaxValueValidator(Type.MaxValue, null);
-    }
-
-    @Override
-    protected long[] longValues() {
-        return new long[]{20};
+        return new DateTimeValidator(Type.IsTime, null);
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "-30",
-                "-20",
-                "-19",
-                "-1",
-                "0",
-                "5",
-                "10",
-                "19",
-                "20",
+                "00:00",
         };
     }
 
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "20.1",
-                "20.2",
-                "21",
-                "29",
-                "29999",
+                "a",
+                "00",
+                "2459",
+                "245900",
+                "hhmm",
+                "hhmmss",
+                "24:60",
+                "25:59",
+                "25:60",
+                "25:60:",
+                "24:59:60",
         };
     }
 }

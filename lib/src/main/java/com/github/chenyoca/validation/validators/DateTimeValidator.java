@@ -47,7 +47,7 @@ public class DateTimeValidator extends AbstractValidator {
             }
             if(sdf != null){
                 sdf.setLenient(false);
-                return testDate(sdf.parse(inputValue));
+                return checkDate(sdf.parse(inputValue));
             }else{
                 return false;
             }
@@ -57,7 +57,7 @@ public class DateTimeValidator extends AbstractValidator {
         }
     }
 
-    boolean testDate(Date date){
+    boolean checkDate(Date date){
         final Date now = new Date();
         switch (testType){
             case IsFuture:
@@ -70,7 +70,7 @@ public class DateTimeValidator extends AbstractValidator {
     }
 
     @Override
-    public void onAdded() {
+    public void verifyValues() {
         if (!ExtraType.None.equals(extraType) && !ExtraType.String.equals(extraType))
             throw new IllegalArgumentException(getClass().getSimpleName() +
                     " ONLY accept String values." +

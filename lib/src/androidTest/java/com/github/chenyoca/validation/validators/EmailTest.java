@@ -1,49 +1,38 @@
 package com.github.chenyoca.validation.validators;
 
-import com.github.chenyoca.validation.AbstractTest;
 import com.github.chenyoca.validation.Type;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
- * 2014-07-20
+ * 2014-07-21
  */
-@Config(emulateSdk = 16)
-@RunWith(RobolectricTestRunner.class)
-public class EmailTest extends AbstractTest{
+public class EmailTest extends GroupTester {
 
-    public EmailValidator validator;
-
-    @Before public void setUp(){
-        validator = new EmailValidator(Type.Email,null);
+    @Override
+    protected AbstractValidator validator() {
+        return new EmailValidator(Type.Email, null);
     }
 
-    @Test
     @Override
-    public void shouldAllFailed(){
-        assertFalse(validator.perform("a"));
-        assertFalse(validator.perform("XXXX"));
-        assertFalse(validator.perform("电子邮件@qq.com"));
-        assertFalse(validator.perform("chenyoca#@gm@ail.com"));
+    protected String[] thisShouldAllAssertTrue() {
+        return new String[]{
+                "chenyoca@gmail.com",
+                "chen.yoca@gmail.com",
+                "chen.yo-ca@gmail.com",
+                "chen.yo-ca2013@gmail.com",
+                "228441083@qq.com",
+        };
     }
 
-    @Test
     @Override
-    public void shouldAllPassed(){
-        assertTrue(validator.perform("chenyoca@gmail.com"));
-        assertTrue(validator.perform("chen.yoca@gmail.com"));
-        assertTrue(validator.perform("chen.yo-ca@gmail.com"));
-        assertTrue(validator.perform("chen.yo-ca2013@gmail.com"));
-        assertTrue(validator.perform("228441083@qq.com"));
-
+    protected String[] thisShouldAllAssertFalse() {
+        return new String[]{
+                "a",
+                "XXXX",
+                "电子邮件@qq.com",
+                "chenyoca#@gm@ail.com",
+        };
     }
 }
