@@ -1,5 +1,6 @@
 package com.github.chenyoca.validation.validators;
 
+import com.github.chenyoca.validation.AbstractTest;
 import com.github.chenyoca.validation.Type;
 
 import org.junit.Before;
@@ -18,9 +19,7 @@ import static org.junit.Assert.assertTrue;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
-@Config(emulateSdk = 16)
-@RunWith(RobolectricTestRunner.class)
-public class DateTimeTest {
+public class DateTimeTest extends AbstractTest{
 
     public DateTimeValidator dateValidator;
     public DateTimeValidator timeValidator;
