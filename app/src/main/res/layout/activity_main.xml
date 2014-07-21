@@ -12,38 +12,11 @@
         android:orientation="vertical"
         >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="单项校验："
-            />
-
-        <EditText
-            android:id="@+id/single_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="组合：必填 | 电子邮件 | 最大长度为20"
-            />
-
-        <Button
-            android:id="@+id/single_commit"
-            android:text="单项校验"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="表单校验:"
-            />
-
         <EditText
             android:id="@+id/form_field_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="必填|手机号码"
+            android:hint="组合条件：必填选项|手机号码"
             />
 
         <EditText
@@ -57,7 +30,7 @@
             android:id="@+id/form_field_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="仅数字"
+            android:hint="组合条件：仅数字|最大长度20"
             />
 
         <EditText
@@ -146,7 +119,7 @@
 
         <Button
             android:id="@+id/form_commit"
-            android:text="表单校验"
+            android:text="提交校验"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

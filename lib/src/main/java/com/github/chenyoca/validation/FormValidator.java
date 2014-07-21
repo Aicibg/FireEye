@@ -1,17 +1,14 @@
 package com.github.chenyoca.validation;
 
 import android.content.Context;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.runners.TestRunner;
+import com.github.chenyoca.validation.validators.ValidatorFactory;
+import com.github.chenyoca.validation.supports.AbstractValidator;
 
 /**
  * User: YooJia.Chen@gmail.com
@@ -20,19 +17,22 @@ import com.github.chenyoca.validation.runners.TestRunner;
  */
 public class FormValidator {
 
-    private MessageDisplay display;
-    private ViewGroup form;
+    final Context context;
+    final MessageDisplay display;
+    final View form;
+    final SparseArray<_> configs = new SparseArray<_>();
+    final SparseArray<_> weakHold = new SparseArray<_>();
+    final SparseArray<String> values = new SparseArray<String>();
 
-    private final Context context;
+    public FormValidator(View form, MessageDisplay display){
+        this.form = form;
+        assert form != null;
+        this.context = form.getContext();
+        this.display = display;
+    }
 
-    // Values of fields
-    private SparseArray<String> valuesOfFields = new SparseArray<String>();
-
-    // Configs of the form
-    private SparseArray<Config> formConfigArray = new SparseArray<Config>();
-
-    public FormValidator(Context context){
-        this(context, new MessageDisplay() {
+    public FormValidator(View form){
+        this(form,new MessageDisplay() {
             @Override
             public void dismiss(EditText field) {
                 field.setError(null);
@@ -45,270 +45,114 @@ public class FormValidator {
         });
     }
 
-    public FormValidator(Context context, MessageDisplay display){
-        this.display = display;
-        this.context = context;
-    }
-
-    public static void enableDebug(){
-        _.DebugEnabled = true;
-    }
-
-    public static void disableDebug(){
-        _.DebugEnabled = false;
+    /**
+     * Add validate type to a view with view id.
+     * @param viewId View ID
+     * @param types Validate type
+     * @return FormValidator instance.
+     */
+    public FormValidator add(int viewId, Type...types){
+        for (Type t : types) add(viewId, t);
+        return this;
     }
 
     /**
-     * Add test fields by types and view id.
-     * @param viewId View id for the test field.
-     * @param types Build in types
-     * @return AndroidValidator instance.
+     * Add validate runners to a view with view id.
+     * @param viewId View ID
+     * @param validators Test validators
+     * @return FormValidator instance.
      */
-    public FormValidator putField(int viewId, Type... types){
-        if (types.length < 1) throw new IllegalArgumentException("Types array at less 1 parameter !");
-        Config s = Config.build(context, types[0]).apply();
-        for (int i=1;i<types.length;i++){
-            s.add(types[i]).apply();
+    public FormValidator add(int viewId, AbstractValidator...validators){
+        if (validators == null || validators.length == 0){
+            throw new IllegalArgumentException("Required 1 or more runner !");
         }
-        formConfigArray.put(viewId, s);
-        return this;
-    }
-
-    /**
-     * Add a test field with config and view id.
-     * @param viewId View id for the test field.
-     * @param config Config
-     * @return AndroidValidator instance.
-     */
-    public FormValidator putField(int viewId, Config config){
-        formConfigArray.put(viewId, config);
-        return this;
-    }
-
-    /**
-     * Bind a form for test actions
-     * @param form Target form layout
-     * @return AndroidValidator instance.
-     */
-    public FormValidator bind(ViewGroup form){
-        this.form = form;
-        return this;
-    }
-
-    /**
-     * Apply InputType to EditText.
-     * @return AndroidValidator instance.
-     */
-    public FormValidator applyInputType(){
-        checkBindForm();
-        applyInputTypeToChildren(form);
-        return this;
-    }
-
-    private void applyInputTypeToChildren(ViewGroup parent){
-        int childrenCount = parent.getChildCount();
-        for (int i = 0; i < childrenCount; i++){
-            View child = parent.getChildAt(i);
-            if ( ! (child instanceof EditText)){
-                if (child instanceof ViewGroup) {
-                    if (_.DebugEnabled) Log.i("Validator","[I] Found a ViewGroup child !");
-                    applyInputTypeToChildren((ViewGroup) child);
-                }
-                // YES
-                continue;
-            }
-            EditText item = (EditText) child;
-            Config conf = formConfigArray.get(item.getId());
-            if (conf == null){
-                if (_.DebugEnabled) Log.w("Validator","[W] Apply InputType. A EditText child in Form without test config !");
-                continue;
-            }
-            int inputType = InputType.TYPE_CLASS_TEXT;
-            for (TestRunner r : conf.runnerArray){
-                switch (r.testType){
-                    case MobilePhone:
-                    case Numeric:
-                    case Digits:
-                    case MaxValue:
-                    case MinValue:
-                    case RangeValue:
-                    case IPv4:
-                    case CreditCard:
-                        inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL;
-                        break;
-                    case Email:
-                        inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-                        item.setSingleLine(true);
-                        break;
-                    case URL:
-                    case Host:
-                        inputType = InputType.TYPE_TEXT_VARIATION_URI;
-                        break;
-                    case MaxLength:
-                    case RangeLength:
-                        int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
-                        item.setFilters(new InputFilter[]{
-                                new InputFilter.LengthFilter(r.extraInt[index])} );
-                        break;
-                    default: inputType = InputType.TYPE_CLASS_TEXT;
-                }
-            }
-            item.setInputType(inputType);
-        }
-    }
-
-    /**
-     * Set all fields `single line`
-     * @return AndroidValidator instance.
-     */
-    public FormValidator setSingleLine(){
-        checkBindForm();
-        int childrenCount = form.getChildCount();
-        for (int i = 0; i < childrenCount; i++){
-            View c = form.getChildAt(i);
-            if (c instanceof EditText){
-                EditText item = (EditText) c;
-                item.setSingleLine(true);
-            }
+        _ item = configs.get(viewId);
+        if (item != null){
+            for (AbstractValidator v: validators) item.add(v);
+        }else{
+            item = create(viewId, validators[0], Type.Custom);
+            for (int i=1;i<validators.length;i++) item.add(validators[i]);
         }
         return this;
     }
 
-    /**
-     * Test all fields, and get a boolean result , STOP testing when got a test failed.
-     * @return True if passed, false otherwise.
-     */
-    public boolean test(){
-        checkBindForm();
-        return testForm(form);
-    }
-
-    /**
-     * Test all fields, and get a boolean reset.
-     * @return True if passed, false otherwise.
-     */
-    public boolean testAll(){
-        checkBindForm();
-        return testFormAll(form);
-    }
-
-    /**
-     * Test the form layout.
-     * @param form The form layout
-     * @param continueTest If true, continue when a filed test failed, otherwise break.
-     * @return True when test passed .
-     */
-    private boolean testForm(ViewGroup form, boolean continueTest){
-        valuesOfFields.clear();
-        return testChildrenView(form, continueTest);
-    }
-
-    private boolean testChildrenView(ViewGroup parent, boolean continueTest){
-        int childrenCount = parent.getChildCount();
-        boolean testPassed = true;
-        for (int i = 0; i < childrenCount; i++){
-            View child = parent.getChildAt(i);
-            if (child instanceof EditText){
-                EditText item = (EditText) child;
-                int viewId = item.getId();
-                Config conf = formConfigArray.get(viewId);
-                if (conf == null){
-                    if (_.DebugEnabled) Log.w("Validator","[W] Running Test. A EditText child in Form without test config !");
-                    continue;
-                }
-                ResultWrapper rs = testField(item, conf, display);
-                testPassed &= rs.passed;
-                valuesOfFields.put(viewId, rs.value);
-                if (_.DebugEnabled) Log.i("Validator","[I] A field tested! Result:{ passed:"+testPassed +", message:"+rs.message +", value:"+rs.value+" }");
-                if (! continueTest && ! testPassed) break;
-            }else if ( child instanceof ViewGroup){
-                if (_.DebugEnabled) Log.i("Validator","[I] Found a ViewGroup child !");
-                testPassed &= testChildrenView((ViewGroup) child, continueTest);
-            }else {
-                if (_.DebugEnabled) Log.w("Validator","[W] A child in Form is NOT EditText !");
-            }
+    private void add(int viewId, Type type){
+        // If config(key by view id) exists, just add.
+        _ item = configs.get(viewId);
+        if (item != null){
+            item.add(context, type);
+            return;
         }
-        return testPassed;
+        // NO, create it.
+        item = create(viewId, ValidatorFactory.build(context, type), type);
+
     }
 
-    public boolean testForm(ViewGroup form){
-        return testForm(form, false);
+    private _ create(int viewId, AbstractValidator validator, Type type){
+        View field = form.findViewById(viewId);
+        if ( ! (field instanceof EditText)){
+            throw new IllegalArgumentException(
+                    String.format("View(id=%d) IS NOT A EditText View !", viewId));
+        }
+        EditText editText = (EditText)field;
+        _ item = new _(display, editText , validator, type);
+        configs.put(viewId, item);
+        weakHold.put(viewId, item);
+        values.put(viewId,"");
+        return item;
     }
 
-    public boolean testFormAll(ViewGroup form){
-        return testForm(form, true);
+    public FormValidator applyInputType(int...excludeViewIDs){
+        for (int exclude : excludeViewIDs){
+            weakHold.remove(exclude);
+        }
+        int size = weakHold.size();
+        for (int i=0;i<size;i++) weakHold.valueAt(i).performInputType();
+        return this;
+    }
+
+    public TestResult test(){
+        return test(true);
+    }
+
+    public TestResult test(boolean continuousTest){
+        boolean passFlag = true;
+        String failedMsg = "NO_TEST_CONFIGURATIONS";
+        String failedVal = null;
+        TestResult r = null;
+        int size = configs.size();
+        for (int i=0;i<size;i++) {
+            r = configs.valueAt(i).performTest();
+            if (debug) Log.i("Test","Field tested: "+r);
+            passFlag &= r.passed;
+            failedMsg = passFlag ? null : r.message;
+            failedVal = r.value;
+            values.setValueAt(i, r.value);
+            if (!passFlag && !continuousTest) break;
+        }
+        return new TestResult(r != null && passFlag,failedMsg,failedVal);
     }
 
     /**
-     * Get value by view id.
-     * @param viewId View Id.
-     * @return String value in view.
+     * Get an extra value from field that WITHOUT isValid config by view id.
+     * @param viewId View id WITHOUT isValid config
+     * @return String value
+     */
+    public String getExtraValue(int viewId){
+        return ((TextView)form.findViewById(viewId)).getText().toString();
+    }
+
+    /**
+     * Get value from isValid form.
+     * @param viewId View id
+     * @return String value
      */
     public String getValue(int viewId){
-        return valuesOfFields.get(viewId);
+        return values.get(viewId);
     }
 
-    /**
-     * Get value by view id from parent view.
-     * @param parent Parent view
-     * @param viewId view Id
-     * @return String value in view.
-     */
-    public String getValue(View parent, int viewId){
-        return ((TextView)parent.findViewById(viewId)).getText().toString();
-    }
-
-    /**
-     * Set a custom display interface.
-     * @param display display interface
-     */
-    public void setDisplay(MessageDisplay display){
-        this.display = display;
-    }
-
-    /**
-     * Test edit text field .
-     * @param field Input field, a EditText view.
-     * @param conf Test configuration .
-     * @return Test result wrapper.
-     */
-    public static ResultWrapper testField(EditText field, Config conf, MessageDisplay display){
-        if (conf == null) return new ResultWrapper(false,"Field configuration CANNOT BE NULL !!", null);
-        boolean passed = true;
-        String message = null;
-        String input = String.valueOf(field.getText());
-        if (display != null) display.dismiss(field);
-
-        // If required
-        TestRunner first = conf.runnerArray.get(0);
-        if (Type.Required.equals(first.testType)){
-            passed = first.perform(input);
-            message = first.getMessage();
-        }else if (TextUtils.isEmpty(input)){
-            return new ResultWrapper(true, "NO-INPUT-VALUE-AND-IS-NOT-REQUIRED", String.valueOf(input));
-        }
-
-        if ( ! passed){
-            if (display != null) display.show(field, message);
-            return new ResultWrapper(false, message, null);
-        }
-
-        for (TestRunner r : conf.runnerArray){
-            if (Type.Required.equals(r.testType)) continue;
-            passed = r.perform(input);
-            message = r.getMessage();
-            if ( !passed){
-                if (display != null) display.show(field, message);
-                break;
-            }
-        }
-
-        return new ResultWrapper(passed, message, String.valueOf(input));
-    }
-
-    private void checkBindForm(){
-        if (form == null){
-            throw new IllegalStateException("FormView is NULL ! Did you call 'bind(form)' ?");
-        }
+    boolean debug = false;
+    public void debug(boolean enable){
+        debug = enable;
     }
 }

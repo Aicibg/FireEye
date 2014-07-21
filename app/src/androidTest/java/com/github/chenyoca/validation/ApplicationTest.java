@@ -1,4 +1,4 @@
-package com.example.yoojia.myapplication;
+package com.github.chenyoca.validation;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

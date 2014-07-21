@@ -11,9 +11,7 @@ import android.widget.Toast;
 import com.github.chenyoca.validation.FormValidator;
 import com.github.chenyoca.validation.MessageDisplay;
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.EditTextLazyLoader;
-import com.github.chenyoca.validation.Config;
-import com.github.chenyoca.validation.ResultWrapper;
+import com.github.chenyoca.validation.supports.EditTextValuesLoader;
 
 public class MainActivity extends Activity {
 
@@ -38,54 +36,37 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Config conf = Config.build(this, Type.Required).message("必填选项").apply();
-        conf.add(Type.MaxLength).values(20).apply();
-        conf.add(Type.Email).apply();
-
-        final EditText test = (EditText) findViewById(R.id.single_test);
-
-        final Button commit = (Button) findViewById(R.id.single_commit);
-        commit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ResultWrapper rw = FormValidator.testField(test, conf, messageDisplay);
-                int color = rw.passed ?
-                        android.R.color.holo_green_dark : android.R.color.holo_red_dark;
-                commit.setTextColor(getResources().getColor(color));
-            }
-        });
-
         final LinearLayout form = (LinearLayout) findViewById(R.id.form);
 
 //      默认是在 EditText 右边显示一个浮动提示框。
-//      final FormValidator av = new FormValidator();
+//      final FormValidator av = new FormValidator(form);
 
 //      指定自定义显示出错消息的方式，
-        final FormValidator av = new FormValidator(this, messageDisplay);
-        av.putField(R.id.form_field_1, Type.MobilePhone, Type.Required);
-        av.putField(R.id.form_field_2, Type.CreditCard);
-        av.putField(R.id.form_field_3, Type.Digits);
-        av.putField(R.id.form_field_4, Type.Email);
-        av.putField(R.id.form_field_5, Config.build(this, Type.EqualsTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
-        av.putField(R.id.form_field_6, Type.Host);
-        av.putField(R.id.form_field_7, Type.URL);
-        av.putField(R.id.form_field_8, Config.build(this, Type.MaxLength).values(5).apply());
-        av.putField(R.id.form_field_9, Config.build(this, Type.MinLength).values(4).apply());
-        av.putField(R.id.form_field_10, Config.build(this, Type.RangeLength).values(4,8).apply());
-        av.putField(R.id.form_field_11, Type.NotBlank);
-        av.putField(R.id.form_field_12, Type.Numeric);
-        av.putField(R.id.form_field_13, Config.build(this, Type.MaxValue).values(100).apply());
-        av.putField(R.id.form_field_14, Config.build(this, Type.MinValue).values(20).apply());
-        av.putField(R.id.form_field_15, Config.build(this, Type.RangeValue).values(18, 30).apply());
+        final FormValidator av = new FormValidator(form, messageDisplay);
+        av.add(R.id.form_field_1, Type.Required, Type.MobilePhone);
+        av.add(R.id.form_field_2, Type.CreditCard);
+        av.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
+        av.add(R.id.form_field_4, Type.Email);
+        av.add(R.id.form_field_5, Type.EqualsTo.value(new EditTextValuesLoader(form, R.id.form_field_4)));
+        av.add(R.id.form_field_6, Type.Host);
+        av.add(R.id.form_field_7, Type.URL);
+        av.add(R.id.form_field_8, Type.MaxLength.value(5));
+        av.add(R.id.form_field_9, Type.MinLength.value(4));
+        av.add(R.id.form_field_10, Type.RangeLength.values(4,8));
+        av.add(R.id.form_field_11, Type.NotBlank);
+        av.add(R.id.form_field_12, Type.Numeric);
+        av.add(R.id.form_field_13, Type.MaxValue.value(100));
+        av.add(R.id.form_field_14, Type.MinValue.value(20));
+        av.add(R.id.form_field_15, Type.RangeValue.values(18,30));
 
-        av.bind(form)
-          .applyInputType();
+        av.debug(true);
+        av.applyInputType();
 
         final Button formCommit = (Button) findViewById(R.id.form_commit);
         formCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int color = av.testAll() ?
+                int color = av.test().passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 formCommit.setTextColor(getResources().getColor(color));
 

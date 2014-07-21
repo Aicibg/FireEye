@@ -29,64 +29,54 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:android-validation:2.3-SNAPSHOT'
+        compile 'com.github.chenyoca:android-validation:2.4.1-SNAPSHOT'
     }
+
+```
+
+Maven
+
+```xml
+
+    <dependency>
+        <groupId>com.github.chenyoca</groupId>
+        <artifactId>android-validation</artifactId>
+        <version>2.4-SNAPSHOT</version>
+        <type>aar</type>
+        <scope>provided</scope>
+    </dependency>
 
 ```
 ## 已内置支持的校验方式
 
-* **Required** (必填)
-* **NotBlank** (非空数据)
-* **Digits** (仅数字)
-* **Email** (电子邮件)
-* **EqualTo** (与指定值相同)
-* **Host** (主机地址)
-* **URL** (Http URL)
-* **IPv4** (IPv4地址)
-* **RangeLength** (指定长度范围)
-* **MinLength** (最小长度)
-* **MaxLength** (最大长度)
-* **Numeric** (数值)
-* **CreditCard** (信用卡号)
-* **RangeValue** (最值范围)
-* **MinValue** (最小值)
-* **MaxValue** (最大值)
-* **MobilePhone** (中国的手机号码)
+* **Required** 必填选项
+* **NotBlank** 非空数据
+* **Digits** 仅数字
+* **IsDate** 是否为有效日期
+* **IsTime** 是否为有效时间
+* **IsDateTime** 是否为有效的日期和时间
+* **IsFuture** 是否为当前时间之后的日期和时间
+* **IsPast** 是否为当前时间之前的日期和时间
+* **Email** 电子邮件
+* **EqualTo** 与指定值相同
+* **Host** 主机地址
+* **URL** Http URL
+* **IPv4** IPv4地
+* **RangeLength** 指定长度范围
+* **MinLength** 最小长度
+* **MaxLength** 最大长度
+* **Numeric** 数值
+* **CreditCard** 信用卡号
+* **RangeValue** 最值范围
+* **MinValue** 最小值
+* **MaxValue** 最大值
+* **MobilePhone** 中国的手机号码
 
 ## 如何使用？
 
-### 方式 1：对单个EditText进行校验
-
-#### 1. 构建校验配置
-
-```java
-
-    // 通过build, add, custom接口来添加校验规则，
-    // Apply 用于每次添加校验规则，在 add() 方法中，会自动将保存前一条配置，
-    // 但在最后一条规则配置后，记得调用 apply() 确认规则配置完成。
-
-    final Config conf = Config.build(context, Types.Required).message("必填选项").apply();
-    conf.add(Types.LengthInMax).values(20).apply();
-    conf.add(Types.Email).apply();
-    
-```
-
-**!!!! 最后添加的规则一定要调用 apply() !!!!**
-
-#### 2. 对EditText执行校验
-
-```java
-
-    EditText edittext = (EditText) findViewById(R.id.single_test);
-    ResultWrapper result = FormValidator.testField(edittext, conf);
-
-```
-
-### 方式 2：对整个Layout内的EditText全部校验
-
 通过 View ID 来绑定校验配置信息
 
-#### 1. 对表单内各个EditText绑定其校验配置
+#### 对表单内各个EditText绑定其校验配置
 
 ```java
 
@@ -104,77 +94,47 @@ Add dependency
         }
     };
 
-    final FormValidator fv = new FormValidator(context);
-    // FormValidator.addField(*Config instance*, *view id for EditText*)
-    final Config conf = Config.build(Types.Required).message("必填选项").apply();
-    conf.add(Types.LengthInMax).values(20).apply();
-    conf.add(Types.Email).apply();
-
-    final EditText test = (EditText) findViewById(R.id.single_test);
-
-    final Button apply = (Button) findViewById(R.id.single_apply);
-    apply.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ResultWrapper rw = AndroidValidator.testField(test, conf, testDisplay);
-            int color = rw.passed ?
-                    android.R.color.holo_green_dark : android.R.color.holo_red_dark;
-            apply.setTextColor(getResources().getColor(color));
-        }
-    });
-
+    // 绑定表单View
     final LinearLayout form = (LinearLayout) findViewById(R.id.form);
 
 //      默认是在 EditText 右边显示一个浮动提示框。
-//      final AndroidValidator av = new AndroidValidator();
+//      final FormValidator av = new FormValidator(form);
 
 //      指定自定义显示出错消息的方式，
-    final FormValidator av = new FormValidator(context, messageDisplay);
-    av.putField(R.id.form_field_1, Types.MobilePhone, Types.Required);
-    av.putField(R.id.form_field_2, Types.CreditCard);
-    av.putField(R.id.form_field_3, Types.Digits);
-    av.putField(R.id.form_field_4, Types.Email);
-    av.putField(R.id.form_field_5, Config.build(context, Types.EqualTo).loader(new EditTextLazyLoader(form,R.id.form_field_4)).apply());
-    av.putField(R.id.form_field_6, Types.Host);
-    av.putField(R.id.form_field_7, Types.URL);
-    av.putField(R.id.form_field_8, Config.build(context, Types.MaxLength).values(5).apply());
-    av.putField(R.id.form_field_9, Config.build(context, Types.MinLength).values(4).apply());
-    av.putField(R.id.form_field_10, Config.build(context, Types.RangeLength).values(4,8).apply());
-    av.putField(R.id.form_field_11, Types.NotBlank);
-    av.putField(R.id.form_field_12, Types.Numeric);
-    av.putField(R.id.form_field_13, Config.build(context, Types.MaxValue).values(100).apply());
-    av.putField(R.id.form_field_14, Config.build(context, Types.MinValue).values(20).apply());
-    av.putField(R.id.form_field_15, Config.build(context, Types.RangeValue).values(18, 30).apply());
-        
-```
+    final FormValidator av = new FormValidator(form, messageDisplay);
 
-#### 2. 对表单执行校验配置
+    av.add(R.id.form_field_1, Type.Required, Type.MobilePhone);
+    av.add(R.id.form_field_2, Type.CreditCard);
+    av.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
+    av.add(R.id.form_field_4, Type.Email);
 
-##### 2.1 粗鲁的校验 - 直接拿校验结果
+    // 使用`ValuesLoader`使得当校验时，才加载校验参数`values`。
+    av.add(R.id.form_field_5, Type.EqualsTo.values(new EditTextValuesLoader(form,R.id.form_field_4)));
+    av.add(R.id.form_field_6, Type.Host);
+    av.add(R.id.form_field_7, Type.URL);
+    av.add(R.id.form_field_8, Type.MaxLength.value(5));
+    av.add(R.id.form_field_9, Type.MinLength.value(4));
+    av.add(R.id.form_field_10, Type.RangeLength.values(4,8));
+    av.add(R.id.form_field_11, Type.NotBlank);
+    av.add(R.id.form_field_12, Type.Numeric);
+    av.add(R.id.form_field_13, Type.MaxValue.value(100));
+    av.add(R.id.form_field_14, Type.MinValue.value(20));
+    av.add(R.id.form_field_15, Type.RangeValue.values(18,30));
 
-```java
+    // 输出调试信息
+    av.debug(true);
 
-    final LinearLayout form = (LinearLayout) findViewById(R.id.form);
-    
-    // 1. 中断校验：按Layout的ChildView顺序校验，遇到校验失败则中断。
-    boolean passed = fv.testForm(form)
-    
-    // 1. 连续校验：按Layout的ChildView顺序校验，遇到校验失败继续，不中断。
-    boolean passed = fv.testFormAll(form)
-    
-```
+    // 应用输入框的输入法布局样式
+    av.applyInputType();
 
-##### 2.2 文明的校验
+    TestResult r = av.test();
 
-```java
+    if(r.passed){
+        // 校验通过
+    }else{
+        // 校验失败
+    }
 
-    // 先绑定校验表单
-    fv.bind(form)
-          .applyInputType(); // 将校验规则应用到EditText中，使得输入法根据校验配置，显示不同的布局。
-          
-    fv.test();
-    // Or fv.testAll();
-    
 ```
 
 ## 如何扩展？
@@ -185,9 +145,9 @@ Add dependency
 
     // 添加到已创建的Config中：
     
-    conf.add(new TestRunner("出错时，此消息被返回并显示到EditText中") {
+    conf.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
         @Override
-        public boolean test(CharSequence inputValue) {
+        public boolean test(String inputValue) {
             // 校验通过时返回 true
             return inputValue.equal("AABB");
         }
@@ -210,11 +170,11 @@ Add dependency
 
 ### 自定义消息
 
-自定义消息中如果需要与 values(...) 中的参数匹配，请使用 `{$1}` 和 '{$2}' 做占位符。
+自定义消息中如果需要与 value(...) / values(...) 中的参数匹配，请使用 `{$1}` 和 '{$2}' 做占位符。
 
 e.g:
 
-> Config.build(context, Types.MaxLength).values(10,140).message("您最多可以输入{$1}到{$2}个文字！").apply();
+> Types.MaxLength.values(10,140).message("您最多可以输入{$1}到{$2}个文字！");
 
 当校验失败时，提示的消息内容为：`您最多可以输入10到140个文字！`
 
