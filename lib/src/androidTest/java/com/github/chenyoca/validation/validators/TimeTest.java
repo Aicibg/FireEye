@@ -18,7 +18,10 @@ public class TimeTest extends GroupTester{
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "00:00",
+                "01:01:59",
+                "23:59:59",
+                "12:12:12",
+                "12:00:00",
         };
     }
 
