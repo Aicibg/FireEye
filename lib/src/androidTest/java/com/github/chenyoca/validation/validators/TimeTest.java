@@ -8,21 +8,20 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
  * YooJia.Chen@gmail.com
  * 2014-07-21
  */
-public class EmailTest extends GroupTester {
+public class TimeTest extends GroupTester{
 
     @Override
     protected AbstractValidator setUpValidator() {
-        return new EmailValidator(Type.Email, null);
+        return new DateTimeValidator(Type.IsTime, null);
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "chenyoca@gmail.com",
-                "chen.yoca@gmail.com",
-                "chen.yo-ca@gmail.com",
-                "chen.yo-ca2013@gmail.com",
-                "228441083@qq.com",
+                "01:01:59",
+                "23:59:59",
+                "12:12:12",
+                "12:00:00",
         };
     }
 
@@ -30,9 +29,16 @@ public class EmailTest extends GroupTester {
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
                 "a",
-                "XXXX",
-                "电子邮件@qq.com",
-                "chenyoca#@gm@ail.com",
+                "00",
+                "2459",
+                "245900",
+                "hhmm",
+                "hhmmss",
+                "24:60",
+                "25:59",
+                "25:60",
+                "25:60:",
+                "24:59:60",
         };
     }
 }

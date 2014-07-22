@@ -6,33 +6,34 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
- * 2014-07-21
+ * 2014-07-22
  */
-public class EmailTest extends GroupTester {
-
+public class MaxLengthTest extends GroupTester {
     @Override
     protected AbstractValidator setUpValidator() {
-        return new EmailValidator(Type.Email, null);
+        return new MaxLengthValidator(Type.MaxLength, null);
+    }
+
+    @Override
+    protected long[] setUpLongValues() {
+        return new long[]{20};
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "chenyoca@gmail.com",
-                "chen.yoca@gmail.com",
-                "chen.yo-ca@gmail.com",
-                "chen.yo-ca2013@gmail.com",
-                "228441083@qq.com",
+                "",
+                "1",
+                "1234567890123456789",
+                "12345678901234567890"
         };
     }
 
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "a",
-                "XXXX",
-                "电子邮件@qq.com",
-                "chenyoca#@gm@ail.com",
+                "123456789012345678901",
+                "1234567890123456789012",
         };
     }
 }

@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.chenyoca.validation.validators.ValidatorFactory;
 import com.github.chenyoca.validation.supports.AbstractValidator;
+import com.github.chenyoca.validation.validators.ValidatorFactory;
 
 /**
  * User: YooJia.Chen@gmail.com

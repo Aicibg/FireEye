@@ -21,7 +21,7 @@ class RangeLengthValidator extends AbstractValidator {
     }
 
     @Override
-    public void onAdded() {
+    public void verifyValues() {
         checkRequiredLongValues();
     }
 }
