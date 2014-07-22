@@ -20,21 +20,21 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public abstract class GroupTester {
 
-    protected abstract AbstractValidator validator();
+    protected abstract AbstractValidator setUpValidator();
 
     protected abstract String[] thisShouldAllAssertTrue();
     protected abstract String[] thisShouldAllAssertFalse();
 
-    protected String[] stringValues(){ return null;}
-    protected long[] longValues(){ return null;}
-    protected double[] doubleValues(){ return null;}
+    protected String[] setUpStringValues(){ return null;}
+    protected long[] setUpLongValues(){ return null;}
+    protected double[] setUpDoubleValues(){ return null;}
 
     AbstractValidator validator;
 
     @Before
     public void setUp(){
-        validator = validator();
-        validator.setIfNeedValues(longValues(), stringValues(), doubleValues());
+        validator = setUpValidator();
+        validator.setIfNeedValues(setUpLongValues(), setUpStringValues(), setUpDoubleValues());
     }
 
     @Test

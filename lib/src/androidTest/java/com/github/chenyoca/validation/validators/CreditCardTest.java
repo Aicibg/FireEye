@@ -11,7 +11,7 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
 public class CreditCardTest extends GroupTester {
 
     @Override
-    protected AbstractValidator validator() {
+    protected AbstractValidator setUpValidator() {
         return new CreditCardValidator(Type.CreditCard,null);
     }
 

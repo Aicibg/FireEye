@@ -11,12 +11,12 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
 public class EqualsToTest extends GroupTester {
 
     @Override
-    protected AbstractValidator validator() {
+    protected AbstractValidator setUpValidator() {
         return new EqualsToValidator(Type.EqualsTo, null);
     }
 
     @Override
-    protected String[] stringValues() {
+    protected String[] setUpStringValues() {
         return new String[]{"chenyoca"};
     }
 

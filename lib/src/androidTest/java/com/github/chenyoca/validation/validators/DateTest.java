@@ -11,7 +11,7 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
 public class DateTest extends GroupTester {
     
     @Override
-    protected AbstractValidator validator() {
+    protected AbstractValidator setUpValidator() {
         return new DateTimeValidator(Type.IsDate, null);
     }
 

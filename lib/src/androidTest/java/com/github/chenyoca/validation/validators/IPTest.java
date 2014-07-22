@@ -11,7 +11,7 @@ import com.github.chenyoca.validation.supports.AbstractValidator;
 public class IPTest extends GroupTester {
 
     @Override
-    protected AbstractValidator validator() {
+    protected AbstractValidator setUpValidator() {
         return new IPv4Validator(Type.IPv4, null);
     }
 
