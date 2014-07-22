@@ -18,12 +18,12 @@ class NumericValidator extends AbstractValidator {
 
     @Override
     public boolean isValid(String inputValue) {
-        return isNumeric(String.valueOf(inputValue));
+        return isNumeric(inputValue);
     }
 
     // implements commit apache common utils
     public static boolean isNumeric(String input){
-        if("null".equalsIgnoreCase(input) || TextUtils.isEmpty(input)){
+        if(TextUtils.isEmpty(input)){
             return false;
         }
         char[] chars = input.toCharArray();
@@ -33,7 +33,7 @@ class NumericValidator extends AbstractValidator {
         boolean allowSigns = false;
         boolean foundDigit = false;
         // deal loader any possible sign up front
-        int start = (chars[0] == '-') ? 1 : 0;
+        int start = (chars[0] == '-' || chars[0] == '+') ? 1 : 0;
         if (sz > start + 1) {
             if (chars[start] == '0' && chars[start + 1] == 'x') {
                 int i = start + 2;

@@ -38,8 +38,6 @@ public class RangeLongValueTest extends GroupTester {
                 "-1",
                 "0",
                 "4",
-                "5.1",
-                "5.00001",
                 "10.00001",
                 "11",
                 "11",

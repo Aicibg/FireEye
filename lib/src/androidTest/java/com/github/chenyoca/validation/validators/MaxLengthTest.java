@@ -32,9 +32,8 @@ public class MaxLengthTest extends GroupTester {
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "1234567890123456789+",
-                "1234567890123456789+1",
-                "1234567890123456789+12"
+                "123456789012345678901",
+                "1234567890123456789012",
         };
     }
 }
