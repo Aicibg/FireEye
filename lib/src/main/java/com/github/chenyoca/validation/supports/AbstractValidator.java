@@ -109,7 +109,7 @@ public abstract class AbstractValidator {
      */
     private void performLazyLoader(){
         if (valuesLoader != null){
-            setIfNeedValues(valuesLoader.longValues(),
+            setValues(valuesLoader.longValues(),
                     valuesLoader.stringValues(),
                     valuesLoader.doubleValues());
         }
@@ -127,23 +127,7 @@ public abstract class AbstractValidator {
         this.message = message;
     }
 
-    public void setRequiredValues(long[] lVals, String[] sVals, double[] dVals){
-        boolean nullValues = lVals == null || lVals.length == 0;
-        if ( ! nullValues) setValues(lVals);
-        boolean nullDVs = dVals == null || dVals.length == 0;
-        if ( ! nullDVs) setValues(dVals);
-        nullValues &= nullDVs;
-        boolean nullSVs = sVals == null || sVals.length == 0;
-        if ( ! nullSVs) setValues(sVals);
-        nullValues &= nullSVs;
-        if (nullValues){
-            throw
-                    new IllegalArgumentException("Test required 1 or 2 values. " +
-                            "Accept types: Int/Long/Float/Double/String .");
-        }
-    }
-
-    public void setIfNeedValues(long[] lVals, String[] sVals, double[] dVals){
+    public void setValues(long[] lVals, String[] sVals, double[] dVals){
         if (lVals != null && lVals.length >0) setValues(lVals);
         if (sVals != null && sVals.length >0) setValues(sVals);
         if (dVals != null && dVals.length >0) setValues(dVals);

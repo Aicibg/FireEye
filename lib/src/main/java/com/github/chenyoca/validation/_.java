@@ -28,7 +28,6 @@ class _ {
         assert this.display != null;
         this.field = field;
         assert this.field != null;
-        setValues(validator, type);
         add(validator);
     }
 
@@ -97,9 +96,7 @@ class _ {
     }
 
     void add(Context c, Type type){
-        AbstractValidator r = ValidatorFactory.build(c, type);
-        setValues(r, type);
-        add(r);
+        add(ValidatorFactory.build(c, type));
     }
 
     void add(AbstractValidator v){
@@ -108,38 +105,10 @@ class _ {
         }else{
             runners.add(v);
         }
+        v.setValues(v.testType.longValues, v.testType.stringValues, v.testType.floatValues);
+        if (v.testType.message != null) v.setMessage(v.testType.message);
+        if (v.testType.valuesLoader != null) v.setValuesLoader(v.testType.valuesLoader);
         v.verifyValues();
     }
 
-    void setValues(AbstractValidator v, Type type){
-        switch (type){
-            case CreditCard:
-            case Email:
-            case Host:
-            case URL:
-            case IPv4:
-            case MobilePhone:
-            case NotBlank:
-            case Numeric:
-            case Required:
-                //No need values
-                break;
-            case MaxLength:
-            case MinLength:
-            case RangeLength:
-                //Required values
-                v.setIfNeedValues(type.longValues, null, null);
-                break;
-            case MinValue:
-            case MaxValue:
-            case RangeValue:
-                v.setRequiredValues(type.longValues, type.stringValues, type.floatValues);
-                break;
-            default:
-                v.setIfNeedValues(type.longValues, type.stringValues, type.floatValues);
-                break;
-        }
-        if (type.message != null) v.setMessage(type.message);
-        if (type.valuesLoader != null) v.setValuesLoader(type.valuesLoader);
-    }
 }
