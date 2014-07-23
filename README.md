@@ -29,7 +29,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:android-validation:0.1-SNAPSHOT'
+        compile 'com.github.chenyoca:android-validation:0.1.1-SNAPSHOT'
     }
 
 ```
@@ -41,7 +41,7 @@ Maven
     <dependency>
         <groupId>com.github.chenyoca</groupId>
         <artifactId>android-validation</artifactId>
-        <version>2.4-SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>

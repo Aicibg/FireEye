@@ -23,7 +23,7 @@ class _ {
     final EditText field;
     List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, EditText field, AbstractValidator validator, Type type) {
+    _(MessageDisplay display, EditText field, AbstractValidator validator) {
         this.display = display;
         assert this.display != null;
         this.field = field;
