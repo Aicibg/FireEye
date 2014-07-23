@@ -90,7 +90,8 @@ public class FormValidator {
         View field = form.findViewById(viewId);
         if ( ! (field instanceof EditText)){
             throw new IllegalArgumentException(
-                    String.format("View(id=%d) IS NOT A EditText View !", viewId));
+                    String.format("The view[ID=%d,Class=%s] IS NOT A EditText View !",
+                            viewId, field.getClass().getName()));
         }
         EditText editText = (EditText)field;
         _ item = new _(display, editText , validator, type);
