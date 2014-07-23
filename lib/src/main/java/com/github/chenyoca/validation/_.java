@@ -25,7 +25,9 @@ class _ {
 
     _(MessageDisplay display, EditText field, AbstractValidator validator, Type type) {
         this.display = display;
+        assert this.display != null;
         this.field = field;
+        assert this.field != null;
         setValues(validator, type);
         add(validator);
     }
@@ -45,7 +47,7 @@ class _ {
                 return new TestResult(false, message, null);
             }
         }else if (TextUtils.isEmpty(value)){
-            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", value);
+            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", null);
         }
 
         final int size = runners.size();
