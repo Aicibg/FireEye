@@ -34,7 +34,7 @@ public abstract class GroupTester {
     @Before
     public void setUp(){
         validator = setUpValidator();
-        validator.setIfNeedValues(setUpLongValues(), setUpStringValues(), setUpDoubleValues());
+        validator.setValues(setUpLongValues(), setUpStringValues(), setUpDoubleValues());
     }
 
     @Test

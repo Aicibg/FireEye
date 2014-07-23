@@ -17,32 +17,30 @@ import com.github.chenyoca.validation.validators.ValidatorFactory;
  */
 public class FormValidator {
 
-    final Context context;
-    final MessageDisplay display;
-    final View form;
-    final SparseArray<_> configs = new SparseArray<_>();
-    final SparseArray<_> weakHold = new SparseArray<_>();
-    final SparseArray<String> values = new SparseArray<String>();
+    final static class SimpleMessageDisplay implements MessageDisplay{
+        @Override
+        public void dismiss(EditText field) { field.setError(null); }
+        @Override
+        public void show(EditText field, String message) { field.setError(message); }
+    }
+
+    private final Context context;
+    private final MessageDisplay display;
+    private final View form;
+    private final SparseArray<_> configs = new SparseArray<_>();
+    private final SparseArray<_> viewHolder = new SparseArray<_>();
+    private final SparseArray<String> values = new SparseArray<String>();
 
     public FormValidator(View form, MessageDisplay display){
         this.form = form;
-        assert form != null;
+        assert this.form != null;
         this.context = form.getContext();
         this.display = display;
+        assert this.display != null;
     }
 
     public FormValidator(View form){
-        this(form,new MessageDisplay() {
-            @Override
-            public void dismiss(EditText field) {
-                field.setError(null);
-            }
-
-            @Override
-            public void show(EditText field, String message) {
-                field.setError(message);
-            }
-        });
+        this(form,new SimpleMessageDisplay());
     }
 
     /**
@@ -52,7 +50,16 @@ public class FormValidator {
      * @return FormValidator instance.
      */
     public FormValidator add(int viewId, Type...types){
-        for (Type t : types) add(viewId, t);
+        if (types == null || types.length == 0){
+            throw new IllegalArgumentException("Required 1 or more type to add !");
+        }
+        _ item = configs.get(viewId);
+        if (item != null){
+            for (Type t: types) item.add(context,t);
+        }else{
+            item = create(viewId, ValidatorFactory.build(context, types[0]));
+            for (int i=1;i<types.length;i++) item.add(context,types[i]);
+        }
         return this;
     }
 
@@ -64,50 +71,39 @@ public class FormValidator {
      */
     public FormValidator add(int viewId, AbstractValidator...validators){
         if (validators == null || validators.length == 0){
-            throw new IllegalArgumentException("Required 1 or more runner !");
+            throw new IllegalArgumentException("Required 1 or more validator to add !");
         }
         _ item = configs.get(viewId);
         if (item != null){
             for (AbstractValidator v: validators) item.add(v);
         }else{
-            item = create(viewId, validators[0], Type.Custom);
+            item = create(viewId, validators[0]);
             for (int i=1;i<validators.length;i++) item.add(validators[i]);
         }
         return this;
     }
 
-    private void add(int viewId, Type type){
-        // If config(key by view id) exists, just add.
-        _ item = configs.get(viewId);
-        if (item != null){
-            item.add(context, type);
-            return;
-        }
-        // NO, create it.
-        item = create(viewId, ValidatorFactory.build(context, type), type);
-
-    }
-
-    private _ create(int viewId, AbstractValidator validator, Type type){
+    private _ create(int viewId, AbstractValidator validator){
         View field = form.findViewById(viewId);
         if ( ! (field instanceof EditText)){
             throw new IllegalArgumentException(
-                    String.format("View(id=%d) IS NOT A EditText View !", viewId));
+                    String.format("The view[ID=%d,Class=%s] IS NOT an EditText View !",
+                            viewId, field.getClass().getName()));
         }
         EditText editText = (EditText)field;
-        _ item = new _(display, editText , validator, type);
+        _ item = new _(display, editText , validator);
         configs.put(viewId, item);
-        weakHold.put(viewId, item);
+        viewHolder.put(viewId, item);
         values.put(viewId,"");
         return item;
     }
 
     public FormValidator applyInputType(int...excludeViewIDs){
         for (int exclude : excludeViewIDs){
-            weakHold.remove(exclude);
+            viewHolder.remove(exclude);
         }
-        int size = weakHold.size();
-        for (int i=0;i<size;i++) weakHold.valueAt(i).performInputType();
+        int size = viewHolder.size();
+        for (int i=0;i<size;i++) viewHolder.valueAt(i).performInputType();
         return this;
     }
 
@@ -120,7 +116,7 @@ public class FormValidator {
         String failedMsg = "NO_TEST_CONFIGURATIONS";
         String failedVal = null;
         TestResult r = null;
-        int size = configs.size();
+        final int size = configs.size();
         for (int i=0;i<size;i++) {
             r = configs.valueAt(i).performTest();
             if (debug) Log.i("Test","Field tested: "+r);

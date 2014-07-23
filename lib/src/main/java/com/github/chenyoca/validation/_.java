@@ -23,10 +23,11 @@ class _ {
     final EditText field;
     List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, EditText field, AbstractValidator validator, Type type) {
+    _(MessageDisplay display, EditText field, AbstractValidator validator) {
         this.display = display;
+        assert this.display != null;
         this.field = field;
-        setValues(validator, type);
+        assert this.field != null;
         add(validator);
     }
 
@@ -45,7 +46,7 @@ class _ {
                 return new TestResult(false, message, null);
             }
         }else if (TextUtils.isEmpty(value)){
-            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", value);
+            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", null);
         }
 
         final int size = runners.size();
@@ -95,9 +96,7 @@ class _ {
     }
 
     void add(Context c, Type type){
-        AbstractValidator r = ValidatorFactory.build(c, type);
-        setValues(r, type);
-        add(r);
+        add(ValidatorFactory.build(c, type));
     }
 
     void add(AbstractValidator v){
@@ -106,38 +105,10 @@ class _ {
         }else{
             runners.add(v);
         }
+        v.setValues(v.testType.longValues, v.testType.stringValues, v.testType.floatValues);
+        if (v.testType.message != null) v.setMessage(v.testType.message);
+        if (v.testType.valuesLoader != null) v.setValuesLoader(v.testType.valuesLoader);
         v.verifyValues();
     }
 
-    void setValues(AbstractValidator v, Type type){
-        switch (type){
-            case CreditCard:
-            case Email:
-            case Host:
-            case URL:
-            case IPv4:
-            case MobilePhone:
-            case NotBlank:
-            case Numeric:
-            case Required:
-                //No need values
-                break;
-            case MaxLength:
-            case MinLength:
-            case RangeLength:
-                //Required values
-                v.setIfNeedValues(type.longValues, null, null);
-                break;
-            case MinValue:
-            case MaxValue:
-            case RangeValue:
-                v.setRequiredValues(type.longValues, type.stringValues, type.floatValues);
-                break;
-            default:
-                v.setIfNeedValues(type.longValues, type.stringValues, type.floatValues);
-                break;
-        }
-        if (type.message != null) v.setMessage(type.message);
-        if (type.valuesLoader != null) v.setValuesLoader(type.valuesLoader);
-    }
 }

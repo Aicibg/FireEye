@@ -44,4 +44,5 @@ dependencies {
     androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
 
-apply from: 'https://raw.githubusercontent.com/chenyoca/gradle_publish/master/publish_aar.gradle'
+//apply from: 'http://git.oschina.net/chenyoca/GradlePublish/raw/master/publish_aar.gradle'
+apply from: 'publish.gradle'
