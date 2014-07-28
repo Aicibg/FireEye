@@ -5,6 +5,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.github.chenyoca.validation.supports.AbstractValidator;
 import com.github.chenyoca.validation.validators.ValidatorFactory;
@@ -20,10 +21,10 @@ import java.util.List;
 class _ {
 
     final MessageDisplay display;
-    final EditText field;
+    final TextView field;
     List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, EditText field, AbstractValidator validator) {
+    _(MessageDisplay display, TextView field, AbstractValidator validator) {
         this.display = display;
         assert this.display != null;
         this.field = field;

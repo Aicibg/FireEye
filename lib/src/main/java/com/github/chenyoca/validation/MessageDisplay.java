@@ -1,6 +1,6 @@
 package com.github.chenyoca.validation;
 
-import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by YooJia.Chen
@@ -12,12 +12,12 @@ public interface MessageDisplay {
      * Dismiss the message
      * @param field Target view.
      */
-    void dismiss(EditText field);
+    void dismiss(TextView field);
 
     /**
      * Show the message
      * @param field Target view.
      * @param message Message to show.
      */
-    void show(EditText field, String message);
+    void show(TextView field, String message);
 }
