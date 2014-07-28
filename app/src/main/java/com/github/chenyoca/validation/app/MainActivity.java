@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.chenyoca.validation.FormValidator;
@@ -23,12 +24,12 @@ public class MainActivity extends Activity {
      */
     MessageDisplay messageDisplay = new MessageDisplay() {
         @Override
-        public void dismiss(EditText field) {
+        public void dismiss(TextView field) {
             field.setError(null);
         }
 
         @Override
-        public void show(EditText field, String message) {
+        public void show(TextView field, String message) {
             field.setError(message);
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         }
