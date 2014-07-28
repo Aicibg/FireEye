@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.chenyoca.validation.supports.AbstractValidator;
@@ -19,28 +18,40 @@ public class FormValidator {
 
     final static class SimpleMessageDisplay implements MessageDisplay{
         @Override
-        public void dismiss(EditText field) { field.setError(null); }
+        public void dismiss(TextView field) { field.setError(null); }
         @Override
-        public void show(EditText field, String message) { field.setError(message); }
+        public void show(TextView field, String message) { field.setError(message); }
     }
 
     private final Context context;
     private final MessageDisplay display;
     private final View form;
-    private final SparseArray<_> configs = new SparseArray<_>();
-    private final SparseArray<_> viewHolder = new SparseArray<_>();
+    private final SparseArray<_> validations = new SparseArray<_>();
+    private final SparseArray<_> validationsEx = new SparseArray<_>();
+    private final SparseArray<View> fields = new SparseArray<View>();
     private final SparseArray<String> values = new SparseArray<String>();
 
-    public FormValidator(View form, MessageDisplay display){
+    boolean debug = false;
+
+    private FormValidator(View form, Context context, MessageDisplay display){
         this.form = form;
-        assert this.form != null;
-        this.context = form.getContext();
+        this.context = context;
+        assert this.context != null;
         this.display = display;
         assert this.display != null;
     }
 
+    public FormValidator(View form, MessageDisplay display){
+        this(form, form.getContext(), display);
+    }
+
     public FormValidator(View form){
         this(form,new SimpleMessageDisplay());
+        assert form != null;
+    }
+
+    public FormValidator(Context context){
+        this(null, context, new SimpleMessageDisplay());
     }
 
     /**
@@ -50,60 +61,123 @@ public class FormValidator {
      * @return FormValidator instance.
      */
     public FormValidator add(int viewId, Type...types){
-        if (types == null || types.length == 0){
-            throw new IllegalArgumentException("Required 1 or more type to add !");
-        }
-        _ item = configs.get(viewId);
-        if (item != null){
-            for (Type t: types) item.add(context,t);
-        }else{
-            item = create(viewId, ValidatorFactory.build(context, types[0]));
-            for (int i=1;i<types.length;i++) item.add(context,types[i]);
-        }
+        add(null, viewId,types);
         return this;
     }
 
     /**
-     * Add validate runners to a view with view id.
+     * Add validate type to a view with special field
+     * @param field special field
+     * @param types Validate type
+     * @return FormValidator instance.
+     */
+    public FormValidator add(TextView field, Type...types){
+        int viewId = checkoutViewId(field);
+        add(field, viewId,types);
+        return this;
+    }
+
+    private void add(TextView field, int viewId, Type...types){
+        if (types == null || types.length == 0){
+            throw new IllegalArgumentException("Required 1 or more type to add !");
+        }
+        _ item = validations.get(viewId);
+        if (item != null){
+            for (Type t: types) item.add(context,t);
+        }else{
+            if (field != null){
+                item = create(field, ValidatorFactory.build(context, types[0]));
+            }else{
+                item = create(viewId, ValidatorFactory.build(context, types[0]));
+            }
+            for (int i=1;i<types.length;i++) item.add(context,types[i]);
+        }
+    }
+
+    /**
+     * Add validate type to a view with special field
+     * @param field special field
+     * @param validators Test validators
+     * @return FormValidator instance.
+     */
+    public FormValidator add(TextView field, AbstractValidator...validators){
+        int viewId = checkoutViewId(field);
+        add(null, viewId, validators);
+        return this;
+    }
+
+    /**
+     * Add validators to a view with view id.
      * @param viewId View ID
      * @param validators Test validators
      * @return FormValidator instance.
      */
     public FormValidator add(int viewId, AbstractValidator...validators){
+        add(null, viewId, validators);
+        return this;
+    }
+
+    protected void add(TextView field, int viewId, AbstractValidator...validators){
         if (validators == null || validators.length == 0){
             throw new IllegalArgumentException("Required 1 or more validator to add !");
         }
-        _ item = configs.get(viewId);
+        _ item = validations.get(viewId);
         if (item != null){
             for (AbstractValidator v: validators) item.add(v);
         }else{
-            item = create(viewId, validators[0]);
+            if (field != null){
+                item = create(field, validators[0]);
+            }else{
+                item = create(viewId, validators[0]);
+            }
             for (int i=1;i<validators.length;i++) item.add(validators[i]);
         }
-        return this;
     }
 
     private _ create(int viewId, AbstractValidator validator){
         View field = form.findViewById(viewId);
-        if ( ! (field instanceof EditText)){
+        if ( ! (field instanceof TextView)){
             throw new IllegalArgumentException(
-                    String.format("The view[ID=%d,Class=%s] IS NOT an EditText View !",
+                    String.format("The view[ID=%d,Class=%s] IS NOT a TextView/EditText (OR TextView sub class ) View !",
                             viewId, field.getClass().getName()));
         }
-        EditText editText = (EditText)field;
-        _ item = new _(display, editText , validator);
-        configs.put(viewId, item);
-        viewHolder.put(viewId, item);
+        return create(viewId, (TextView)field, validator);
+    }
+
+    private _ create(TextView field, AbstractValidator validator){
+        return create(checkoutViewId(field), field, validator);
+    }
+
+    private int checkoutViewId(TextView field){
+        final int viewId = field.getId();
+        if ( viewId == 0){
+            throw new IllegalArgumentException(
+                    String.format("The view[Class=%s] MUST has a valid View ID !",
+                            field.getClass().getName()));
+        }
+        return viewId;
+    }
+
+    private _ create(int viewId, TextView field, AbstractValidator validator){
+        _ item = new _(display, field , validator);
+        validations.put(viewId, item);
+        validationsEx.put(viewId, item);
+        fields.put(viewId, field);
         values.put(viewId,"");
         return item;
     }
 
+    /**
+     * Apply InputType to views.
+     * @param excludeViewIDs Apply exclude this view IDs
+     * @return FormValidator instance.
+     */
     public FormValidator applyInputType(int...excludeViewIDs){
         for (int exclude : excludeViewIDs){
-            viewHolder.remove(exclude);
+            validationsEx.remove(exclude);
         }
-        int size = viewHolder.size();
-        for (int i=0;i<size;i++) viewHolder.valueAt(i).performInputType();
+        int size = validationsEx.size();
+        for (int i=0;i<size;i++) validationsEx.valueAt(i).performInputType();
         return this;
     }
 
@@ -116,9 +190,9 @@ public class FormValidator {
         String failedMsg = "NO_TEST_CONFIGURATIONS";
         String failedVal = null;
         TestResult r = null;
-        final int size = configs.size();
+        final int size = validations.size();
         for (int i=0;i<size;i++) {
-            r = configs.valueAt(i).performTest();
+            r = validations.valueAt(i).performTest();
             if (debug) Log.i("Test","Field tested: "+r);
             passFlag &= r.passed;
             failedMsg = passFlag ? null : r.message;
@@ -147,7 +221,26 @@ public class FormValidator {
         return values.get(viewId);
     }
 
-    boolean debug = false;
+    /**
+     * Get the view Instance
+     * @param viewId View ID
+     * @param _ Type
+     * @param <T> Type
+     * @return View Instance
+     */
+    public <T> T getView(int viewId, Class<T> _){
+        View field = fields.get(viewId);
+        if (field != null){
+            return (T)field;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Set debug
+     * @param enable log debug info if true.
+     */
     public void debug(boolean enable){
         debug = enable;
     }

@@ -2,6 +2,7 @@ package com.github.chenyoca.validation;
 
 import android.content.Context;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.github.chenyoca.validation.validators.ValidatorFactory;
 
@@ -25,10 +26,10 @@ public class CoreTest {
 
     MessageDisplay display = new MessageDisplay() {
         @Override
-        public void dismiss(EditText field) { }
+        public void dismiss(TextView field) { }
 
         @Override
-        public void show(EditText field, String message) { }
+        public void show(TextView field, String message) { }
     };
 
     Context context = Robolectric.getShadowApplication().getApplicationContext();

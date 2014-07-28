@@ -29,7 +29,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:android-validation:0.1.1-SNAPSHOT'
+        compile 'com.github.chenyoca:android-validation:0.1.2-SNAPSHOT'
     }
 
 ```
@@ -41,7 +41,7 @@ Maven
     <dependency>
         <groupId>com.github.chenyoca</groupId>
         <artifactId>android-validation</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
@@ -121,6 +121,10 @@ Maven
     av.add(R.id.form_field_14, Type.MinValue.value(20));
     av.add(R.id.form_field_15, Type.RangeValue.values(18,30));
 
+    // 添加不在Form中的输入框
+    EditText inputNotInForm = (EditText)findViewById(R.id.input_not_in_form);
+    av.add(inputNotInForm, Type.IsTime);
+
     // 输出调试信息
     av.debug(true);
 
@@ -139,20 +143,29 @@ Maven
 
 ## 如何扩展？
 
-通过 Config的扩展接口，添加你自定义的校验实现类
+通过 FormValidator 的扩展接口，添加你自定义的校验实现类
 
 ```java
 
-    // 添加到已创建的Config中：
+    // 添加到某个ViewID的输入对象中：
     
-    conf.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
+    formValidator.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
         @Override
         public boolean test(String inputValue) {
             // 校验通过时返回 true
             return inputValue.equal("AABB");
         }
     });
-    
+
+    // 添加到某个View的输入对象中：
+
+    formValidator.add(passwordInput, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
+        @Override
+        public boolean test(String inputValue) {
+            // 校验通过时返回 true
+            return inputValue.equal("CCDD");
+        }
+    });
 
 ```
 
@@ -160,7 +173,7 @@ Maven
 
 ### 校验顺序
 
-校验顺序按Config添加配置的顺序进行校验。
+校验顺序按`add(...)`添加配置的顺序进行校验。
 
 **如果添加 `Required` 校验类型，则 `Required` 无论在哪个顺序被添加，都会被首先校验。**
 
@@ -170,7 +183,7 @@ Maven
 
 ### 自定义消息
 
-自定义消息中如果需要与 value(...) / values(...) 中的参数匹配，请使用 `{$1}` 和 '{$2}' 做占位符。
+自定义消息中如果需要与 value(...) / values(...) 中的参数匹配，请使用 `{$1}` 和 `{$2}` 做占位符。
 
 e.g:
 
@@ -184,11 +197,26 @@ e.g:
 
 如“最大长度”、“邮件地址”等校验条件，可以将EditText的输入类型自动切换至相应类型。
 
-### 获取EditText的值
+### 获取Form中被校验EditText的值
 
-```java
+   ```java
 
-    String username = validator.getValue(R.id.form_field_1);
+       String username = validator.getValue(R.id.form_field_1);
 
-```
+   ```
 
+### 获取Form中没有被校验EditText的值
+
+   ```java
+
+       String username = validator.getExtraValue(R.id.form_field_others);
+
+   ```
+
+### 获取Form中被校验EditText的对象
+
+   ```java
+
+       EditText username = validator.getView(R.id.form_field_1,EditText.class);
+
+   ```
