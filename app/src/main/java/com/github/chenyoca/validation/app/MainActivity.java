@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 import com.github.chenyoca.validation.FormValidator;
 import com.github.chenyoca.validation.MessageDisplay;
 import com.github.chenyoca.validation.Type;
-import com.github.chenyoca.validation.supports.EditTextValuesLoader;
+import com.github.chenyoca.validation.supports.TextViewValuesLoader;
 
 public class MainActivity extends Activity {
 
@@ -51,7 +50,7 @@ public class MainActivity extends Activity {
         validator.add(R.id.form_field_2, Type.CreditCard);
         validator.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
         validator.add(R.id.form_field_4, Type.Email);
-        validator.add(R.id.form_field_5, Type.EqualsTo.value(new EditTextValuesLoader(form, R.id.form_field_4)));
+        validator.add(R.id.form_field_5, Type.EqualsTo.value(new TextViewValuesLoader(form, R.id.form_field_4)));
         validator.add(R.id.form_field_6, Type.Host);
         validator.add(R.id.form_field_7, Type.URL);
         validator.add(R.id.form_field_8, Type.MaxLength.value(5));

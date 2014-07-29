@@ -2,6 +2,7 @@ package com.github.chenyoca.validation.supports;
 
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.github.chenyoca.validation.ValuesLoader;
 
@@ -10,16 +11,16 @@ import com.github.chenyoca.validation.ValuesLoader;
  * YooJia.Chen@gmail.com
  * 2014-07-15
  */
-public class EditTextValuesLoader implements ValuesLoader {
+public class TextViewValuesLoader implements ValuesLoader {
 
-    private final EditText editText;
+    private final TextView editText;
 
-    public EditTextValuesLoader(EditText editText){
+    public TextViewValuesLoader(TextView editText){
         this.editText = editText;
     }
 
-    public EditTextValuesLoader(View parent, int viewId){
-        this((EditText)parent.findViewById(viewId));
+    public TextViewValuesLoader(View parent, int viewId){
+        this((TextView)parent.findViewById(viewId));
     }
 
     @Override
