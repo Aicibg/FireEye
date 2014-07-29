@@ -9,17 +9,17 @@ package com.github.chenyoca.validation;
 public interface ValuesLoader {
 
     /**
-     * @return Return the INT value, size of 1 or 2.
+     * @return Return the Int/Long values, size of 1 or 2.
      */
     long[] longValues();
 
     /**
-     * @return Return the DOUBLE value, size of 1 or 2.
+     * @return Return the Float/Double values, size of 1 or 2.
      */
     double[] doubleValues();
 
     /**
-     * @return Return the STRING value, size of 1 or 2.
+     * @return Return the String values, size of 1 or 2.
      */
     String[] stringValues();
 }

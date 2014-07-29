@@ -17,8 +17,7 @@ Add repository
 
     allprojects {
         repositories {
-            // !!!! ADD THIS !!!!
-            maven{ url 'http://oss.sonatype.org/content/groups/public/' }
+            maven{ url 'http://oss.sonatype.org/content/groups/public/' } // !!!! ADD THIS !!!!
         }
     }
 
@@ -72,7 +71,7 @@ Maven
 * **MaxValue** 最大值
 * **MobilePhone** 中国的手机号码
 
-## 如何使用？
+## How to usage - 如何使用
 
 通过 View ID 来绑定校验配置信息
 
@@ -109,7 +108,7 @@ Maven
     av.add(R.id.form_field_4, Type.Email);
 
     // 使用`ValuesLoader`使得当校验时，才加载校验参数`values`。
-    av.add(R.id.form_field_5, Type.EqualsTo.values(new EditTextValuesLoader(form,R.id.form_field_4)));
+    av.add(R.id.form_field_5, Type.EqualsTo.values(new TextViewValuesLoader(form,R.id.form_field_4)));
     av.add(R.id.form_field_6, Type.Host);
     av.add(R.id.form_field_7, Type.URL);
     av.add(R.id.form_field_8, Type.MaxLength.value(5));
@@ -220,3 +219,9 @@ e.g:
        EditText username = validator.getView(R.id.form_field_1,EditText.class);
 
    ```
+
+### Contact - 交流方式
+
+* Email: yoojia.chen@gmail.com
+* QQ: 228441083
+* QQ群：106904788
