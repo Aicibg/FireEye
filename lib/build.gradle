@@ -15,13 +15,13 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        applicationId "com.github.chenyoca.validation"
+        applicationId "com.github.chenyoca.fireeye"
         minSdkVersion 11
         targetSdkVersion 11
         versionCode 1
         versionName "1.0"
 
-        testApplicationId "com.github.chenyoca.validation.test"
+        testApplicationId "com.github.chenyoca.fireeye.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         testHandleProfiling true
         testFunctionalTest true
@@ -37,7 +37,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:19.+'
 
     androidTestCompile 'junit:junit:4.10'
     androidTestCompile 'org.robolectric:robolectric:2.3'
