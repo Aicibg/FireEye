@@ -14,7 +14,7 @@ import com.github.chenyoca.validation.validators.ValidatorFactory;
  * Date: 2014-06-25
  * Android Validator
  */
-public class FormValidator {
+public class FireEye {
 
     final static class SimpleMessageDisplay implements MessageDisplay{
         @Override
@@ -33,7 +33,7 @@ public class FormValidator {
 
     boolean debug = false;
 
-    private FormValidator(View form, Context context, MessageDisplay display){
+    private FireEye(View form, Context context, MessageDisplay display){
         this.form = form;
         this.context = context;
         assert this.context != null;
@@ -41,16 +41,16 @@ public class FormValidator {
         assert this.display != null;
     }
 
-    public FormValidator(View form, MessageDisplay display){
+    public FireEye(View form, MessageDisplay display){
         this(form, form.getContext(), display);
     }
 
-    public FormValidator(View form){
+    public FireEye(View form){
         this(form,new SimpleMessageDisplay());
         assert form != null;
     }
 
-    public FormValidator(Context context){
+    public FireEye(Context context){
         this(null, context, new SimpleMessageDisplay());
     }
 
@@ -60,7 +60,7 @@ public class FormValidator {
      * @param types Validate type
      * @return FormValidator instance.
      */
-    public FormValidator add(int viewId, Type...types){
+    public FireEye add(int viewId, Type...types){
         add(null, viewId,types);
         return this;
     }
@@ -71,7 +71,7 @@ public class FormValidator {
      * @param types Validate type
      * @return FormValidator instance.
      */
-    public FormValidator add(TextView field, Type...types){
+    public FireEye add(TextView field, Type...types){
         int viewId = checkoutViewId(field);
         add(field, viewId,types);
         return this;
@@ -100,7 +100,7 @@ public class FormValidator {
      * @param validators Test validators
      * @return FormValidator instance.
      */
-    public FormValidator add(TextView field, AbstractValidator...validators){
+    public FireEye add(TextView field, AbstractValidator...validators){
         int viewId = checkoutViewId(field);
         add(null, viewId, validators);
         return this;
@@ -112,7 +112,7 @@ public class FormValidator {
      * @param validators Test validators
      * @return FormValidator instance.
      */
-    public FormValidator add(int viewId, AbstractValidator...validators){
+    public FireEye add(int viewId, AbstractValidator...validators){
         add(null, viewId, validators);
         return this;
     }
@@ -172,7 +172,7 @@ public class FormValidator {
      * @param excludeViewIDs Apply exclude this view IDs
      * @return FormValidator instance.
      */
-    public FormValidator applyInputType(int...excludeViewIDs){
+    public FireEye applyInputType(int...excludeViewIDs){
         for (int exclude : excludeViewIDs){
             validationsEx.remove(exclude);
         }

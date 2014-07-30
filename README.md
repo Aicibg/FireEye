@@ -1,4 +1,4 @@
-# Android校验库 - Android Validation
+# Android校验库 - Fire Eye
 
 简单易用的Android校验库。
 
@@ -17,7 +17,7 @@ Add repository
 
     allprojects {
         repositories {
-            maven{ url 'http://oss.sonatype.org/content/groups/public/' } // !!!! ADD THIS !!!!
+            meyeen{ url 'http://oss.sonatype.org/content/groups/public/' } // !!!! ADD THIS !!!!
         }
     }
 
@@ -28,19 +28,19 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:android-validation:0.1.2-SNAPSHOT'
+        compile 'com.github.chenyoca:fire-eye:1.0@aar'
     }
 
 ```
 
-Maven
+Meyeen
 
 ```xml
 
     <dependency>
         <groupId>com.github.chenyoca</groupId>
-        <artifactId>android-validation</artifactId>
-        <version>0.1.2-SNAPSHOT</version>
+        <artifactId>fire-eye</artifactId>
+        <version>1.0</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
@@ -97,40 +97,40 @@ Maven
     final LinearLayout form = (LinearLayout) findViewById(R.id.form);
 
 //      默认是在 EditText 右边显示一个浮动提示框。
-//      final FormValidator av = new FormValidator(form);
+//      final FireEye eye = new FireEye(form);
 
 //      指定自定义显示出错消息的方式，
-    final FormValidator av = new FormValidator(form, messageDisplay);
+    final FireEye eye = new FireEye(form, messageDisplay);
 
-    av.add(R.id.form_field_1, Type.Required, Type.MobilePhone);
-    av.add(R.id.form_field_2, Type.CreditCard);
-    av.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
-    av.add(R.id.form_field_4, Type.Email);
+    eye.add(R.id.form_field_1, Type.Required, Type.MobilePhone);
+    eye.add(R.id.form_field_2, Type.CreditCard);
+    eye.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
+    eye.add(R.id.form_field_4, Type.Email);
 
     // 使用`ValuesLoader`使得当校验时，才加载校验参数`values`。
-    av.add(R.id.form_field_5, Type.EqualsTo.values(new TextViewValuesLoader(form,R.id.form_field_4)));
-    av.add(R.id.form_field_6, Type.Host);
-    av.add(R.id.form_field_7, Type.URL);
-    av.add(R.id.form_field_8, Type.MaxLength.value(5));
-    av.add(R.id.form_field_9, Type.MinLength.value(4));
-    av.add(R.id.form_field_10, Type.RangeLength.values(4,8));
-    av.add(R.id.form_field_11, Type.NotBlank);
-    av.add(R.id.form_field_12, Type.Numeric);
-    av.add(R.id.form_field_13, Type.MaxValue.value(100));
-    av.add(R.id.form_field_14, Type.MinValue.value(20));
-    av.add(R.id.form_field_15, Type.RangeValue.values(18,30));
+    eye.add(R.id.form_field_5, Type.EqualsTo.values(new TextViewValuesLoader(form,R.id.form_field_4)));
+    eye.add(R.id.form_field_6, Type.Host);
+    eye.add(R.id.form_field_7, Type.URL);
+    eye.add(R.id.form_field_8, Type.MaxLength.value(5));
+    eye.add(R.id.form_field_9, Type.MinLength.value(4));
+    eye.add(R.id.form_field_10, Type.RangeLength.values(4,8));
+    eye.add(R.id.form_field_11, Type.NotBlank);
+    eye.add(R.id.form_field_12, Type.Numeric);
+    eye.add(R.id.form_field_13, Type.MaxValue.value(100));
+    eye.add(R.id.form_field_14, Type.MinValue.value(20));
+    eye.add(R.id.form_field_15, Type.RangeValue.values(18,30));
 
     // 添加不在Form中的输入框
     EditText inputNotInForm = (EditText)findViewById(R.id.input_not_in_form);
-    av.add(inputNotInForm, Type.IsTime);
+    eye.add(inputNotInForm, Type.IsTime);
 
     // 输出调试信息
-    av.debug(true);
+    eye.debug(true);
 
     // 应用输入框的输入法布局样式
-    av.applyInputType();
+    eye.applyInputType();
 
-    TestResult r = av.test();
+    TestResult r = eye.test();
 
     if(r.passed){
         // 校验通过
@@ -142,13 +142,13 @@ Maven
 
 ## 如何扩展？
 
-通过 FormValidator 的扩展接口，添加你自定义的校验实现类
+通过 FireEye 的扩展接口，添加你自定义的校验实现类
 
-```java
+```jeyea
 
     // 添加到某个ViewID的输入对象中：
     
-    formValidator.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
+    eye.add(R.id.username, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
         @Override
         public boolean test(String inputValue) {
             // 校验通过时返回 true
@@ -158,7 +158,7 @@ Maven
 
     // 添加到某个View的输入对象中：
 
-    formValidator.add(passwordInput, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
+    eye.add(passwordInput, new AbstractValidator("出错时，此消息被返回并显示到EditText中") {
         @Override
         public boolean test(String inputValue) {
             // 校验通过时返回 true
@@ -198,25 +198,25 @@ e.g:
 
 ### 获取Form中被校验EditText的值
 
-   ```java
+   ```jeyea
 
-       String username = validator.getValue(R.id.form_field_1);
+       String username = eye.getValue(R.id.form_field_1);
 
    ```
 
 ### 获取Form中没有被校验EditText的值
 
-   ```java
+   ```jeyea
 
-       String username = validator.getExtraValue(R.id.form_field_others);
+       String username = eye.getExtraValue(R.id.form_field_others);
 
    ```
 
 ### 获取Form中被校验EditText的对象
 
-   ```java
+   ```jeyea
 
-       EditText username = validator.getView(R.id.form_field_1,EditText.class);
+       EditText username = eye.getView(R.id.form_field_1,EditText.class);
 
    ```
 

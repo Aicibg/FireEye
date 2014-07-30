@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.github.chenyoca.validation.FormValidator;
+import com.github.chenyoca.validation.FireEye;
 import com.github.chenyoca.validation.Type;
 
 /**
@@ -20,19 +20,19 @@ public class NoFormActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final FormValidator validator = new FormValidator(this);
+        final FireEye eye = new FireEye(this);
         EditText mobile = (EditText) findViewById(R.id.form_field_1);
         EditText card = (EditText) findViewById(R.id.form_field_2);
-        validator.add(mobile, Type.Required, Type.MobilePhone);
-        validator.add(card, Type.CreditCard);
-        validator.debug(true);
-        validator.applyInputType();
+        eye.add(mobile, Type.Required, Type.MobilePhone);
+        eye.add(card, Type.CreditCard);
+        eye.debug(true);
+        eye.applyInputType();
 
         final Button formCommit = (Button) findViewById(R.id.form_commit);
         formCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int color = validator.test().passed ?
+                int color = eye.test().passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 formCommit.setTextColor(getResources().getColor(color));
                 formCommit.setTag(color);
