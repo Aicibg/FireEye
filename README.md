@@ -28,7 +28,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:fire-eye:1.0@aar'
+        compile 'com.github.chenyoca:fire-eye:1.0-SNAPSHOT@aar'
     }
 
 ```
@@ -40,7 +40,7 @@ Meyeen
     <dependency>
         <groupId>com.github.chenyoca</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
