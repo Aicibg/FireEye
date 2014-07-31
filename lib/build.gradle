@@ -26,6 +26,7 @@ android {
         testHandleProfiling true
         testFunctionalTest true
     }
+
     buildTypes {
         release {
             runProguard false
