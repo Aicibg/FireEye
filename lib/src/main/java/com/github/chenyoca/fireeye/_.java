@@ -1,9 +1,13 @@
 package com.github.chenyoca.fireeye;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.chenyoca.fireeye.supports.AbstractValidator;
@@ -23,12 +27,24 @@ class _ {
     final TextView field;
     List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
-    _(MessageDisplay display, TextView field, AbstractValidator validator) {
+    final TextWatcher textWatcher = new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
+        @Override public void onTextChanged(CharSequence s, int a, int b, int c) {}
+        @Override public void afterTextChanged(Editable s) {
+            field.setError(null);
+        }
+    };
+
+    _(MessageDisplay display, final TextView field, AbstractValidator validator) {
         this.display = display;
         assert this.display != null;
         this.field = field;
         assert this.field != null;
         add(validator);
+        final boolean isEditTextChildren = field instanceof EditText;
+        if (! isEditTextChildren ){
+            field.addTextChangedListener(textWatcher);
+        }
     }
 
     TestResult performTest(){
