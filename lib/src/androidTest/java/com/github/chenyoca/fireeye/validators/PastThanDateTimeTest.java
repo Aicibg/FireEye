@@ -6,28 +6,36 @@ import com.github.chenyoca.fireeye.supports.AbstractValidator;
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
- * 2014-07-21
+ * 2014-08-13
  */
-public class FutureTest extends GroupTester {
-
+public class PastThanDateTimeTest extends GroupTester {
     @Override
     protected AbstractValidator setUpValidator() {
-        return new DateTimeValidator(Type.IsFuture, null);
+        return new DateTimeValidator(Type.IsPast, null);
+    }
+
+    @Override
+    protected String[] setUpStringValues() {
+        return new String[]{
+                "yyyy/MM/dd HH:mm:ss",
+                "2014/08/13 00:00:00"
+        };
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "2088-01-01 00:00:00",
-                "2017-07-20 21:00:59",
+            "2011/07/20 21:00:00",
+            "2014/08/12 23:59:59",
+            "2014/08/12 23:59:00",
         };
     }
 
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "2000-01-01 00:00:00",
-                "2014-07-20 21:00:00",
+                "2088/07/20 21:00:00",
+                "2014/08/13 00:00:01",
         };
     }
 }

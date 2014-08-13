@@ -59,10 +59,10 @@ class _ {
             message = first.getMessage();
             if ( ! passed){
                 display.show(field, message);
-                return new TestResult(false, message, null);
+                return new TestResult(false, message, null, null);
             }
         }else if (TextUtils.isEmpty(value)){
-            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", null);
+            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", null, null);
         }
 
         final int size = runners.size();
@@ -72,10 +72,10 @@ class _ {
             message = r.getMessage();
             if ( ! passed){
                 display.show(field, message);
-                return new TestResult(false, message, value);
+                return new TestResult(false, message, r.getError(), value);
             }
         }
-        return new TestResult(true, "TEST_PASSED", value);
+        return new TestResult(true, "TEST_PASSED", null, value);
     }
 
     void performInputType(){

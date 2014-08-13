@@ -24,6 +24,7 @@ public abstract class AbstractValidator {
 
     protected ExtraType extraType = ExtraType.None;
     protected String message;
+    protected String error;
     private ValuesLoader valuesLoader;
 
     protected AbstractValidator(Type testType, String message){
@@ -119,6 +120,8 @@ public abstract class AbstractValidator {
         return message == null? "" : message;
     }
 
+    public String getError() { return error == null? "" : error; }
+
     public void setValuesLoader(ValuesLoader valuesLoader){
         this.valuesLoader = valuesLoader;
     }
@@ -128,9 +131,9 @@ public abstract class AbstractValidator {
     }
 
     public void setValues(long[] lVals, String[] sVals, double[] dVals){
-        if (lVals != null && lVals.length >0) setValues(lVals);
-        if (sVals != null && sVals.length >0) setValues(sVals);
-        if (dVals != null && dVals.length >0) setValues(dVals);
+        if (lVals != null && lVals.length > 0) setValues(lVals);
+        if (sVals != null && sVals.length > 0) setValues(sVals);
+        if (dVals != null && dVals.length > 0) setValues(dVals);
     }
 
     /**
@@ -162,7 +165,7 @@ public abstract class AbstractValidator {
     }
 
     /**
-     * Set Flow/Double extra value for isValid runner.
+     * Set Float/Double extra value for isValid runner.
      * @param values Flow/Double extra
      */
     private void setValues(double... values){

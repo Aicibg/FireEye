@@ -1,6 +1,7 @@
 package com.github.chenyoca.fireeye.validators;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.chenyoca.fireeye.Type;
 import com.github.chenyoca.fireeye.supports.AbstractValidator;
@@ -25,6 +26,7 @@ public class DateTimeValidator extends AbstractValidator {
     protected boolean isValid(String inputValue) {
         try{
             final DateFormat sdf;
+            // Format : extraString[0]
             if (!TextUtils.isEmpty(extraString[0])){
                 sdf = new SimpleDateFormat(extraString[0]);
             }else{
@@ -45,27 +47,26 @@ public class DateTimeValidator extends AbstractValidator {
                         break;
                 }
             }
-            if(sdf != null){
-                sdf.setLenient(false);
-                return checkDate(sdf.parse(inputValue));
-            }else{
-                return false;
+            if(sdf == null) return false;
+            sdf.setLenient(false);
+            final Date date = sdf.parse(inputValue);
+            if (date.getTime() < 0){
+                Log.w("DateTime","[-] DateTime before Jan. 1, 1970 GMT !!!");
+            }
+            // Time base: extraString[1]
+            final Date base = extraString[1] == null ? new Date() : sdf.parse(extraString[1]);
+            switch (testType){
+                case IsFuture:
+                    return base.before(date);//now.getTime() < date.getTime();
+                case IsPast:
+                    return base.after(date);//now.getTime() > date.getTime();
+                default:
+                    return true;
             }
         }catch (ParseException e){
             e.printStackTrace();
+            error = e.getMessage();
             return false;
-        }
-    }
-
-    boolean checkDate(Date date){
-        final Date now = new Date();
-        switch (testType){
-            case IsFuture:
-                return now.before(date);//now.getTime() < date.getTime();
-            case IsPast:
-                return now.after(date);//now.getTime() > date.getTime();
-            default:
-                return true;
         }
     }
 

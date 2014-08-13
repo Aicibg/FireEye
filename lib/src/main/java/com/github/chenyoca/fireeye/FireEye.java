@@ -189,18 +189,21 @@ public class FireEye {
         boolean passFlag = true;
         String failedMsg = "NO_TEST_CONFIGURATIONS";
         String failedVal = null;
+        String failedError = null;
         TestResult r = null;
         final int size = validations.size();
         for (int i=0;i<size;i++) {
             r = validations.valueAt(i).performTest();
-            if (debug) Log.i("Test","Field tested: "+r);
+            if (debug) Log.i("Test","[>] Field tested: " + r);
             passFlag &= r.passed;
             failedMsg = passFlag ? null : r.message;
+            failedError = r.error;
             failedVal = r.value;
             values.setValueAt(i, r.value);
             if (!passFlag && !continuousTest) break;
         }
-        return new TestResult(r != null && passFlag,failedMsg,failedVal);
+        return new TestResult(r != null && passFlag,
+                failedMsg, failedError, failedVal);
     }
 
     /**

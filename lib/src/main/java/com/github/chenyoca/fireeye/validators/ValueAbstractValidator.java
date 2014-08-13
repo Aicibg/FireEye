@@ -20,7 +20,7 @@ abstract class ValueAbstractValidator extends AbstractValidator {
         try{
             inputValue = Double.valueOf(input);
         }catch (Exception e){
-            message = e.getMessage();
+            error = e.getMessage();
             return false;
         }
         if (ExtraType.Long.equals(extraType)){
