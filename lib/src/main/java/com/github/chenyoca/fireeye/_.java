@@ -25,7 +25,7 @@ class _ {
 
     final MessageDisplay display;
     final TextView field;
-    List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
+    final List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
 
     final TextWatcher textWatcher = new TextWatcher() {
         @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
@@ -103,8 +103,17 @@ class _ {
                 case MaxLength:
                 case RangeLength:
                     final int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
-                    field.setFilters(new InputFilter[]{
-                            new InputFilter.LengthFilter((int)r.extraLong[index])} );
+                    InputFilter[] origin = field.getFilters();
+                    if (origin.length == 0){
+                        field.setFilters(new InputFilter[]{new InputFilter.LengthFilter((int)r.extraLong[index])});
+                    }else if (origin.length == 1 && !(origin[0] instanceof InputFilter.LengthFilter)){
+                        final InputFilter[] filters = new InputFilter[]
+                                {
+                                origin[0],
+                                new InputFilter.LengthFilter((int)r.extraLong[index])
+                                };
+                        field.setFilters(filters);
+                    }
                     break;
             }
         }

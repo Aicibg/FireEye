@@ -226,7 +226,7 @@ public class FireEye {
      * @param viewId View ID
      * @param _ Type
      * @param <T> Type
-     * @return View Instance
+     * @return View Instance if exists, otherwise return null.
      */
     public <T> T getView(int viewId, Class<T> _){
         View field = fields.get(viewId);
