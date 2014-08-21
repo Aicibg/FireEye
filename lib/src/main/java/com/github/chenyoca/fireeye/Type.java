@@ -1,5 +1,8 @@
 package com.github.chenyoca.fireeye;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * AUTH: chenyoca (chenyoca@gmail.com)
  * DATE: 2014-06-25
@@ -36,6 +39,11 @@ public enum Type {
     String message = null;
     ValuesLoader valuesLoader = null;
 
+    /**
+     * Set date/time format. e.g: yyyy-MM-dd, HH:mm:ss, yyyy-MM-dd HH:mm:ss
+     * @param format Date/Time format
+     * @return Type
+     */
     public Type format(String format){
         switch (this){
             case IsDate:
@@ -46,19 +54,45 @@ public enum Type {
                 value(format);
                 break;
             default:
-                throw new IllegalStateException(
-                        "Only types of DATE/TIME can call this method to set date format string. ");
+                throw new UnsupportedOperationException(
+                        "Only types of DATE/TIME can call this method to set date/time format string. ");
         }
         return this;
     }
 
+    /**
+     * Set time base for future/past
+     * @param time time base
+     * @return Type
+     */
+    public Type than(String time){
+        // check type
+        switch (this){
+            case IsFuture:
+            case IsPast:
+                break;
+            default:
+                throw new UnsupportedOperationException(
+                        "Only types of Type.IsFuture/Type.IsPast can call this method to set base time. ");
+        }
+        // value1: format
+        // value2: base time
+        values(null, time);
+        return this;
+    }
+
     public Type value(String value){
-        stringValues = new String[]{value};
+        values(value, null);
         return this;
     }
 
     public Type values(String value1, String value2){
-        stringValues = new String[]{value1, value2};
+        if (stringValues == null){
+            stringValues = new String[]{value1, value2};
+        }else{
+            stringValues[0] = value1 == null ? stringValues[0] : value1;
+            stringValues[1] = value2 == null ? stringValues[1] : value2;
+        }
         return this;
     }
 
@@ -68,17 +102,27 @@ public enum Type {
     }
 
     public Type values(long value1, long value2){
-        longValues = new long[]{value1, value2};
+        if (longValues == null){
+            longValues = new long[]{value1, value2};
+        }else{
+            longValues[0] = value1;
+            longValues[1] = value2;
+        }
         return this;
     }
 
     public Type value(double value){
-        floatValues = new double[]{value};
+        values(value, Double.NaN);
         return this;
     }
 
     public Type values(double value1, double value2){
-        floatValues = new double[]{value1, value2};
+        if (floatValues == null){
+            floatValues = new double[]{value1, value2};
+        }else{
+            floatValues[0] = Double.isNaN(value1) ? floatValues[0]: value1;
+            floatValues[1] = Double.isNaN(value2) ? floatValues[1]: value2;
+        }
         return this;
     }
 
@@ -90,5 +134,12 @@ public enum Type {
     public Type message(String message){
         this.message = message;
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        String msg = "[" + name() + "] with ";
+        return msg;
     }
 }

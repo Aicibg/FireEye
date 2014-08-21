@@ -6,9 +6,9 @@ import com.github.chenyoca.fireeye.supports.AbstractValidator;
 /**
  * Created by YooJia.Chen
  * YooJia.Chen@gmail.com
- * 2014-07-21
+ * 2014-08-13
  */
-public class FutureTest extends GroupTester {
+public class FutureThanTimeTest extends GroupTester {
 
     @Override
     protected AbstractValidator setUpValidator() {
@@ -16,18 +16,30 @@ public class FutureTest extends GroupTester {
     }
 
     @Override
+    protected String[] setUpStringValues() {
+        return new String[]{
+                "HH:mm:ss",
+                "11:06:01"
+        };
+    }
+
+    @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
-                "2088-01-01 00:00:00",
-                "2017-07-20 21:00:59",
+                "11:06:02",
+                "23:00:00",
+                "18:56:54",
         };
     }
 
     @Override
     protected String[] thisShouldAllAssertFalse() {
         return new String[]{
-                "2000-01-01 00:00:00",
-                "2014-07-20 21:00:00",
+                "11:06:00",
+                "10:59:56",
+                "00:00:00",
+                "2015-01-01 00:00:00",
+                "2099-01-01 00:00:00",
         };
     }
 }

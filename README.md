@@ -132,7 +132,7 @@ Meyeen
 
 通过 FireEye 的扩展接口，添加你自定义的校验实现类
 
-```jeyea
+```java
 
     // 添加到某个ViewID的输入对象中：
     
@@ -155,6 +155,23 @@ Meyeen
     });
 
 ```
+
+## 校验参数
+
+可以通过Type.Type的方法对校验类型设置参数，这些参数将在校验时，作为对比数据使用。
+但一些格式类的校验（如 `Email`，`CreditCard`等），是不接受参数的。即使设置了也不起作用。
+另外，一些校验类型只接受特定数据类型的参数，如 `MaxLength` 等，只接受 long,int 类型参数。
+
+需要特别说明的是时间校验参数：
+
+* `Type.IsTime`, `Type.IsDate`, `Type.IsDateTime` 都接受 `format(String format)` 方法传递的参数，
+用于设定时间或者日期和格式，这个不用细说了。
+
+* `Type.IsFuture`, 'Type.IsPast' 同样接受 `format(String format)` 方法传递的参数。这两个校验类型，
+如果不指定比较时间，则与当前时间做对比，相差1毫秒或以上即认为校验通过。
+通过 `than(String time)` 方法来校验时间基准，这个时间的格式与 `format(String format)` 的时间格式相同。
+如 `format("yyyy-MM-dd")` 那么 `than(String time)` 必须为 `than("2014-08-13")`。
+
 
 ## 注意
 
@@ -186,7 +203,7 @@ e.g:
 
 ### 获取Form中被校验EditText的值
 
-   ```jeyea
+   ```java
 
        String username = eye.getValue(R.id.form_field_1);
 
@@ -194,7 +211,7 @@ e.g:
 
 ### 获取Form中没有被校验EditText的值
 
-   ```jeyea
+   ```java
 
        String username = eye.getExtraValue(R.id.form_field_others);
 
@@ -202,7 +219,7 @@ e.g:
 
 ### 获取Form中被校验EditText的对象
 
-   ```jeyea
+   ```java
 
        EditText username = eye.getView(R.id.form_field_1,EditText.class);
 

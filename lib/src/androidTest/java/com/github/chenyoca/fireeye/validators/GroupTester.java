@@ -46,6 +46,9 @@ public abstract class GroupTester {
     @Test
     public void shouldAllAssertFalse(){
         final String[] inputs = thisShouldAllAssertFalse();
-        for (String i: inputs) assertFalse(validator.perform(i));
+        for (String i: inputs) {
+            assertFalse(validator.perform(i));
+            System.out.println(">> Error: "+validator.getError());
+        }
     }
 }
