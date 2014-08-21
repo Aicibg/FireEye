@@ -18,8 +18,8 @@ public class EqualsToFloatTest extends GroupTester {
     }
 
     @Override
-    protected String[] setUpStringValues() {
-        return new String[]{"3.14159"};
+    protected double[] setUpDoubleValues() {
+        return new double[]{3.14159};
     }
 
     @Override

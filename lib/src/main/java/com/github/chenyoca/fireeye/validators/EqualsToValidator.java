@@ -32,7 +32,7 @@ class EqualsToValidator extends AbstractValidator {
         }catch (NumberFormatException e){
             e.printStackTrace();
             if (debug){
-                System.out.println("[>] InputValue: " + inputValue);
+                System.out.println("[>] Number format error ! InputValue: " + inputValue);
             }
             this.error = e.getMessage();
         }
