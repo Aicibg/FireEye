@@ -1,5 +1,7 @@
 package com.github.chenyoca.fireeye.validators;
 
+import android.util.Log;
+
 import com.github.chenyoca.fireeye.Type;
 import com.github.chenyoca.fireeye.supports.AbstractValidator;
 
@@ -16,13 +18,25 @@ class EqualsToValidator extends AbstractValidator {
 
     @Override
     public boolean isValid(String inputValue) {
-        String value = null;
-        switch (extraType){
-            case Long: value = String.valueOf(extraLong[0]); break;
-            case Double: value = String.valueOf(extraFloat[0]); break;
-            case String: value = extraString[0]; break;
+        try{
+            switch (extraType){
+                case Long:
+                    final long inputLong = Long.parseLong(inputValue);
+                    return inputLong == extraLong[0];
+                case Double:
+                    final double inputDouble = Double.parseDouble(inputValue);
+                    return inputDouble == extraFloat[0];
+                case String:
+                    return inputValue.equals(extraString[0]);
+            }
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+            if (debug){
+                System.out.println("[>] InputValue: " + inputValue);
+            }
+            this.error = e.getMessage();
         }
-        return inputValue.equals(value);
+        return false;
     }
 
 }

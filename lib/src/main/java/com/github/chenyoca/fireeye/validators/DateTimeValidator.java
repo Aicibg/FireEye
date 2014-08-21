@@ -51,18 +51,30 @@ public class DateTimeValidator extends AbstractValidator {
             sdf.setLenient(false);
             final Date date = sdf.parse(inputValue);
             if (date.getTime() < 0){
-                Log.w("DateTime","[-] DateTime before Jan. 1, 1970 GMT !!!");
+                System.out.println("[-] DateTime before Jan. 1, 1970 GMT !!!");
             }
+
             // Time base: extraString[1]
             final Date base = extraString[1] == null ? new Date() : sdf.parse(extraString[1]);
+            boolean result = false;
             switch (testType){
                 case IsFuture:
-                    return base.before(date);//now.getTime() < date.getTime();
+                    result = base.before(date);//now.getTime() < date.getTime();
+                    break;
                 case IsPast:
-                    return base.after(date);//now.getTime() > date.getTime();
+                    result = base.after(date);//now.getTime() > date.getTime();
+                    break;
                 default:
-                    return true;
+                    result = true;
             }
+            if (debug){
+                System.out.println("[>] Date time base[S]: " + extraString[1]);
+                System.out.println("[>] Date time base[T]: " + base.getTime());
+                System.out.println("[>] Date time value[S]: " + inputValue);
+                System.out.println("[>] Date time value[T]: " + date.getTime());
+                System.out.println("[>] result: " + result);
+            }
+            return result;
         }catch (ParseException e){
             e.printStackTrace();
             error = e.getMessage();

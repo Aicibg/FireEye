@@ -138,7 +138,8 @@ public class FireEye {
         View field = form.findViewById(viewId);
         if ( ! (field instanceof TextView)){
             throw new IllegalArgumentException(
-                    String.format("The view[ID=%d,Class=%s] IS NOT a TextView/EditText (OR TextView sub class ) View !",
+                    String.format(
+                            "The view[ID=%d,Class=%s] IS NOT a TextView/EditText (OR TextView sub class ) View !",
                             viewId, field.getClass().getName()));
         }
         return create(viewId, (TextView)field, validator);
@@ -194,7 +195,7 @@ public class FireEye {
         final int size = validations.size();
         for (int i=0;i<size;i++) {
             r = validations.valueAt(i).performTest();
-            if (debug) Log.i("Test","[>] Field tested: " + r);
+            if (debug) System.out.println("[>] Field tested: " + r);
             passFlag &= r.passed;
             failedMsg = passFlag ? null : r.message;
             failedError = r.error;

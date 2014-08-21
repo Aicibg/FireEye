@@ -16,19 +16,19 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:fire-eye:1.0@aar'
+        compile 'com.github.chenyoca:fire-eye:1.2@aar'
     }
 
 ```
 
-Meyeen
+Maven
 
 ```xml
 
     <dependency>
         <groupId>com.github.chenyoca</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>1.0</version>
+        <version>1.2</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
@@ -117,6 +117,9 @@ Meyeen
 
     // 应用输入框的输入法布局样式
     eye.applyInputType();
+
+    // 对某些输入框不应用输入法布局样式
+    //eye.applyInputType(exclude viewId)
 
     TestResult r = eye.test();
 
@@ -229,4 +232,4 @@ e.g:
 
 * Email: yoojia.chen@gmail.com
 * QQ: 228441083
-* QQ群：106904788
+* QQ群：106904788(谨入)

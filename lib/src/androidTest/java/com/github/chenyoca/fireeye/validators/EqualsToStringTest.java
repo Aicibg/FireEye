@@ -8,11 +8,13 @@ import com.github.chenyoca.fireeye.supports.AbstractValidator;
  * YooJia.Chen@gmail.com
  * 2014-07-21
  */
-public class EqualsToTest extends GroupTester {
+public class EqualsToStringTest extends GroupTester {
 
     @Override
     protected AbstractValidator setUpValidator() {
-        return new EqualsToValidator(Type.EqualsTo, null);
+        EqualsToValidator v = new EqualsToValidator(Type.EqualsTo, null);
+        v.debug(true);
+        return v;
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,7 +24,7 @@ class _ {
 
     final MessageDisplay display;
     final TextView field;
-    final List<AbstractValidator> runners = new ArrayList<AbstractValidator>(1);
+    final List<AbstractValidator> validators = new ArrayList<AbstractValidator>(1);
 
     final TextWatcher textWatcher = new TextWatcher() {
         @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
@@ -35,11 +34,13 @@ class _ {
         }
     };
 
-    _(MessageDisplay display, final TextView field, AbstractValidator validator) {
+    _(MessageDisplay display, TextView field, AbstractValidator validator) {
         this.display = display;
-        assert this.display != null;
         this.field = field;
-        assert this.field != null;
+        if (display == null || field == null || validator == null){
+            throw new IllegalArgumentException(
+                    "Parameters[display, field, validator] NOT-ALLOW null values !");
+        }
         add(validator);
         final boolean isEditTextChildren = field instanceof EditText;
         if (! isEditTextChildren ){
@@ -51,7 +52,7 @@ class _ {
         String value = String.valueOf(field.getText().toString());
         display.dismiss(field);
         String message;
-        AbstractValidator first = runners.get(0);
+        AbstractValidator first = validators.get(0);
         boolean required = false;
         if (first != null && Type.Required.equals(first.testType)){
             required = true;
@@ -62,12 +63,12 @@ class _ {
                 return new TestResult(false, message, null, null);
             }
         }else if (TextUtils.isEmpty(value)){
-            return new TestResult(true, "NO_VALUE_NOT_REQUIRED", null, null);
+            return new TestResult(true, "NO-VALUE-NOT-REQUIRED", null, null);
         }
 
-        final int size = runners.size();
+        final int size = validators.size();
         for (int i = required ? 1 : 0;i < size;i++){
-            AbstractValidator r = runners.get(i);
+            AbstractValidator r = validators.get(i);
             boolean passed = r.perform(value);
             message = r.getMessage();
             if ( ! passed){
@@ -75,12 +76,12 @@ class _ {
                 return new TestResult(false, message, r.getError(), value);
             }
         }
-        return new TestResult(true, "TEST_PASSED", null, value);
+        return new TestResult(true, "VALIDATE-PASSED", null, value);
     }
 
     void performInputType(){
         int inputType = field.getInputType();
-        for (AbstractValidator r : runners){
+        for (AbstractValidator r : validators){
             switch (r.testType){
                 case MobilePhone:
                 case Numeric:
@@ -105,7 +106,8 @@ class _ {
                     final int index = Type.MaxLength.equals(r.testType) ? 0 : 1;
                     InputFilter[] origin = field.getFilters();
                     if (origin.length == 0){
-                        field.setFilters(new InputFilter[]{new InputFilter.LengthFilter((int)r.extraLong[index])});
+                        field.setFilters(
+                                new InputFilter[]{new InputFilter.LengthFilter((int)r.extraLong[index])});
                     }else if (origin.length == 1 && !(origin[0] instanceof InputFilter.LengthFilter)){
                         final InputFilter[] filters = new InputFilter[]
                                 {
@@ -126,9 +128,9 @@ class _ {
 
     void add(AbstractValidator v){
         if (Type.Required.equals(v.testType)){
-            runners.add(0, v);
+            validators.add(0, v);
         }else{
-            runners.add(v);
+            validators.add(v);
         }
         v.setValues(v.testType.longValues, v.testType.stringValues, v.testType.floatValues);
         if (v.testType.message != null) v.setMessage(v.testType.message);

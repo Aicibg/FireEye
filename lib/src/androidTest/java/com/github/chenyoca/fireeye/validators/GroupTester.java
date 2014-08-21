@@ -1,5 +1,7 @@
 package com.github.chenyoca.fireeye.validators;
 
+import android.text.TextUtils;
+
 import com.github.chenyoca.fireeye.supports.AbstractValidator;
 
 import org.junit.Before;
@@ -48,7 +50,8 @@ public abstract class GroupTester {
         final String[] inputs = thisShouldAllAssertFalse();
         for (String i: inputs) {
             assertFalse(validator.perform(i));
-            System.out.println(">> Error: "+validator.getError());
+            String er = validator.getError();
+            if (!TextUtils.isEmpty(er)) System.out.println("[>] Error: "+validator.getError());
         }
     }
 }

@@ -13,12 +13,12 @@ import java.util.regex.Pattern;
 public abstract class AbstractValidator {
 
     protected enum ExtraType {
-        Long, Double, String,None
+        Long, Double, String, None
     }
 
     public final Type testType;
     protected final double[] extraFloat = new double[2];
-    // Access Level : Public, For InputType used this properties.
+    // Access Level : Public - For InputType used this properties.
     public final long[] extraLong = new long[2];
     protected final String[] extraString = new String[2];
 
@@ -26,6 +26,8 @@ public abstract class AbstractValidator {
     protected String message;
     protected String error;
     private ValuesLoader valuesLoader;
+
+    protected boolean debug = false;
 
     protected AbstractValidator(Type testType, String message){
         this.testType = testType;
@@ -116,18 +118,30 @@ public abstract class AbstractValidator {
         }
     }
 
+    /**
+     * Get test result message
+     * @return Test result message, NOT null .
+     */
     public String getMessage(){
         return message == null? "" : message;
     }
 
+    /**
+     * Get test error message
+     * @return Test error message, NOT null .
+     */
     public String getError() { return error == null? "" : error; }
 
     public void setValuesLoader(ValuesLoader valuesLoader){
         this.valuesLoader = valuesLoader;
     }
 
-    public void setMessage(String message){
-        this.message = message;
+    /**
+     * Set message(format) for test result.
+     * @param messageOrFormat Message(format)
+     */
+    public void setMessage(String messageOrFormat){
+        this.message = messageOrFormat;
     }
 
     public void setValues(long[] lVals, String[] sVals, double[] dVals){
@@ -181,5 +195,13 @@ public abstract class AbstractValidator {
     protected static boolean isMatched(String regex, CharSequence inputValue){
         Pattern p = Pattern.compile(regex);
         return p.matcher(inputValue).matches();
+    }
+
+    /**
+     * Enable debug flag
+     * @param enable Enable if true.
+     */
+    public void debug(boolean enable){
+        this.debug = enable;
     }
 }
