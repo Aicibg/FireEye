@@ -7,7 +7,7 @@
 它内置了大量常用的验证类型，足以满足你的功能需求。
 它还有一个可扩展的验证选项，你可以通过扩展接口添加你需要的验证方式。
 
-![截图](http://i.imgur.com/nK3CgSh.png)
+![截图](!http://i.imgur.com/nK3CgSh.png)
 
 ## Gradle 依赖
 
@@ -16,7 +16,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.chenyoca:fire-eye:1.2@aar'
+        compile 'com.github.yoojia:fire-eye:1.0@aar'
     }
 
 ```
@@ -26,9 +26,9 @@ Maven
 ```xml
 
     <dependency>
-        <groupId>com.github.chenyoca</groupId>
+        <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>1.2</version>
+        <version>1.0</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
