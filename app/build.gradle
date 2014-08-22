@@ -15,13 +15,13 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        applicationId "com.github.chenyoca.fireeye.app"
+        applicationId "com.github.yoojia.fireeye.app"
         minSdkVersion 11
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
 
-        testApplicationId "com.github.chenyoca.validation.app.test"
+        testApplicationId "com.github.yoojia.validation.app.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         testHandleProfiling true
         testFunctionalTest true
