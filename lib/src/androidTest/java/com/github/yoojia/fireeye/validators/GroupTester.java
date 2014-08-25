@@ -42,16 +42,19 @@ public abstract class GroupTester {
     @Test
     public void shouldAllAssertTrue(){
         final String[] inputs = thisShouldAllAssertTrue();
-        for (String i: inputs) assertTrue(validator.perform(i));
+        for (String i: inputs) {
+            boolean flag = validator.perform(i);
+            assertTrue(">> Assert TRUE, but false, error: " + validator.getError(),flag);
+        }
     }
 
     @Test
     public void shouldAllAssertFalse(){
         final String[] inputs = thisShouldAllAssertFalse();
         for (String i: inputs) {
-            assertFalse(validator.perform(i));
-            String er = validator.getError();
-            if (!TextUtils.isEmpty(er)) System.out.println("[>] Error: "+validator.getError());
+            boolean flag = validator.perform(i);
+            assertFalse(">> Assert FALSE, but true, error: " + validator.getError(), flag);
+
         }
     }
 }
