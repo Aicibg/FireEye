@@ -7,7 +7,7 @@
 它内置了大量常用的验证类型，足以满足你的功能需求。
 它还有一个可扩展的验证选项，你可以通过扩展接口添加你需要的验证方式。
 
-![截图](!http://i.imgur.com/nK3CgSh.png)
+![截图](http://i.imgur.com/sucjaqE.png)
 
 ## Gradle 依赖
 
