@@ -12,7 +12,9 @@ public class DateTimeFormatTest extends GroupTester {
 
     @Override
     protected AbstractValidator setUpValidator() {
-        return new DateTimeValidator(Type.IsDateTime, null);
+        DateTimeValidator v =  new DateTimeValidator(Type.IsDateTime, null);
+        v.debug(true);
+        return v;
     }
 
     @Override

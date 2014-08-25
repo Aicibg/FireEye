@@ -12,12 +12,15 @@ public class DateTest extends GroupTester {
     
     @Override
     protected AbstractValidator setUpValidator() {
-        return new DateTimeValidator(Type.IsDate, null);
+        DateTimeValidator v =  new DateTimeValidator(Type.IsDate, null);
+        v.debug(true);
+        return v;
     }
 
     @Override
     protected String[] thisShouldAllAssertTrue() {
         return new String[]{
+                "2014-01-01",
                 "2014-07-21",
                 "2014-12-31",
                 "2000-02-29",

@@ -31,15 +31,15 @@ public class DateTimeValidator extends AbstractValidator {
             }else{
                 switch (testType){
                     case IsDate:
-                        sdf = SimpleDateFormat.getDateInstance();
+                        sdf = new SimpleDateFormat("yyyy-MM-dd");
                         break;
                     case IsTime:
-                        sdf = SimpleDateFormat.getTimeInstance();
+                        sdf = new SimpleDateFormat("HH:mm:ss");
                         break;
                     case IsDateTime:
                     case IsFuture:
                     case IsPast:
-                        sdf = SimpleDateFormat.getDateTimeInstance();
+                        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         break;
                     default:
                         sdf = null;
@@ -50,7 +50,7 @@ public class DateTimeValidator extends AbstractValidator {
             sdf.setLenient(false);
             final Date date = sdf.parse(inputValue);
             if (date.getTime() < 0){
-                System.out.println("[-] DateTime before Jan. 1, 1970 GMT !!!");
+                System.out.println("[-] DateTime before 1970-01-01 GMT !!!");
             }
 
             // Time base: extraString[1]
@@ -74,7 +74,7 @@ public class DateTimeValidator extends AbstractValidator {
                 System.out.println("[>] result: " + result);
             }
             return result;
-        }catch (ParseException e){
+        }catch (Exception e){
             e.printStackTrace();
             error = e.getMessage();
             return false;
