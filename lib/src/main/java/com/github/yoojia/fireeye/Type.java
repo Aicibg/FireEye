@@ -28,7 +28,8 @@ public enum Type {
     RangeValue,
     MinValue,
     MaxValue,
-    MobilePhone;
+    MobilePhone,
+    VehicleNumber;
 
     String[] stringValues = null;
     long[] longValues = null;

@@ -15,7 +15,7 @@ import java.util.Date;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
-public class DateTimeValidator extends AbstractValidator {
+class DateTimeValidator extends AbstractValidator {
 
     protected DateTimeValidator(Type testType, String message) {
         super(testType, message);

@@ -22,4 +22,5 @@
     <string name="validation_error_msg_range_length">Only accept length between [{$1},{$2}], retry please！</string>
     <string name="validation_error_msg_range_value">Only accept length between [{$1},{$2}] retry please！</string>
     <string name="validation_error_msg_required">This field is required！</string>
+    <string name="validation_error_msg_vehicle">Please input a valid Chinese vehicle plate license number！</string>
 </resources>
