@@ -16,7 +16,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:1.0@aar'
+        compile 'com.github.yoojia:fire-eye:1.1@aar'
     }
 
 ```
@@ -28,7 +28,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
