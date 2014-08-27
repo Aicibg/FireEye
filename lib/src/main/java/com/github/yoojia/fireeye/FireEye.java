@@ -120,6 +120,7 @@ public class FireEye {
         if (validators == null || validators.length == 0){
             throw new IllegalArgumentException("Required 1 or more validator to add !");
         }
+
         _ item = validations.get(viewId);
         if (item != null){
             for (AbstractValidator v: validators) item.add(v);
@@ -159,6 +160,7 @@ public class FireEye {
     }
 
     private _ create(int viewId, TextView field, AbstractValidator validator){
+        if (field == null) throw new NullPointerException("Field (TextView) CANNOT be null !");
         _ item = new _(display, field , validator);
         validations.put(viewId, item);
         validationsEx.put(viewId, item);

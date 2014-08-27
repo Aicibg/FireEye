@@ -58,6 +58,7 @@ Maven
 * **MinValue** 最小值
 * **MaxValue** 最大值
 * **MobilePhone** 中国的手机号码
+* **VehicleNumber** 中国的车辆号牌
 
 ## How to usage - 如何使用
 

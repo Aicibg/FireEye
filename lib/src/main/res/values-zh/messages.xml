@@ -22,4 +22,5 @@
     <string name="validation_error_msg_range_length">允许的内容长度范围在[{$1},{$2}]之间，请重试！</string>
     <string name="validation_error_msg_range_value">允许的数值范围在[{$1},{$2}]之间，请重试！</string>
     <string name="validation_error_msg_required">这是必填选项，请填写！</string>
+    <string name="validation_error_msg_vehicle">请输入有效的车牌号码！</string>
 </resources>

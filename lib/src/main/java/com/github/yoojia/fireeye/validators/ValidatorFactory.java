@@ -40,6 +40,7 @@ public class ValidatorFactory {
             case MaxValue: validator = new MaxValueValidator(type, res.getString(R.string.validation_error_msg_max_value)); break;
             case MinValue: validator = new MinValueValidator(type, res.getString(R.string.validation_error_msg_min_value)); break;
             case RangeValue: validator = new RangeValueValidator(type, res.getString(R.string.validation_error_msg_range_value)); break;
+            case VehicleNumber: validator = new VehicleNumberValidator(type, res.getString(R.string.validation_error_msg_vehicle)); break;
             default: validator = null; break;
         }
         return validator;
