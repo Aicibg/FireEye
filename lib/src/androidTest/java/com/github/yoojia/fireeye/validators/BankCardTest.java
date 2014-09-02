@@ -8,11 +8,11 @@ import com.github.yoojia.fireeye.supports.AbstractValidator;
  * YooJia.Chen@gmail.com
  * 2014-07-20
  */
-public class CreditCardTest extends GroupTester {
+public class BankCardTest extends GroupTester {
 
     @Override
     protected AbstractValidator setUpValidator() {
-        return new CreditCardValidator(Type.CreditCard,null);
+        return new BankCardValidator(Type.BankCard,null);
     }
 
     @Override

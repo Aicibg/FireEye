@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.yoojia.fireeye.MessageDisplay;
-import com.github.yoojia.fireeye.Type;
-import com.github.yoojia.fireeye._;
 import com.github.yoojia.fireeye.validators.ValidatorFactory;
 
 import org.junit.Test;
@@ -41,7 +38,7 @@ public class CoreTest {
     public void shouldReadText(){
 
         EditText req = new EditText(context);
-        _ item = new _(display, req, ValidatorFactory.build(context, Type.Required));
+        Wrapper item = new Wrapper(display, req, ValidatorFactory.build(context, Type.Required));
         req.setText("A");
         assertTrue(item.performTest().passed);
         req.setText("#");
@@ -61,7 +58,7 @@ public class CoreTest {
     @Test
     public void shouldReadValue(){
         EditText value = new EditText(context);
-        _ item = new _(display, value, ValidatorFactory.build(context, Type.Required));
+        Wrapper item = new Wrapper(display, value, ValidatorFactory.build(context, Type.Required));
         item.add(context, Type.MinValue.value(10));
 
         assertFalse(item.performTest().passed);

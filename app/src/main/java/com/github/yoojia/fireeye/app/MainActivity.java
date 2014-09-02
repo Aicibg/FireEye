@@ -46,8 +46,8 @@ public class MainActivity extends Activity {
 
         // 指定自定义显示出错消息的方式，
         fireEye = new FireEye(form, messageDisplay);
-        fireEye.add(R.id.form_field_1, Type.Required, Type.MobilePhone);
-        fireEye.add(R.id.form_field_2, Type.CreditCard);
+        fireEye.add(R.id.form_field_1, Type.Required, Type.Mobile);
+        fireEye.add(R.id.form_field_2, Type.BankCard);
         fireEye.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
         fireEye.add(R.id.form_field_4, Type.Email);
         fireEye.add(R.id.form_field_5, Type.EqualsTo.value(new TextViewValuesLoader(form, R.id.form_field_4)));

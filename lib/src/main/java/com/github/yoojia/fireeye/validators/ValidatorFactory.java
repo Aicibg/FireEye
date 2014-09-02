@@ -18,8 +18,8 @@ public class ValidatorFactory {
         Resources res = c.getResources();
         AbstractValidator validator;
         switch (type){
-            case MobilePhone: validator = new MobilePhoneValidator(type, res.getString(R.string.validation_error_msg_mobile_phone)); break;
-            case CreditCard: validator = new CreditCardValidator(type, res.getString(R.string.validation_error_msg_credit_card)); break;
+            case Mobile: validator = new MobilePhoneValidator(type, res.getString(R.string.validation_error_msg_mobile_phone)); break;
+            case BankCard: validator = new BankCardValidator(type, res.getString(R.string.validation_error_msg_credit_card)); break;
             case Digits: validator = new DigitsValidator(type, res.getString(R.string.validation_error_msg_digits)); break;
             case Email: validator = new EmailValidator(type, res.getString(R.string.validation_error_msg_email)); break;
             case EqualsTo: validator = new EqualsToValidator(type, res.getString(R.string.validation_error_msg_equals)); break;
@@ -41,6 +41,7 @@ public class ValidatorFactory {
             case MinValue: validator = new MinValueValidator(type, res.getString(R.string.validation_error_msg_min_value)); break;
             case RangeValue: validator = new RangeValueValidator(type, res.getString(R.string.validation_error_msg_range_value)); break;
             case VehicleNumber: validator = new VehicleNumberValidator(type, res.getString(R.string.validation_error_msg_vehicle)); break;
+            case IDCard: validator = new IDCardValidator(type, res.getString(R.string.validation_error_msg_id_card)); break;
             default: validator = null; break;
         }
         return validator;
