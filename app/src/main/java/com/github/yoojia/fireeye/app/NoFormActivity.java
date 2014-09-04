@@ -23,8 +23,8 @@ public class NoFormActivity extends Activity{
         final FireEye eye = new FireEye(this);
         EditText mobile = (EditText) findViewById(R.id.form_field_1);
         EditText card = (EditText) findViewById(R.id.form_field_2);
-        eye.add(mobile, Type.Required, Type.MobilePhone);
-        eye.add(card, Type.CreditCard);
+        eye.add(mobile, Type.Required, Type.Mobile);
+        eye.add(card, Type.BankCard);
         eye.debug(true);
         eye.applyInputType();
 

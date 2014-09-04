@@ -9,9 +9,9 @@ import com.github.yoojia.fireeye.supports.AbstractValidator;
  * Credit card
  * !! Copyright -> http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.js
  */
-class CreditCardValidator extends AbstractValidator {
+class BankCardValidator extends AbstractValidator {
 
-    public CreditCardValidator(Type testType, String message){
+    public BankCardValidator(Type testType, String message){
         super(testType, message);
     }
 
@@ -21,21 +21,22 @@ class CreditCardValidator extends AbstractValidator {
         if ( ! isMatched("[\\d -]*", inputValue) ) {
             return false;
         }
-
         String value = inputValue.replaceAll("\\D", "");
-
-        // Basing min and max length on
-        // http://developer.ean.com/general_info/Valid_Credit_Card_Types
-        int length = value.length();
-        if ( length < 13 || length > 19 ) {
+        final int length = value.length();
+        if ( 13 > length || 19 < length){
             return false;
+        }else{
+            return matchLuhn(value, length);
         }
 
+    }
+
+    public static boolean matchLuhn(String rawCardNumbers, int length){
         char cDigit;
         int nCheck = 0, nDigit;
         boolean bEven = false;
         for ( int n = length - 1; n >= 0; n--) {
-            cDigit = value.charAt(n);
+            cDigit = rawCardNumbers.charAt(n);
             nDigit = Integer.parseInt(String.valueOf(cDigit), 10);
             if ( bEven ) {
                 if ( (nDigit *= 2) > 9 ) {
@@ -45,7 +46,6 @@ class CreditCardValidator extends AbstractValidator {
             nCheck += nDigit;
             bEven = !bEven;
         }
-
         return (nCheck % 10) == 0;
     }
 

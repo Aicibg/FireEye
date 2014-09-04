@@ -24,11 +24,12 @@ public enum Type {
     MinLength,
     MaxLength,
     Numeric,
-    CreditCard,
+    BankCard,
+    IDCard,
     RangeValue,
     MinValue,
     MaxValue,
-    MobilePhone,
+    Mobile,
     VehicleNumber;
 
     String[] stringValues = null;

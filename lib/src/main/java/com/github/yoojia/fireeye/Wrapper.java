@@ -20,7 +20,7 @@ import java.util.List;
  * YooJia.Chen@gmail.com
  * 2014-07-18
  */
-class _ {
+class Wrapper {
 
     final MessageDisplay display;
     final TextView field;
@@ -34,7 +34,7 @@ class _ {
         }
     };
 
-    _(MessageDisplay display, TextView field, AbstractValidator validator) {
+    Wrapper(MessageDisplay display, TextView field, AbstractValidator validator) {
         this.display = display;
         this.field = field;
         if (display == null || field == null || validator == null){
@@ -83,14 +83,14 @@ class _ {
         int inputType = field.getInputType();
         for (AbstractValidator r : validators){
             switch (r.testType){
-                case MobilePhone:
+                case Mobile:
                 case Numeric:
                 case Digits:
                 case MaxValue:
                 case MinValue:
                 case RangeValue:
                 case IPv4:
-                case CreditCard:
+                case BankCard:
                     inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL;
                     break;
                 case Email:

@@ -53,12 +53,16 @@ Maven
 * **MinLength** 最小长度
 * **MaxLength** 最大长度
 * **Numeric** 数值
-* **CreditCard** 信用卡号
+* **BankCard** 信用卡号/银行卡号
 * **RangeValue** 最值范围
 * **MinValue** 最小值
 * **MaxValue** 最大值
-* **MobilePhone** 中国的手机号码
+* **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的车辆号牌
+
+### Coming soon
+
+* IDCard 中国的身份证号
 
 ## How to usage - 如何使用
 

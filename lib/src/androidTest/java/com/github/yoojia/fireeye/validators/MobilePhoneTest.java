@@ -11,7 +11,7 @@ import com.github.yoojia.fireeye.supports.AbstractValidator;
 public class MobilePhoneTest extends GroupTester {
     @Override
     protected AbstractValidator setUpValidator() {
-        return new MobilePhoneValidator(Type.MobilePhone, null);
+        return new MobilePhoneValidator(Type.Mobile, null);
     }
 
     @Override
