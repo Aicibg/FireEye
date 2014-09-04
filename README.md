@@ -16,7 +16,7 @@ Add dependency
 ```groovy
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:1.1@aar'
+        compile 'com.github.yoojia:fire-eye:1.2@aar'
     }
 
 ```
@@ -28,7 +28,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
         <type>aar</type>
         <scope>provided</scope>
     </dependency>
@@ -59,10 +59,7 @@ Maven
 * **MaxValue** 最大值
 * **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的车辆号牌
-
-### Coming soon
-
-* IDCard 中国的身份证号
+* **IDCard** 中国的身份证号（15位和18位）
 
 ## How to usage - 如何使用
 
