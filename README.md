@@ -61,7 +61,7 @@ Maven
 * **VehicleNumber** 中国的车辆号牌
 * **IDCard** 中国的身份证号（15位和18位）
 
-## How to usage - 如何使用
+## Usage - 如何使用
 
 通过 View ID 来绑定校验配置信息
 
@@ -234,4 +234,3 @@ e.g:
 
 * Email: yoojia.chen@gmail.com
 * QQ: 228441083
-* QQ群：106904788(谨入)
