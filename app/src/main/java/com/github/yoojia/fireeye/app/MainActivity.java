@@ -1,69 +1,52 @@
 package com.github.yoojia.fireeye.app;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.yoojia.fireeye.FireEye;
+import com.github.yoojia.fireeye.Form;
+import com.github.yoojia.fireeye.LazyLoader;
 import com.github.yoojia.fireeye.MessageDisplay;
-import com.github.yoojia.fireeye.Type;
-import com.github.yoojia.fireeye.supports.TextViewValuesLoader;
+import com.github.yoojia.fireeye.StaticPattern;
+import com.github.yoojia.fireeye.TextViewLoader;
+import com.github.yoojia.fireeye.ValuePattern;
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends ActionBarActivity {
 
     FireEye fireEye;
-    LinearLayout form;
-
-    /**
-     * 自定义显示出错消息的方式，默认是在 EditText 右边显示一个浮动提示框。
-     */
-    MessageDisplay messageDisplay = new MessageDisplay() {
-        @Override
-        public void dismiss(TextView field) {
-            field.setError(null);
-        }
-
-        @Override
-        public void show(TextView field, String message) {
-            field.setError(message);
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        form = (LinearLayout) findViewById(R.id.form);
+        View formView = findViewById(R.id.form);
+        Form form = new Form(formView);
 
-//      默认是在 EditText 右边显示一个浮动提示框。
-//      final FireEye fireEye = new FireEye(form);
+        fireEye = new FireEye();
+        fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
+        fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
 
-        // 指定自定义显示出错消息的方式，
-        fireEye = new FireEye(form, messageDisplay);
-        fireEye.add(R.id.form_field_1, Type.Required, Type.Mobile);
-        fireEye.add(R.id.form_field_2, Type.BankCard);
-        fireEye.add(R.id.form_field_3, Type.Digits, Type.MaxLength.value(20));
-        fireEye.add(R.id.form_field_4, Type.Email);
-        fireEye.add(R.id.form_field_5, Type.EqualsTo.value(new TextViewValuesLoader(form, R.id.form_field_4)));
-        fireEye.add(R.id.form_field_6, Type.Host);
-        fireEye.add(R.id.form_field_7, Type.URL);
-        fireEye.add(R.id.form_field_8, Type.MaxLength.value(5));
-        fireEye.add(R.id.form_field_9, Type.MinLength.value(4));
-        fireEye.add(R.id.form_field_10, Type.RangeLength.values(4, 8));
-        fireEye.add(R.id.form_field_11, Type.NotBlank);
-        fireEye.add(R.id.form_field_12, Type.Numeric);
-        fireEye.add(R.id.form_field_13, Type.MaxValue.value(100));
-        fireEye.add(R.id.form_field_14, Type.MinValue.value(20));
-        fireEye.add(R.id.form_field_15, Type.RangeValue.values(18, 30));
+        fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);
+        fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
 
-        fireEye.debug(true);
-        fireEye.applyInputType();
+        fireEye.add(form.byId(R.id.form_field_4), StaticPattern.Required, StaticPattern.Email);
+        fireEye.add(form.byId(R.id.form_field_5), ValuePattern.Required, ValuePattern.EqualsTo.lazy(new TextViewLoader(form.byId(R.id.form_field_4))));
+        fireEye.add(form.byId(R.id.form_field_6), StaticPattern.Host);
+        fireEye.add(form.byId(R.id.form_field_7), StaticPattern.URL);
+        fireEye.add(form.byId(R.id.form_field_8), ValuePattern.MaxLength.setValue(5));
+        fireEye.add(form.byId(R.id.form_field_9), ValuePattern.MinLength.setValue(4));
+        fireEye.add(form.byId(R.id.form_field_10), ValuePattern.RangeLength.setFirstValue(4L).setSecondValue(8L));
+        fireEye.add(form.byId(R.id.form_field_11), StaticPattern.NotBlank);
+        fireEye.add(form.byId(R.id.form_field_12), StaticPattern.Numeric);
+        fireEye.add(form.byId(R.id.form_field_13), ValuePattern.MaxValue.setValue(100));
+        fireEye.add(form.byId(R.id.form_field_14), ValuePattern.MinValue.setValue(20));
+        fireEye.add(form.byId(R.id.form_field_15), ValuePattern.RangeValue.setFirstValue(18L).setSecondValue(30L));
 
         final Button formCommit = (Button) findViewById(R.id.form_commit);
         formCommit.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +59,6 @@ public class MainActivity extends Activity {
 
             }
         });
-
     }
+
 }
