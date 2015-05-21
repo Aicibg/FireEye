@@ -47,7 +47,6 @@ Maven
 * **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的民用车辆号牌
 * **IDCard** 中国的身份证号（15位和18位）
-
 ## How to use - 如何使用
 
 通过 View ID 来绑定校验配置信息
@@ -105,3 +104,4 @@ Maven
         }
 
 ```
+
