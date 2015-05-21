@@ -1,1 +1,1 @@
-include ':app', ':fireeye'
+include ':app', ':fire-eye'

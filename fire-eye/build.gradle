@@ -60,7 +60,7 @@ bintray {
 
 install {
     repositories.mavenInstaller {
-        pom.artifactId = 'fireeye'
+        pom.artifactId = 'fire-eye'
         pom {
             project {
                 packaging 'aar'
