@@ -1,34 +1,19 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.robolectric:robolectric-gradle-plugin:0.11.0'
-    }
-}
-
 apply plugin: 'com.android.application'
-apply plugin: 'robolectric'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.github.yoojia.fireeye.app"
         minSdkVersion 11
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-
-        testApplicationId "com.github.yoojia.validation.app.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
-        testHandleProfiling true
-        testFunctionalTest true
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,10 +21,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:19.+'
-    compile project(':lib')
-
-    androidTestCompile 'junit:junit:4.10'
-    androidTestCompile 'org.robolectric:robolectric:2.3'
-    androidTestCompile 'com.squareup:fest-android:1.0.+'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile project(':fireeye')
 }
