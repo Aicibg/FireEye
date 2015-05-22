@@ -45,9 +45,9 @@ abstract class PatternInvoker<P, E> {
         StringBuilder buf = new StringBuilder(input.toString());
         buf.append('@').append(input.getHint())
                 .append(':').append(input.getText());
-        buf.append(" -> patterns:\n");
+        buf.append("\n -> patterns:\n");
         for (P pattern : patterns){
-            buf.append("\t").append(pattern.toString()).append(" ,");
+            buf.append("\t").append(pattern.toString()).append(" ,\n");
         }
         return buf.toString();
     }
