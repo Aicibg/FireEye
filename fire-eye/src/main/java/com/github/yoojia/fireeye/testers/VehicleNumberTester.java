@@ -1,10 +1,10 @@
 package com.github.yoojia.fireeye.testers;
 
 /**
- *
- * @author Yoojia.Chen (yoojia.chen@gmail.com)
+ * 中国民用车辆号牌
+ * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
- * @since 2.0
+ * @since   2.0
  */
 public class VehicleNumberTester extends AbstractTester {
 
@@ -12,6 +12,8 @@ public class VehicleNumberTester extends AbstractTester {
 
     @Override
     public boolean test(String content) {
-        return testRegex(VEHICLE_REGEX, content);
+        // 全部转换成大写来优化正则匹配性能
+        final String number = content.toUpperCase();
+        return testRegex(VEHICLE_REGEX, number);
     }
 }

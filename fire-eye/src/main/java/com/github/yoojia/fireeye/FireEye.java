@@ -1,6 +1,5 @@
 package com.github.yoojia.fireeye;
 
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
@@ -11,13 +10,13 @@ import java.util.List;
 /**
  * Fire Eye
  *
- * @author Yoojia.Chen (yoojia.chen@gmail.com)
+ * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version 2015-05-20
- * @since 2.0
+ * @since   2.0
  */
 public class FireEye {
 
-    private final List<TestType> mOrderedFields = new ArrayList<>();
+    private final List<TypeWrapper> mOrderedFields = new ArrayList<>();
     private final SparseArray<StaticPatternMeta> mStaticPatterns = new SparseArray<StaticPatternMeta>();
     private final SparseArray<ValuePatternMeta> mValuePatterns = new SparseArray<ValuePatternMeta>();
     private final MessageDisplay mDefaultMessageDisplay = new MessageDisplay() {
@@ -43,14 +42,14 @@ public class FireEye {
      * @return FireEye
      */
     public FireEye add(TextView viewWithId, StaticPattern...patterns){
-        enforceViewId(viewWithId);
-        enforcePatterns(patterns);
+        enforceHasViewId(viewWithId);
+        enforceHasPatterns(patterns);
         final int viewId = viewWithId.getId();
         final StaticPatternMeta meta = mStaticPatterns.get(viewId);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
         if (meta == null){
-            mOrderedFields.add(new TestType(viewId, true));
+            mOrderedFields.add(new TypeWrapper(viewId, true));
             mStaticPatterns.put(viewId, new StaticPatternMeta(viewId, viewWithId, patterns));
         }else{
             meta.addPatterns(patterns);
@@ -65,14 +64,14 @@ public class FireEye {
      * @return FireEye
      */
     public FireEye add(TextView viewWithId, ValuePattern...patterns){
-        enforceViewId(viewWithId);
-        enforcePatterns(patterns);
+        enforceHasViewId(viewWithId);
+        enforceHasPatterns(patterns);
         final int viewId = viewWithId.getId();
         final ValuePatternMeta meta = mValuePatterns.get(viewId);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
         if (meta == null){
-            mOrderedFields.add(new TestType(viewId, false));
+            mOrderedFields.add(new TypeWrapper(viewId, false));
             mValuePatterns.put(viewId, new ValuePatternMeta(viewId, viewWithId, patterns));
         }else{
             meta.addPatterns(patterns);
@@ -94,13 +93,14 @@ public class FireEye {
      */
     public Result test(){
         // 校验时，按保存的的输入框顺序来校验
-        for (TestType testType : mOrderedFields){
-            final Result result;
-            if (testType.isStaticPattern){
-                result = testPattern(mStaticPatterns.get(testType.viewId));
+        for (TypeWrapper typeWrapper : mOrderedFields){
+            final PatternMeta target;
+            if (typeWrapper.isStaticPattern){
+                target = mStaticPatterns.get(typeWrapper.viewId);
             }else{
-                result = testPattern(mValuePatterns.get(testType.viewId));
+                target = mValuePatterns.get(typeWrapper.viewId);
             }
+            final Result result = testPattern(target);
             if (result != null) return result;
         }
         return Result.passed(null);
@@ -122,7 +122,7 @@ public class FireEye {
      * 确保View有一个ID
      * @param viewWithId View
      */
-    private static void enforceViewId(TextView viewWithId){
+    private static void enforceHasViewId(TextView viewWithId){
         final int viewId = viewWithId.getId();
         if (viewId == View.NO_ID){
             throw new IllegalArgumentException("检验的View必须具备一个Id (View Id required)");
@@ -133,18 +133,18 @@ public class FireEye {
      * 确保有一个校验模式
      * @param items 模式条目
      */
-    private static void enforcePatterns(Object[] items){
+    private static void enforceHasPatterns(Object[] items){
         if (items == null || items.length == 0){
             throw new IllegalArgumentException("必须指定至少一个校验模式(Pattern required)");
         }
     }
 
-    private final class TestType {
+    private final class TypeWrapper {
 
         final int viewId;
         final boolean isStaticPattern;
 
-        private TestType(int viewId, boolean isStaticPattern) {
+        private TypeWrapper(int viewId, boolean isStaticPattern) {
             this.viewId = viewId;
             this.isStaticPattern = isStaticPattern;
         }

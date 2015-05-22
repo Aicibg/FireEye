@@ -3,8 +3,7 @@ package com.github.yoojia.fireeye;
 import android.widget.TextView;
 
 /**
- * Created by YooJia.Chen
- * YooJia.Chen@gmail.com
+ * @author Yoojia.chen (yooJia.Chen@gmail.com)
  * 2014-07-14
  */
 public interface MessageDisplay {

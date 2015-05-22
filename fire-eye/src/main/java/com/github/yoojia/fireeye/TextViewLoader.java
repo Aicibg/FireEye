@@ -3,7 +3,7 @@ package com.github.yoojia.fireeye;
 import android.widget.TextView;
 
 /**
- * TextView Loader
+ * TextView Text value Loader
  *
  * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
@@ -29,6 +29,6 @@ public class TextViewLoader implements LazyLoader{
 
     @Override
     public String loadString() {
-        return mTextView.getText().toString();
+        return String.valueOf(mTextView.getText());
     }
 }

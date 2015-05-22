@@ -43,9 +43,17 @@ public abstract class AbstractTester {
 
     /**
      * 校验器实现类实现真正的校验方法
+     * @param content 内容
+     * @return 是否校验通过
      */
     protected abstract boolean test(String content);
 
+    /**
+     * 校验内容是否匹配指定正则表达式
+     * @param regex 正则表达式
+     * @param inputValue 内容
+     * @return 是否匹配
+     */
     protected static boolean testRegex(String regex, CharSequence inputValue){
         return Pattern.compile(regex).matcher(inputValue).matches();
     }

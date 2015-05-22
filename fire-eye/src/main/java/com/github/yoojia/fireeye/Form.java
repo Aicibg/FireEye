@@ -8,7 +8,7 @@ import android.widget.TextView;
  *
  * @author Yoojia.Chen (yoojia.chen@
  * @version version 2015-05-21
- * @since app.version
+ * @since 2.0
  */
 public class Form {
 
@@ -18,6 +18,12 @@ public class Form {
         this.form = form;
     }
 
+    /**
+     * 查找表格From的子View
+     * @param viewId View ID
+     * @param <T> TextView的子类型
+     * @return TextView的子类型
+     */
     public <T extends TextView> T byId(int viewId){
         return (T) form.findViewById(viewId);
     }

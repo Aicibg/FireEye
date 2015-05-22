@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * 输入框的匹配模式
  *
- * @author Yoojia.Chen (yoojia.chen@gmail.com)
+ * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
- * @since 2.0
+ * @since   2.0
  */
 final class ValuePatternMeta extends PatternMeta<ValuePattern>{
 
@@ -58,6 +58,16 @@ final class ValuePatternMeta extends PatternMeta<ValuePattern>{
             Log.d("V-Meta", "Result > passed: YES, value: " + value);
         }
         return Result.passed(value);
+    }
+
+    @Override
+    protected boolean onOrdering(ValuePattern item) {
+        if (ValuePattern.Required.equals(item)){
+            this.patterns.add(0, item);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private AbstractValuesTester findTester(ValuePattern pattern){

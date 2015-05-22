@@ -1,7 +1,7 @@
 package com.github.yoojia.fireeye.testers;
 
 /**
- *
+ * IP地址校验
  * @author Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
  * @since 2.0

@@ -15,23 +15,37 @@ import java.util.List;
  */
 abstract class PatternMeta<T> {
 
-    final List<T> patterns = new ArrayList<>();
-    final TextView input;
-    final int viewId;
+    protected final List<T> patterns = new ArrayList<>();
+
+    public final TextView input;
+    public final int viewId;
 
     protected PatternMeta(int viewId, TextView input) {
         this.input = input;
         this.viewId = viewId;
     }
 
+    /**
+     * 添加匹配模式列表
+     * @param patterns 匹配模式列表
+     */
     public void addPatterns(T[] patterns){
-        this.patterns.addAll(Arrays.asList(patterns));
+        final List<T> array = Arrays.asList(patterns);
+        for (T item : array){
+            if (!onOrdering(item)) this.patterns.add(item);
+        }
     }
 
     /**
      * 校验输入
      * @return 校验结果
      */
-    abstract Result performTest();
+    public abstract Result performTest();
 
+    /**
+     * 排序处理
+     * @param item 当前正在添加的条目
+     * @return 如果目标被手动排序，由返回true。
+     */
+    protected abstract boolean onOrdering(T item);
 }

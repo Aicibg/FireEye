@@ -9,5 +9,8 @@ package com.github.yoojia.fireeye;
  */
 public class FireEyeEnv {
 
-    public static boolean isDebug = true;
+    /**
+     * 是否开启调试信息输出
+     */
+    public static boolean isDebug = false;
 }

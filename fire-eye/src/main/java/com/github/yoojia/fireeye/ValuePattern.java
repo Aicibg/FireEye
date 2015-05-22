@@ -2,9 +2,9 @@ package com.github.yoojia.fireeye;
 
 /**
  * 数值匹配模式
- * @author Yoojia.Chen (yoojia.chen@gmail.com)
+ * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
- * @since app.version
+ * @since   2.0
  */
 public enum ValuePattern {
 
@@ -33,46 +33,67 @@ public enum ValuePattern {
         mMessage = message;
     }
 
+    /**
+     * 设置懒加载接口
+     * @param lazyLoader 懒加载接口
+     * @return ValuePattern实例
+     */
     public ValuePattern lazy(LazyLoader lazyLoader) {
         mLazyLoader = lazyLoader;
         return this;
     }
 
     /**
-     * 设置提示信息
-     * @param message 提示信息
+     * 设置第一个参数值
+     * @param first 数值
+     * @return ValuePattern
      */
-    public void setMessage(String message) {
-        mMessage = message;
-    }
-
-    public ValuePattern setFirstValue(double min){
-        enforceValueType();
-        minValue = String.valueOf(min);
+    public ValuePattern setFirstValue(double first){
+        enforceFloatValueType();
+        minValue = String.valueOf(first);
         this.value = minValue;
         return this;
     }
 
-    public ValuePattern setSecondValue(double max){
-        enforceValueType();
-        maxValue = String.valueOf(max);
-        return this;
-    }
-
-    public ValuePattern setFirstValue(long min){
-        checkIntValue();
-        minValue = String.valueOf(min);
+    /**
+     * 设置第一个参数值
+     * @param first 数值
+     * @return ValuePattern
+     */
+    public ValuePattern setFirstValue(long first){
+        enforceIntValueType();
+        minValue = String.valueOf(first);
         this.value = minValue;
         return this;
     }
 
-
-    public ValuePattern setSecondValue(long max){
-        checkIntValue();
-        maxValue = String.valueOf(max);
+    /**
+     * 设置第二个参数值
+     * @param second 数值
+     * @return ValuePattern
+     */
+    public ValuePattern setSecondValue(long second){
+        enforceIntValueType();
+        maxValue = String.valueOf(second);
         return this;
     }
 
+    /**
+     * 设置第二个参数值
+     * @param second 数值
+     * @return ValuePattern
+     */
+    public ValuePattern setSecondValue(double second){
+        enforceFloatValueType();
+        maxValue = String.valueOf(second);
+        return this;
+    }
+
+    /**
+     * 设置第一个参数值
+     * @param value 数值
+     * @return ValuePattern
+     */
     public ValuePattern setValue(String value){
         this.value = value;
         this.minValue = this.value;
@@ -80,6 +101,11 @@ public enum ValuePattern {
         return this;
     }
 
+    /**
+     * 设置第一个参数值
+     * @param value 数值
+     * @return ValuePattern
+     */
     public ValuePattern setValue(long value){
         this.value = String.valueOf(value);
         this.minValue = this.value;
@@ -87,6 +113,11 @@ public enum ValuePattern {
         return this;
     }
 
+    /**
+     * 设置第一个参数值
+     * @param value 数值
+     * @return ValuePattern
+     */
     public ValuePattern setValue(double value){
         this.value = String.valueOf(value);
         this.minValue = this.value;
@@ -94,7 +125,7 @@ public enum ValuePattern {
         return this;
     }
 
-    private void checkIntValue(){
+    private void enforceIntValueType(){
         if (valueType == null){
             valueType = ValueType.Int;
         }else{
@@ -102,7 +133,7 @@ public enum ValuePattern {
         }
     }
 
-    private void enforceValueType(){
+    private void enforceFloatValueType(){
         if (valueType == null){
             valueType = ValueType.Float;
         }else{

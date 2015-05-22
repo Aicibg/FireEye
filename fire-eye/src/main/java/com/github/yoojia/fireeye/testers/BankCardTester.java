@@ -1,12 +1,13 @@
 package com.github.yoojia.fireeye.testers;
 
 /**
- *
- * @author Yoojia.Chen (yoojia.chen@gmail.com)
+ * 银行卡/信用卡的卡号规则校验
+ * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
- * @since 2.0
+ * @since   2.0
  */
 public class BankCardTester extends AbstractTester {
+
     @Override
     public boolean test(String inputValue) {
         // accept only spaces, digits and dashes
@@ -20,7 +21,6 @@ public class BankCardTester extends AbstractTester {
         }else{
             return matchLuhn(value, length);
         }
-
     }
 
     private static boolean matchLuhn(String rawCardNumbers, int length){

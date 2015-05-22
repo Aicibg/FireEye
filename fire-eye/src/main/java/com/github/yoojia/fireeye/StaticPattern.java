@@ -32,9 +32,4 @@ public enum StaticPattern {
         return mMessage;
     }
 
-    public StaticPattern setMessage(String message){
-        mMessage = message;
-        return this;
-    }
-
 }

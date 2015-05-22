@@ -5,7 +5,7 @@ package com.github.yoojia.fireeye.testers;
  * 外传数值校验器
  * @author Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
- * @since 2.0
+ * @since   2.0
  */
 public abstract class AbstractValuesTester extends AbstractTester{
 

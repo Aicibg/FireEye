@@ -40,12 +40,12 @@ final class StaticPatternMeta extends PatternMeta<StaticPattern>{
     public Result performTest(){
         final String value = input.getText().toString();
         // 当输入内容为空时，如果第一个校验模式不是“Required”，则跳过后面的配置。
-        StaticPattern first = patterns.get(0);
-        if (TextUtils.isEmpty(value) && !StaticPattern.Required.equals(first)){
+        // 在FireEye入口时，已经确保patterns至少包含一个Pattern配置。
+        if (TextUtils.isEmpty(value) && !StaticPattern.Required.equals(patterns.get(0))){
             return Result.passed(null);
         }
         for (StaticPattern pattern : patterns){
-            AbstractTester tester = findTester(pattern);
+            final AbstractTester tester = findTester(pattern);
             final boolean passed = tester.performTest(value);
             if (!passed){
                 if (FireEyeEnv.isDebug){
@@ -58,6 +58,16 @@ final class StaticPatternMeta extends PatternMeta<StaticPattern>{
             Log.d("S-Meta", "Result > passed: NO, value: " + value);
         }
         return Result.passed(value);
+    }
+
+    @Override
+    protected boolean onOrdering(StaticPattern item) {
+        if (StaticPattern.Required.equals(item)){
+            this.patterns.add(0, item);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private AbstractTester findTester(StaticPattern pattern){
