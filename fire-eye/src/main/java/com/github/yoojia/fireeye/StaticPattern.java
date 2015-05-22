@@ -22,11 +22,13 @@ public enum StaticPattern {
     Mobile("手机号错误"),
     VehicleNumber("车牌号错误");
 
-    String message;
-    int messageId = -1;
+    private final String mDefMessage;
+
+    private String mMessage;
+    private int mMessageId = -1;
 
     private StaticPattern(String message){
-        this.message = message;
+        mDefMessage = message;
     }
 
     /**
@@ -34,7 +36,7 @@ public enum StaticPattern {
      * @param message 消息内容
      */
     public StaticPattern setMessage(String message) {
-        this.message = message;
+        mMessage = message;
         return this;
     }
 
@@ -43,16 +45,28 @@ public enum StaticPattern {
      * @param msgId 资源ID
      */
     public StaticPattern setMessage(int msgId){
-        messageId = msgId;
+        mMessageId = msgId;
         return this;
+    }
+
+    String getMessage() {
+        final String msg = mMessage == null ? mDefMessage : mMessage;
+        mMessage = null;
+        return msg;
+    }
+
+    int getMessageId() {
+        final int msg = mMessageId <= 0 ? -1 : mMessageId;
+        mMessageId = -1;
+        return msg;
     }
 
     @Override
     public String toString() {
         return " {" +
                 "name='" + name() + '\'' +
-                ", message='" + message + '\'' +
-                ", messageId=" + messageId +
+                ", message='" + mMessage + '\'' +
+                ", messageId=" + mMessageId +
                 '}';
     }
 }

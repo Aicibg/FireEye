@@ -1,8 +1,8 @@
 package com.github.yoojia.fireeye;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,20 +43,20 @@ public class FireEye {
 
     /**
      * 添加一个需要校验的View，并指定它的静态校验模式。
-     * @param viewWithId 必须带ID的TextView及其子类
+     * @param inputView TextView及其子类
      * @param patterns 数值校验模式
      * @return FireEye
      */
-    public FireEye add(TextView viewWithId, StaticPattern...patterns){
-        enforceHasViewId(viewWithId);
+    public FireEye add(TextView inputView, StaticPattern...patterns){
+        enforceViewNotNull(inputView);
         enforceHasPatterns(patterns);
-        final int viewKey = viewWithId.getId();
+        final int viewKey = inputView.hashCode();
         final StaticPatternInvoker invoker = mStaticPatterns.get(viewKey);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
         if (invoker == null){
             mOrderedFields.add(new TypeWrapper(viewKey, true));
-            mStaticPatterns.put(viewKey, new StaticPatternInvoker(mContext, viewKey, viewWithId, patterns));
+            mStaticPatterns.put(viewKey, new StaticPatternInvoker(mContext, viewKey, inputView, patterns));
         }else{
             invoker.addPatterns(patterns);
         }
@@ -65,20 +65,20 @@ public class FireEye {
 
     /**
      * 添加一个需要校验的View，并指定它的数值校验模式。
-     * @param viewWithId 必须带ID的TextView及其子类
+     * @param inputView TextView及其子类
      * @param patterns 数值校验模式
      * @return FireEye
      */
-    public FireEye add(TextView viewWithId, ValuePattern...patterns){
-        enforceHasViewId(viewWithId);
+    public FireEye add(TextView inputView, ValuePattern...patterns){
+        enforceViewNotNull(inputView);
         enforceHasPatterns(patterns);
-        final int viewKey = viewWithId.getId();
+        final int viewKey = inputView.hashCode();
         final ValuePatternInvoker invoker = mValuePatterns.get(viewKey);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
         if (invoker == null){
             mOrderedFields.add(new TypeWrapper(viewKey, false));
-            mValuePatterns.put(viewKey, new ValuePatternInvoker(mContext, viewKey, viewWithId, patterns));
+            mValuePatterns.put(viewKey, new ValuePatternInvoker(mContext, viewKey, inputView, patterns));
         }else{
             invoker.addPatterns(patterns);
         }
@@ -100,16 +100,28 @@ public class FireEye {
     public Result test(){
         // 校验时，按保存的的输入框顺序来校验
         for (TypeWrapper typeWrapper : mOrderedFields){
-            final PatternInvoker target;
+            final PatternInvoker invoker;
             if (typeWrapper.isStaticPattern){
-                target = mStaticPatterns.get(typeWrapper.viewKey);
+                invoker = mStaticPatterns.get(typeWrapper.viewKey);
             }else{
-                target = mValuePatterns.get(typeWrapper.viewKey);
+                invoker = mValuePatterns.get(typeWrapper.viewKey);
             }
-            final Result result = testPattern(target);
+            final Result result = testPattern(invoker);
             if (result != null) return result;
         }
         return Result.passed(null);
+    }
+
+    public final void dump(){
+        for (TypeWrapper wrapper : mOrderedFields){
+            final PatternInvoker invoker;
+            if (wrapper.isStaticPattern){
+                invoker = mStaticPatterns.get(wrapper.viewKey);
+            }else{
+                invoker = mValuePatterns.get(wrapper.viewKey);
+            }
+            Log.d("FireEye", invoker.dump());
+        }
     }
 
     /**
@@ -142,24 +154,13 @@ public class FireEye {
     /**
      * @return Null if passed, otherwise return the result
      */
-    private Result testPattern(PatternInvoker meta){
-        mMessageDisplay.dismiss(meta.input);
-        final Result result = meta.performTest();
+    private Result testPattern(PatternInvoker invoker){
+        mMessageDisplay.dismiss(invoker.input);
+        final Result result = invoker.performTest();
         if (!result.passed){
-            mMessageDisplay.show(meta.input, result.message);
+            mMessageDisplay.show(invoker.input, result.message);
         }
         return result.passed ? null : result;
-    }
-
-    /**
-     * 确保View有一个ID
-     * @param viewWithId View
-     */
-    private static void enforceHasViewId(TextView viewWithId){
-        final int viewId = viewWithId.getId();
-        if (viewId == View.NO_ID){
-            throw new IllegalArgumentException("检验的View必须具备一个Id (View Id required)");
-        }
     }
 
     /**
@@ -170,6 +171,10 @@ public class FireEye {
         if (items == null || items.length == 0){
             throw new IllegalArgumentException("必须指定至少一个校验模式(Pattern required)");
         }
+    }
+
+    private static void enforceViewNotNull(TextView view){
+        if (view == null) throw new IllegalArgumentException("校验的View不能为空(Target view cannot be null)");
     }
 
     private final class TypeWrapper {

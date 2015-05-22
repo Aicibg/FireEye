@@ -70,13 +70,13 @@ class ValuePatternMeta extends PatternMeta<ValuePattern> {
 
     static ValuePatternMeta parse(ValuePattern pattern){
         return new ValuePatternMeta(pattern,
-                pattern.message,
-                pattern.messageId,
-                pattern.lazyLoader,
-                pattern.valueType,
-                pattern.minValue,
-                pattern.maxValue,
-                pattern.value);
+                pattern.getMessage(),
+                pattern.getMessageId(),
+                pattern.getLazyLoader(),
+                pattern.getValueType(),
+                pattern.getMinValue(),
+                pattern.getMaxValue(),
+                pattern.getValue());
     }
 
     @Override

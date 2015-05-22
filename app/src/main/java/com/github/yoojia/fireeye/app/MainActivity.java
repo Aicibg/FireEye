@@ -29,10 +29,10 @@ public class MainActivity extends ActionBarActivity {
         fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required.setMessage("请填写您的手机号"), StaticPattern.Mobile);
         fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
 //
-        fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Required.setMessage("请填写数字"), StaticPattern.Digits.setMessage("数字专用"));
+        fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Required, StaticPattern.Digits.setMessage("数字专用"));
         fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
 //
-        fireEye.add(form.byId(R.id.form_field_4), StaticPattern.Required.setMessage("请填写您的邮件地址"), StaticPattern.Email);
+        fireEye.add(form.byId(R.id.form_field_4), StaticPattern.Required, StaticPattern.Email);
         fireEye.add(form.byId(R.id.form_field_5), ValuePattern.Required.setMessage("请再输入一次"), ValuePattern.EqualsTo.lazy(new TextViewLoader(form.byId(R.id.form_field_4))));
         fireEye.add(form.byId(R.id.form_field_6), StaticPattern.Host);
         fireEye.add(form.byId(R.id.form_field_7), StaticPattern.URL);
@@ -50,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
         formCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fireEye.dump();
                 int color = fireEye.test().passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 formCommit.setTextColor(getResources().getColor(color));

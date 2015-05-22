@@ -1,7 +1,5 @@
 package com.github.yoojia.fireeye.testers;
 
-import android.util.Log;
-
 import com.github.yoojia.fireeye.FireEyeEnv;
 
 import java.util.regex.Pattern;
