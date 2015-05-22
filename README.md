@@ -30,25 +30,35 @@ Maven
 
 ## 已内置支持的校验方式
 
+### 静态模式 - StaticPattern
+
+静态模式是指对输入内容进行模式匹配，不需要额外参数即可校验的模式。如校验邮件地址是否正确等。
+
 * **Required** 必填选项
 * **NotBlank** 非空数据
 * **Digits** 仅数字
 * **Email** 电子邮件
-* **EqualTo** 与指定值相同
+* **Numeric** 数值
+* **BankCard** 信用卡号/银行卡号
 * **Host** 主机地址
 * **URL** Http URL
 * **IPv4** IPv4地
-* **RangeLength** 指定长度范围
-* **MinLength** 最小长度
-* **MaxLength** 最大长度
-* **Numeric** 数值
-* **BankCard** 信用卡号/银行卡号
-* **RangeValue** 最值范围
-* **MinValue** 最小值
-* **MaxValue** 最大值
 * **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的民用车辆号牌
 * **IDCard** 中国的身份证号（15位和18位）
+
+### 数值模式 - ValuePattern
+
+数值模式是指需要额外参数来完成对输入内容的校验过程的模式。如判断内容是否与另一个相同等。
+
+* **EqualTo** 与指定值相同
+* **RangeLength** 指定长度范围
+* **MinLength** 最小长度
+* **MaxLength** 最大长度
+* **RangeValue** 最值范围
+* **MinValue** 最小值
+* **MaxValue** 最大值
+
 
 
 ## How to use - 如何使用
