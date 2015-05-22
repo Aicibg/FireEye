@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractTester {
 
+    private static final String TAG = "AbstractInvoker";
+
     /**
      * 发生异常时产生的消息
      */
@@ -29,16 +31,23 @@ public abstract class AbstractTester {
      * @return 如果校验通过返回True，否则返回False。
      */
     public final boolean performTest(String content){
-        if (FireEyeEnv.isDebug) {
-            Log.d("Tester", "Tester > " + this.getClass().getSimpleName());
-        }
+        FireEyeEnv.log(TAG, "Performing tester: " + this);
         try{
             mExceptionMessage = null;
             return test(content);
-        }catch (Exception e){
+        }catch (Throwable e){
+            e.printStackTrace();
             mExceptionMessage = e.getMessage();
             return false;
         }
+    }
+
+    /**
+     * 获取Tester的名称
+     * @return Tester名称
+     */
+    public final String getName(){
+        return this.getClass().getSimpleName();
     }
 
     /**
