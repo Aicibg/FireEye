@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
         Form form = new Form(formView);
 
         fireEye = new FireEye();
-        fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
+        fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required.setMessage(R.string.app_name), StaticPattern.Mobile);
         fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
 
         fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);

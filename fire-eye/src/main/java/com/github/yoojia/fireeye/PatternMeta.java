@@ -29,10 +29,10 @@ abstract class PatternMeta<T> {
      * 添加匹配模式列表
      * @param patterns 匹配模式列表
      */
-    public void addPatterns(T[] patterns){
+    public final void addPatterns(T[] patterns){
         final List<T> array = Arrays.asList(patterns);
         for (T item : array){
-            if (!onOrdering(item)) this.patterns.add(item);
+            if (!onItemFilter(item)) this.patterns.add(item);
         }
     }
 
@@ -47,5 +47,5 @@ abstract class PatternMeta<T> {
      * @param item 当前正在添加的条目
      * @return 如果目标被手动排序，由返回true。
      */
-    protected abstract boolean onOrdering(T item);
+    protected abstract boolean onItemFilter(T item);
 }

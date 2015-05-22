@@ -14,7 +14,7 @@
 Add dependency
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:2.1@aar'
+        compile 'com.github.yoojia:fire-eye:2.2@aar'
     }
 
 Maven
@@ -22,7 +22,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>2.1</version>
+        <version>2.2</version>
         <type>aar</type>
     </dependency>
 
@@ -76,8 +76,8 @@ Maven
     Form form = new Form(formView);
 
     FireEye fireEye = new FireEye();
-    fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
-    fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
+    fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required.setMessage(R.string.tip_required), StaticPattern.Mobile);
+    fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard.setMessage("请输入您的银行卡号"));
 
     fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);
     fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
