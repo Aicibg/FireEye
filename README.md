@@ -76,8 +76,8 @@ Maven
     Form form = new Form(formView);
 
     FireEye fireEye = new FireEye();
-    fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
-    fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
+    fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required.setMessage(R.string.tip_required), StaticPattern.Mobile);
+    fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard.setMessage("请输入您的银行卡号"));
 
     fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);
     fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
