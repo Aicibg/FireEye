@@ -14,7 +14,7 @@
 Add dependency
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:2.2@aar'
+        compile 'com.github.yoojia:fire-eye:2.3@aar'
     }
 
 Maven
@@ -22,7 +22,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>2.2</version>
+        <version>2.3</version>
         <type>aar</type>
     </dependency>
 
