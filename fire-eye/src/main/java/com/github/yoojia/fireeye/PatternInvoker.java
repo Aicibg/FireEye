@@ -41,6 +41,17 @@ abstract class PatternInvoker<P, E> {
         }
     }
 
+    public final String dump(){
+        StringBuilder buf = new StringBuilder(input.toString());
+        buf.append('@').append(input.getHint())
+                .append(':').append(input.getText());
+        buf.append(" -> patterns:\n");
+        for (P pattern : patterns){
+            buf.append("\t").append(pattern.toString()).append(" ,");
+        }
+        return buf.toString();
+    }
+
     /**
      * 校验输入
      * @return 校验结果

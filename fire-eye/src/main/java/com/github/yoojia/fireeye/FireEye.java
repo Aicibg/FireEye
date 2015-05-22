@@ -1,6 +1,7 @@
 package com.github.yoojia.fireeye;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
@@ -100,16 +101,28 @@ public class FireEye {
     public Result test(){
         // 校验时，按保存的的输入框顺序来校验
         for (TypeWrapper typeWrapper : mOrderedFields){
-            final PatternInvoker target;
+            final PatternInvoker invoker;
             if (typeWrapper.isStaticPattern){
-                target = mStaticPatterns.get(typeWrapper.viewKey);
+                invoker = mStaticPatterns.get(typeWrapper.viewKey);
             }else{
-                target = mValuePatterns.get(typeWrapper.viewKey);
+                invoker = mValuePatterns.get(typeWrapper.viewKey);
             }
-            final Result result = testPattern(target);
+            final Result result = testPattern(invoker);
             if (result != null) return result;
         }
         return Result.passed(null);
+    }
+
+    public final void dump(){
+        for (TypeWrapper wrapper : mOrderedFields){
+            final PatternInvoker invoker;
+            if (wrapper.isStaticPattern){
+                invoker = mStaticPatterns.get(wrapper.viewKey);
+            }else{
+                invoker = mValuePatterns.get(wrapper.viewKey);
+            }
+            Log.d("FireEye", invoker.dump());
+        }
     }
 
     /**
@@ -142,11 +155,11 @@ public class FireEye {
     /**
      * @return Null if passed, otherwise return the result
      */
-    private Result testPattern(PatternInvoker meta){
-        mMessageDisplay.dismiss(meta.input);
-        final Result result = meta.performTest();
+    private Result testPattern(PatternInvoker invoker){
+        mMessageDisplay.dismiss(invoker.input);
+        final Result result = invoker.performTest();
         if (!result.passed){
-            mMessageDisplay.show(meta.input, result.message);
+            mMessageDisplay.show(invoker.input, result.message);
         }
         return result.passed ? null : result;
     }

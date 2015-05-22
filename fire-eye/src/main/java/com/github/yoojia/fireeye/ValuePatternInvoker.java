@@ -39,21 +39,22 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
         if (TextUtils.isEmpty(value) && !ValuePattern.Required.equals(first.pattern)){
             return Result.passed(null);
         }
+        final String inputKey = input.getClass().getSimpleName() + "@{" + input.getHint() + "}";
         for (ValuePatternMeta meta : patterns){
             meta.performLazyLoader();
             final AbstractValuesTester tester = findTester(meta);
             final boolean passed = tester.performTest(value);
             if (!passed){
-                FireEyeEnv.log(TAG, tester.getName() + "Result > passed: NO, value: " + value + ", message: " + meta.getMessage());
+                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: NO, value: " + value + ", message: " + meta.getMessage());
                 // 如果校验器发生异常，取异常消息返回
                 String message = tester.getExceptionMessage();
                 if (message == null) message = meta.getMessage();
                 return Result.reject(message, value);
             }else{
-                FireEyeEnv.log(TAG, tester.getName() + " > passed: YES, value: " + value);
+                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: YES, value: " + value);
             }
         }
-        FireEyeEnv.log(TAG, "Input test result > passed: YES, value: " + value);
+        FireEyeEnv.log(TAG, inputKey + " -> passed: YES, value: " + value);
         return Result.passed(value);
     }
 
@@ -71,7 +72,7 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
     protected ValuePatternMeta convert(ValuePattern item) {
         final ValuePatternMeta meta = ValuePatternMeta.parse(item);
         meta.convertMessage(context);
-        FireEyeEnv.log(TAG, "转换后：" + meta.toString());
+        FireEyeEnv.log(TAG, "Value pattern meta -> " + meta.toString());
         return meta;
     }
 
