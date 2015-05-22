@@ -13,7 +13,7 @@ class StaticPatternMeta extends PatternMeta<StaticPattern> {
     }
 
     static StaticPatternMeta parse(StaticPattern pattern){
-        return new StaticPatternMeta(pattern, pattern.message, pattern.messageId);
+        return new StaticPatternMeta(pattern, pattern.getMessage(), pattern.getMessageId());
     }
 
     @Override

@@ -20,17 +20,18 @@ public enum ValuePattern {
 
     EqualsTo("必须输入相同内容");
 
-    String message;
-    int messageId = -1;
+    private final String mDefMessage;
+    private String mMessage;
+    private int mMessageId = -1;
 
-    LazyLoader lazyLoader;
-    ValueType valueType;
-    String minValue;
-    String maxValue;
-    String value;
+    private LazyLoader mLazyLoader;
+    private ValueType mValueType;
+    private String mMinValue;
+    private String mMaxValue;
+    private String mValue;
 
     private ValuePattern(String message){
-        this.message = message;
+        mDefMessage = message;
     }
 
     /**
@@ -39,7 +40,7 @@ public enum ValuePattern {
      * @return ValuePattern实例
      */
     public ValuePattern lazy(LazyLoader lazyLoader) {
-        this.lazyLoader = lazyLoader;
+        mLazyLoader = lazyLoader;
         return this;
     }
 
@@ -50,7 +51,7 @@ public enum ValuePattern {
      */
     public ValuePattern setFirstValue(double first){
         enforceFloatValueType();
-        syncValue(value);
+        syncValue(first);
         return this;
     }
 
@@ -61,7 +62,7 @@ public enum ValuePattern {
      */
     public ValuePattern setFirstValue(long first){
         enforceIntValueType();
-        syncValue(value);
+        syncValue(first);
         return this;
     }
 
@@ -72,7 +73,7 @@ public enum ValuePattern {
      */
     public ValuePattern setSecondValue(long second){
         enforceIntValueType();
-        maxValue = String.valueOf(second);
+        mMaxValue = String.valueOf(second);
         return this;
     }
 
@@ -83,7 +84,7 @@ public enum ValuePattern {
      */
     public ValuePattern setSecondValue(double second){
         enforceFloatValueType();
-        maxValue = String.valueOf(second);
+        mMaxValue = String.valueOf(second);
         return this;
     }
 
@@ -94,7 +95,7 @@ public enum ValuePattern {
      */
     public ValuePattern setValue(String value){
         syncValue(value);
-        valueType = ValueType.String;
+        mValueType = ValueType.String;
         return this;
     }
 
@@ -105,7 +106,7 @@ public enum ValuePattern {
      */
     public ValuePattern setValue(long value){
         syncValue(value);
-        valueType = ValueType.Int;
+        mValueType = ValueType.Int;
         return this;
     }
 
@@ -116,7 +117,7 @@ public enum ValuePattern {
      */
     public ValuePattern setValue(double value){
         syncValue(value);
-        valueType = ValueType.Float;
+        mValueType = ValueType.Float;
         return this;
     }
 
@@ -125,7 +126,7 @@ public enum ValuePattern {
      * @param message 消息内容
      */
     public ValuePattern setMessage(String message) {
-        this.message = message;
+        mMessage = message;
         return this;
     }
 
@@ -134,28 +135,70 @@ public enum ValuePattern {
      * @param msgId 资源ID
      */
     public ValuePattern setMessage(int msgId){
-        messageId = msgId;
+        mMessageId = msgId;
         return this;
     }
 
+    String getMessage() {
+        final String msg = mMessage == null ? mDefMessage : mMessage;
+        mMessage = null;
+        return msg;
+    }
+
+    int getMessageId() {
+        final int msg = mMessageId <= 0 ? -1 : mMessageId;
+        mMessageId = -1;
+        return msg;
+    }
+
+    LazyLoader getLazyLoader() {
+        final LazyLoader loader = mLazyLoader;
+        mLazyLoader = null;
+        return loader;
+    }
+
+    ValueType getValueType() {
+        ValueType type = mValueType;
+        mValueType = null;
+        return type;
+    }
+
+    String getMinValue() {
+        final String value = mMinValue;
+        mMinValue = null;
+        return value;
+    }
+
+    String getMaxValue() {
+        final String value = mMaxValue;
+        mMaxValue = null;
+        return value;
+    }
+
+    String getValue() {
+        final String value = mValue;
+        mValue = null;
+        return value;
+    }
+
     private void syncValue(Object value){
-        this.value = String.valueOf(value);
-        this.minValue = this.value;
+        mValue = String.valueOf(value);
+        mMinValue = mValue;
     }
 
     private void enforceIntValueType(){
-        if (valueType == null){
-            valueType = ValueType.Int;
+        if (mValueType == null){
+            mValueType = ValueType.Int;
         }else{
-            if (!ValueType.Int.equals(valueType)) throw new IllegalArgumentException("设置的数值类型必须同为整数");
+            if (!ValueType.Int.equals(mValueType)) throw new IllegalArgumentException("设置的数值类型必须同为整数");
         }
     }
 
     private void enforceFloatValueType(){
-        if (valueType == null){
-            valueType = ValueType.Float;
+        if (mValueType == null){
+            mValueType = ValueType.Float;
         }else{
-            if (!ValueType.Float.equals(valueType)) throw new IllegalArgumentException("设置的数值类型必须同为浮点数");
+            if (!ValueType.Float.equals(mValueType)) throw new IllegalArgumentException("设置的数值类型必须同为浮点数");
         }
     }
 
@@ -163,15 +206,13 @@ public enum ValuePattern {
     public String toString() {
         return "{" +
                 "name='" + name() + '\'' +
-                ", messageId=" + messageId +
-                ", message='" + message + '\'' +
-                ", message='" + message + '\'' +
-                ", messageId=" + messageId +
-                ", lazyLoader=" + lazyLoader +
-                ", valueType=" + valueType +
-                ", minValue='" + minValue + '\'' +
-                ", maxValue='" + maxValue + '\'' +
-                ", value='" + value + '\'' +
+                ", messageId=" + mMessageId +
+                ", message='" + mMessage + '\'' +
+                ", lazyLoader=" + mLazyLoader +
+                ", valueType=" + mValueType +
+                ", minValue='" + mMinValue + '\'' +
+                ", maxValue='" + mMaxValue + '\'' +
+                ", value='" + mValue + '\'' +
                 '}';
     }
 }
