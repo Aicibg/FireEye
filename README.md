@@ -14,7 +14,7 @@
 Add dependency
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:2.0@aar'
+        compile 'com.github.yoojia:fire-eye:2.1@aar'
     }
 
 Maven
@@ -22,7 +22,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>2.0</version>
+        <version>2.1</version>
         <type>aar</type>
     </dependency>
 
@@ -47,6 +47,8 @@ Maven
 * **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的民用车辆号牌
 * **IDCard** 中国的身份证号（15位和18位）
+
+
 ## How to use - 如何使用
 
 通过 View ID 来绑定校验配置信息
@@ -69,39 +71,40 @@ Maven
         }
     };
 
-        View formView = findViewById(R.id.form);
-        Form form = new Form(formView);
+    // 使用表单查找器来查找输入框
+    View formView = findViewById(R.id.form);
+    Form form = new Form(formView);
 
-        fireEye = new FireEye();
-        fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
-        fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
+    FireEye fireEye = new FireEye();
+    fireEye.add(form.byId(R.id.form_field_1), StaticPattern.Required, StaticPattern.Mobile);
+    fireEye.add(form.byId(R.id.form_field_2), StaticPattern.BankCard);
 
-        fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);
-        fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
+    fireEye.add(form.byId(R.id.form_field_3), StaticPattern.Digits);
+    fireEye.add(form.byId(R.id.form_field_3), ValuePattern.MaxLength.setValue(20));
 
-        fireEye.add(form.byId(R.id.form_field_4), StaticPattern.Required, StaticPattern.Email);
-        fireEye.add(form.byId(R.id.form_field_5), ValuePattern.Required, ValuePattern.EqualsTo.lazy(new TextViewLoader(form.byId(R.id.form_field_4))));
-        fireEye.add(form.byId(R.id.form_field_6), StaticPattern.Host);
-        fireEye.add(form.byId(R.id.form_field_7), StaticPattern.URL);
-        fireEye.add(form.byId(R.id.form_field_8), ValuePattern.MaxLength.setValue(5));
-        fireEye.add(form.byId(R.id.form_field_9), ValuePattern.MinLength.setValue(4));
-        fireEye.add(form.byId(R.id.form_field_10), ValuePattern.RangeLength.setFirstValue(4L).setSecondValue(8L));
-        fireEye.add(form.byId(R.id.form_field_11), StaticPattern.NotBlank);
-        fireEye.add(form.byId(R.id.form_field_12), StaticPattern.Numeric);
-        fireEye.add(form.byId(R.id.form_field_13), ValuePattern.MaxValue.setValue(100));
-        fireEye.add(form.byId(R.id.form_field_14), ValuePattern.MinValue.setValue(20));
-        fireEye.add(form.byId(R.id.form_field_15), ValuePattern.RangeValue.setFirstValue(18L).setSecondValue(30L));
+    fireEye.add(form.byId(R.id.form_field_4), StaticPattern.Required, StaticPattern.Email);
+    fireEye.add(form.byId(R.id.form_field_5), ValuePattern.Required, ValuePattern.EqualsTo.lazy(new TextViewLoader(form.byId(R.id.form_field_4))));
+    fireEye.add(form.byId(R.id.form_field_6), StaticPattern.Host);
+    fireEye.add(form.byId(R.id.form_field_7), StaticPattern.URL);
+    fireEye.add(form.byId(R.id.form_field_8), ValuePattern.MaxLength.setValue(5));
+    fireEye.add(form.byId(R.id.form_field_9), ValuePattern.MinLength.setValue(4));
+    fireEye.add(form.byId(R.id.form_field_10), ValuePattern.RangeLength.setFirstValue(4L).setSecondValue(8L));
+    fireEye.add(form.byId(R.id.form_field_11), StaticPattern.NotBlank);
+    fireEye.add(form.byId(R.id.form_field_12), StaticPattern.Numeric);
+    fireEye.add(form.byId(R.id.form_field_13), ValuePattern.MaxValue.setValue(100));
+    fireEye.add(form.byId(R.id.form_field_14), ValuePattern.MinValue.setValue(20));
+    fireEye.add(form.byId(R.id.form_field_15), ValuePattern.RangeValue.setFirstValue(18L).setSecondValue(30L));
 
     // 输出调试信息
-        FireEyeEvt.isDebug = true;
+    FireEyeEnv.isDebug = true;
 
-        TestResult r = eye.test();
+    Result r = eye.test();
 
-        if(r.passed){
-            // 校验通过
-        }else{
-            // 校验失败
-        }
+    if(r.passed){
+        // 校验通过
+    }else{
+        // 校验失败
+    }
 
 ```
 
