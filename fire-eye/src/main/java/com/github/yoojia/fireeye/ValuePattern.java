@@ -1,9 +1,7 @@
 package com.github.yoojia.fireeye;
 
-import android.content.Context;
-
 /**
- * 数值匹配模式
+ * 数值匹配模式。作为配置项传递，其数据由Config来保存
  * @author  Yoojia.Chen (yoojia.chen@gmail.com)
  * @version version 2015-05-21
  * @since   2.0
@@ -22,18 +20,17 @@ public enum ValuePattern {
 
     EqualsTo("必须输入相同内容");
 
-    private String mMessage;
-    private int mMessageResId = -1;
-    private LazyLoader mLazyLoader;
+    String message;
+    int messageId = -1;
 
+    LazyLoader lazyLoader;
     ValueType valueType;
-
     String minValue;
     String maxValue;
     String value;
 
     private ValuePattern(String message){
-        mMessage = message;
+        this.message = message;
     }
 
     /**
@@ -42,7 +39,7 @@ public enum ValuePattern {
      * @return ValuePattern实例
      */
     public ValuePattern lazy(LazyLoader lazyLoader) {
-        mLazyLoader = lazyLoader;
+        this.lazyLoader = lazyLoader;
         return this;
     }
 
@@ -53,8 +50,7 @@ public enum ValuePattern {
      */
     public ValuePattern setFirstValue(double first){
         enforceFloatValueType();
-        minValue = String.valueOf(first);
-        this.value = minValue;
+        syncValue(value);
         return this;
     }
 
@@ -65,8 +61,7 @@ public enum ValuePattern {
      */
     public ValuePattern setFirstValue(long first){
         enforceIntValueType();
-        minValue = String.valueOf(first);
-        this.value = minValue;
+        syncValue(value);
         return this;
     }
 
@@ -98,8 +93,7 @@ public enum ValuePattern {
      * @return ValuePattern
      */
     public ValuePattern setValue(String value){
-        this.value = value;
-        this.minValue = this.value;
+        syncValue(value);
         valueType = ValueType.String;
         return this;
     }
@@ -110,8 +104,7 @@ public enum ValuePattern {
      * @return ValuePattern
      */
     public ValuePattern setValue(long value){
-        this.value = String.valueOf(value);
-        this.minValue = this.value;
+        syncValue(value);
         valueType = ValueType.Int;
         return this;
     }
@@ -122,8 +115,7 @@ public enum ValuePattern {
      * @return ValuePattern
      */
     public ValuePattern setValue(double value){
-        this.value = String.valueOf(value);
-        this.minValue = this.value;
+        syncValue(value);
         valueType = ValueType.Float;
         return this;
     }
@@ -133,7 +125,7 @@ public enum ValuePattern {
      * @param message 消息内容
      */
     public ValuePattern setMessage(String message) {
-        mMessage = message;
+        this.message = message;
         return this;
     }
 
@@ -142,8 +134,13 @@ public enum ValuePattern {
      * @param msgId 资源ID
      */
     public ValuePattern setMessage(int msgId){
-        mMessageResId = msgId;
+        messageId = msgId;
         return this;
+    }
+
+    private void syncValue(Object value){
+        this.value = String.valueOf(value);
+        this.minValue = this.value;
     }
 
     private void enforceIntValueType(){
@@ -162,40 +159,17 @@ public enum ValuePattern {
         }
     }
 
-    void performLazyLoader(){
-        if (mLazyLoader == null) return;
-        final String stringValue = mLazyLoader.loadString();
-        final Long longValue = mLazyLoader.loadInt();
-        final Double floatValue = mLazyLoader.loadFloat();
-        if (stringValue != null){
-            setValue(stringValue);
-        }
-        else if (longValue != null){
-            setValue(longValue);
-        }
-        else if (floatValue != null){
-            setValue(floatValue);
-        }
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name() + '\'' +
+                ", message='" + message + '\'' +
+                ", messageId=" + messageId +
+                ", lazyLoader=" + lazyLoader +
+                ", valueType=" + valueType +
+                ", minValue='" + minValue + '\'' +
+                ", maxValue='" + maxValue + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
-
-    String getMessage() {
-        if (mMessage == null) return null;
-        String message = mMessage;
-        if (minValue != null) message = message.replace("{0}", minValue);
-        if (maxValue != null) message = message.replace("{1}", maxValue);
-        return message;
-    }
-
-    void tryMessageId(Context context){
-        if (mMessageResId > 0){
-            mMessage = context.getString(mMessageResId);
-        }
-    }
-
-    enum ValueType{
-        Float,
-        Int,
-        String
-    }
-
 }
