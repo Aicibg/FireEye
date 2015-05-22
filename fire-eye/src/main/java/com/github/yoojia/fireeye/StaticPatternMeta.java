@@ -16,4 +16,13 @@ class StaticPatternMeta extends PatternMeta<StaticPattern> {
         return new StaticPatternMeta(pattern, pattern.message, pattern.messageId);
     }
 
+    @Override
+    public String toString() {
+        return " {" +
+                "pattern=" + pattern.name() +
+                ", messageId=" + messageId +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
 }

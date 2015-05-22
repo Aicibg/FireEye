@@ -78,4 +78,18 @@ class ValuePatternMeta extends PatternMeta<ValuePattern> {
                 pattern.maxValue,
                 pattern.value);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "pattern=" + pattern.name() +
+                ", messageId=" + messageId +
+                ", message='" + message + '\'' +
+                ", lazyLoader=" + lazyLoader +
+                ", valueType=" + valueType +
+                ", minValue='" + minValue + '\'' +
+                ", maxValue='" + maxValue + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

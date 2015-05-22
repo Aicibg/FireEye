@@ -163,6 +163,8 @@ public enum ValuePattern {
     public String toString() {
         return "{" +
                 "name='" + name() + '\'' +
+                ", messageId=" + messageId +
+                ", message='" + message + '\'' +
                 ", message='" + message + '\'' +
                 ", messageId=" + messageId +
                 ", lazyLoader=" + lazyLoader +

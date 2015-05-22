@@ -44,7 +44,7 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
             return Result.passed(null);
         }
         for (StaticPatternMeta meta : patterns){
-            final AbstractTester tester = findTester(meta.pattern);
+            final AbstractTester tester = findTester(meta);
             final boolean passed = tester.performTest(value);
             if (!passed){
                 FireEyeEnv.log(TAG, tester.getName() + " > passed: NO, value: " + value + ", message: " + meta.message);
@@ -75,8 +75,8 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
         return meta;
     }
 
-    private AbstractTester findTester(StaticPattern pattern){
-        switch (pattern){
+    private AbstractTester findTester(StaticPatternMeta meta){
+        switch (meta.pattern){
             case BankCard: return new BankCardTester();
             case Digits: return new DigitsTester();
             case Email: return new EmailTester();

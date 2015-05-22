@@ -28,11 +28,4 @@ class PatternMeta<T> {
         }
     }
 
-    @Override
-    public String toString() {
-        return " {" +
-                "messageId=" + messageId +
-                ", message='" + message + '\'' +
-                '}';
-    }
 }

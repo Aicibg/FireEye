@@ -39,15 +39,15 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
         if (TextUtils.isEmpty(value) && !ValuePattern.Required.equals(first.pattern)){
             return Result.passed(null);
         }
-        for (ValuePatternMeta pattern : patterns){
-            pattern.performLazyLoader();
-            final AbstractValuesTester tester = findTester(pattern.pattern);
+        for (ValuePatternMeta meta : patterns){
+            meta.performLazyLoader();
+            final AbstractValuesTester tester = findTester(meta);
             final boolean passed = tester.performTest(value);
             if (!passed){
-                FireEyeEnv.log(TAG, tester.getName() + "Result > passed: NO, value: " + value + ", message: " + pattern.getMessage());
+                FireEyeEnv.log(TAG, tester.getName() + "Result > passed: NO, value: " + value + ", message: " + meta.getMessage());
                 // 如果校验器发生异常，取异常消息返回
                 String message = tester.getExceptionMessage();
-                if (message == null) message = pattern.getMessage();
+                if (message == null) message = meta.getMessage();
                 return Result.reject(message, value);
             }else{
                 FireEyeEnv.log(TAG, tester.getName() + " > passed: YES, value: " + value);
@@ -75,47 +75,47 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
         return meta;
     }
 
-    private AbstractValuesTester findTester(ValuePattern pattern){
-        switch (pattern){
+    private AbstractValuesTester findTester(ValuePatternMeta meta){
+        switch (meta.pattern){
             case EqualsTo:
                 EqualsToTester equalsToTester = new EqualsToTester();
-                switch (pattern.valueType){
+                switch (meta.valueType){
                     case Float:
-                        equalsToTester.setFloatValue(Double.valueOf(pattern.value));
+                        equalsToTester.setFloatValue(Double.valueOf(meta.value));
                         break;
                     case Int:
-                        equalsToTester.setIntValue(Long.valueOf(pattern.value));
+                        equalsToTester.setIntValue(Long.valueOf(meta.value));
                         break;
                     case String:
-                        equalsToTester.setStringValue(pattern.value);
+                        equalsToTester.setStringValue(meta.value);
                         break;
                 }
                 return equalsToTester;
             case MinLength:
                 MinLengthTester minLengthTester = new MinLengthTester();
-                minLengthTester.setIntValue(Long.parseLong(pattern.value));
+                minLengthTester.setIntValue(Long.parseLong(meta.value));
                 return minLengthTester;
             case MaxLength:
                 MaxLengthTester maxLengthTester = new MaxLengthTester();
-                maxLengthTester.setIntValue(Long.parseLong(pattern.value));
+                maxLengthTester.setIntValue(Long.parseLong(meta.value));
                 return maxLengthTester;
             case MinValue:
                 MinValueTester minValueTester = new MinValueTester();
-                minValueTester.setFloatValue(Double.valueOf(pattern.value));
+                minValueTester.setFloatValue(Double.valueOf(meta.value));
                 return minValueTester;
             case MaxValue:
                 MaxValueTester maxValueTester = new MaxValueTester();
-                maxValueTester.setFloatValue(Double.valueOf(pattern.value));
+                maxValueTester.setFloatValue(Double.valueOf(meta.value));
                 return maxValueTester;
             case RangeLength:
                 RangeLengthTester rangeLengthTester = new RangeLengthTester();
-                rangeLengthTester.setMinIntValue(Long.parseLong(pattern.minValue));
-                rangeLengthTester.setMaxIntValue(Long.parseLong(pattern.maxValue));
+                rangeLengthTester.setMinIntValue(Long.parseLong(meta.minValue));
+                rangeLengthTester.setMaxIntValue(Long.parseLong(meta.maxValue));
                 return rangeLengthTester;
             case RangeValue:
                 RangeValueTester rangeValueTester = new RangeValueTester();
-                rangeValueTester.setMinFloatValue(Double.valueOf(pattern.minValue));
-                rangeValueTester.setMaxFloatValue(Double.valueOf(pattern.maxValue));
+                rangeValueTester.setMinFloatValue(Double.valueOf(meta.minValue));
+                rangeValueTester.setMaxFloatValue(Double.valueOf(meta.maxValue));
                 return rangeValueTester;
             case Required:
                 return new RequiredValueTester();
