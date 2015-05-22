@@ -1,5 +1,6 @@
 package com.github.yoojia.fireeye;
 
+import android.content.Context;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
@@ -16,9 +17,10 @@ import java.util.List;
  */
 public class FireEye {
 
+    private final Context mContext;
     private final List<TypeWrapper> mOrderedFields = new ArrayList<>();
-    private final SparseArray<StaticPatternMeta> mStaticPatterns = new SparseArray<StaticPatternMeta>();
-    private final SparseArray<ValuePatternMeta> mValuePatterns = new SparseArray<ValuePatternMeta>();
+    private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<StaticPatternInvoker>();
+    private final SparseArray<ValuePatternInvoker> mValuePatterns = new SparseArray<ValuePatternInvoker>();
     private final MessageDisplay mDefaultMessageDisplay = new MessageDisplay() {
 
         @Override
@@ -35,6 +37,10 @@ public class FireEye {
 
     private MessageDisplay mMessageDisplay = mDefaultMessageDisplay;
 
+    public FireEye(Context context) {
+        mContext = context;
+    }
+
     /**
      * 添加一个需要校验的View，并指定它的静态校验模式。
      * @param viewWithId 必须带ID的TextView及其子类
@@ -44,15 +50,15 @@ public class FireEye {
     public FireEye add(TextView viewWithId, StaticPattern...patterns){
         enforceHasViewId(viewWithId);
         enforceHasPatterns(patterns);
-        final int viewId = viewWithId.getId();
-        final StaticPatternMeta meta = mStaticPatterns.get(viewId);
+        final int viewKey = viewWithId.getId();
+        final StaticPatternInvoker invoker = mStaticPatterns.get(viewKey);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
-        if (meta == null){
-            mOrderedFields.add(new TypeWrapper(viewId, true));
-            mStaticPatterns.put(viewId, new StaticPatternMeta(viewId, viewWithId, patterns));
+        if (invoker == null){
+            mOrderedFields.add(new TypeWrapper(viewKey, true));
+            mStaticPatterns.put(viewKey, new StaticPatternInvoker(mContext, viewKey, viewWithId, patterns));
         }else{
-            meta.addPatterns(patterns);
+            invoker.addPatterns(patterns);
         }
         return this;
     }
@@ -66,15 +72,15 @@ public class FireEye {
     public FireEye add(TextView viewWithId, ValuePattern...patterns){
         enforceHasViewId(viewWithId);
         enforceHasPatterns(patterns);
-        final int viewId = viewWithId.getId();
-        final ValuePatternMeta meta = mValuePatterns.get(viewId);
+        final int viewKey = viewWithId.getId();
+        final ValuePatternInvoker invoker = mValuePatterns.get(viewKey);
         // 校验配置不存在，则创建并添加；如果已存在，则添加到已有的配置中
         // 在创建新的输入框校验配置时，根据代码添加先后，将校验顺序保存下来：
-        if (meta == null){
-            mOrderedFields.add(new TypeWrapper(viewId, false));
-            mValuePatterns.put(viewId, new ValuePatternMeta(viewId, viewWithId, patterns));
+        if (invoker == null){
+            mOrderedFields.add(new TypeWrapper(viewKey, false));
+            mValuePatterns.put(viewKey, new ValuePatternInvoker(mContext, viewKey, viewWithId, patterns));
         }else{
-            meta.addPatterns(patterns);
+            invoker.addPatterns(patterns);
         }
         return this;
     }
@@ -94,11 +100,11 @@ public class FireEye {
     public Result test(){
         // 校验时，按保存的的输入框顺序来校验
         for (TypeWrapper typeWrapper : mOrderedFields){
-            final PatternMeta target;
+            final PatternInvoker target;
             if (typeWrapper.isStaticPattern){
-                target = mStaticPatterns.get(typeWrapper.viewId);
+                target = mStaticPatterns.get(typeWrapper.viewKey);
             }else{
-                target = mValuePatterns.get(typeWrapper.viewId);
+                target = mValuePatterns.get(typeWrapper.viewKey);
             }
             final Result result = testPattern(target);
             if (result != null) return result;
@@ -136,7 +142,7 @@ public class FireEye {
     /**
      * @return Null if passed, otherwise return the result
      */
-    private Result testPattern(PatternMeta meta){
+    private Result testPattern(PatternInvoker meta){
         mMessageDisplay.dismiss(meta.input);
         final Result result = meta.performTest();
         if (!result.passed){
@@ -168,11 +174,11 @@ public class FireEye {
 
     private final class TypeWrapper {
 
-        final int viewId;
+        final int viewKey;
         final boolean isStaticPattern;
 
-        private TypeWrapper(int viewId, boolean isStaticPattern) {
-            this.viewId = viewId;
+        private TypeWrapper(int viewKey, boolean isStaticPattern) {
+            this.viewKey = viewKey;
             this.isStaticPattern = isStaticPattern;
         }
 

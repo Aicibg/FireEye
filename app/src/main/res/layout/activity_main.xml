@@ -16,7 +16,7 @@
             android:id="@+id/form_field_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="组合条件：必填选项|手机号码"
+            android:hint="必填选项|手机号码"
             />
 
         <EditText
@@ -30,21 +30,21 @@
             android:id="@+id/form_field_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="组合条件：仅数字|最大长度20"
+            android:hint="必填选项|仅数字|最大长度20"
             />
 
         <EditText
             android:id="@+id/form_field_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="电子邮件"
+            android:hint="必填选项|电子邮件"
             />
 
         <EditText
             android:id="@+id/form_field_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="必须与“电子邮件”输入框相同"
+            android:hint="必填选项|必须与“电子邮件”输入框相同"
             />
 
         <EditText

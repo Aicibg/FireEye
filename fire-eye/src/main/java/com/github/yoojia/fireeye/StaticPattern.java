@@ -1,7 +1,5 @@
 package com.github.yoojia.fireeye;
 
-import android.content.Context;
-
 /**
  * 静态匹配模式
  *
@@ -24,15 +22,19 @@ public enum StaticPattern {
     Mobile("手机号错误"),
     VehicleNumber("车牌号错误");
 
-    private String mMessage;
-    private int mMessageResId = -1;
+    String message;
+    int messageId = -1;
+
+    private StaticPattern(String message){
+        this.message = message;
+    }
 
     /**
      * 设置提示消息内容
      * @param message 消息内容
      */
     public StaticPattern setMessage(String message) {
-        mMessage = message;
+        this.message = message;
         return this;
     }
 
@@ -41,22 +43,16 @@ public enum StaticPattern {
      * @param msgId 资源ID
      */
     public StaticPattern setMessage(int msgId){
-        mMessageResId = msgId;
+        messageId = msgId;
         return this;
     }
 
-    private StaticPattern(String message){
-        mMessage = message;
-    }
-
-    String getMessage() {
-        return mMessage;
-    }
-
-
-    void tryMessageId(Context context){
-        if (mMessageResId > 0){
-            mMessage = context.getString(mMessageResId);
-        }
+    @Override
+    public String toString() {
+        return " {" +
+                "name='" + name() + '\'' +
+                ", message='" + message + '\'' +
+                ", messageId=" + messageId +
+                '}';
     }
 }
