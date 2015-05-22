@@ -107,6 +107,33 @@ public class FireEye {
     }
 
     /**
+     * 获取输入框的字符串内容
+     * @param input 输入框
+     * @return 字符串内容
+     */
+    public static String getStringValue(TextView input){
+        return String.valueOf(input.getText());
+    }
+
+    /**
+     * 获取输入框的整型值内容
+     * @param input 输入框
+     * @return 整型值
+     */
+    public static long getIntValue(TextView input){
+        return Long.valueOf(getStringValue(input));
+    }
+
+    /**
+     * 获取输入框的浮点值内容
+     * @param input 输入框
+     * @return 浮点值
+     */
+    public static double getFloatValue(TextView input){
+        return Double.valueOf(getStringValue(input));
+    }
+
+    /**
      * @return Null if passed, otherwise return the result
      */
     private Result testPattern(PatternMeta meta){

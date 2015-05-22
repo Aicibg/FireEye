@@ -1,5 +1,7 @@
 package com.github.yoojia.fireeye;
 
+import android.content.Context;
+
 /**
  * 数值匹配模式
  * @author  Yoojia.Chen (yoojia.chen@gmail.com)
@@ -21,6 +23,7 @@ public enum ValuePattern {
     EqualsTo("必须输入相同内容");
 
     private String mMessage;
+    private int mMessageResId = -1;
     private LazyLoader mLazyLoader;
 
     ValueType valueType;
@@ -125,6 +128,24 @@ public enum ValuePattern {
         return this;
     }
 
+    /**
+     * 设置提示消息内容
+     * @param message 消息内容
+     */
+    public ValuePattern setMessage(String message) {
+        mMessage = message;
+        return this;
+    }
+
+    /**
+     * 设置提示消息内容的资源ID
+     * @param msgId 资源ID
+     */
+    public ValuePattern setMessage(int msgId){
+        mMessageResId = msgId;
+        return this;
+    }
+
     private void enforceIntValueType(){
         if (valueType == null){
             valueType = ValueType.Int;
@@ -163,6 +184,12 @@ public enum ValuePattern {
         if (minValue != null) message = message.replace("{0}", minValue);
         if (maxValue != null) message = message.replace("{1}", maxValue);
         return message;
+    }
+
+    void tryMessageId(Context context){
+        if (mMessageResId > 0){
+            mMessage = context.getString(mMessageResId);
+        }
     }
 
     enum ValueType{

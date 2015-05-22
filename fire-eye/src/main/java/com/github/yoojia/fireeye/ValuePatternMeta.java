@@ -61,7 +61,9 @@ final class ValuePatternMeta extends PatternMeta<ValuePattern>{
     }
 
     @Override
-    protected boolean onOrdering(ValuePattern item) {
+    protected boolean onItemFilter(ValuePattern item) {
+        // 在排序时，将消息资源ID转化成字符串
+        item.tryMessageId(input.getContext());
         if (ValuePattern.Required.equals(item)){
             this.patterns.add(0, item);
             return true;

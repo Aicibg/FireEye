@@ -61,7 +61,9 @@ final class StaticPatternMeta extends PatternMeta<StaticPattern>{
     }
 
     @Override
-    protected boolean onOrdering(StaticPattern item) {
+    protected boolean onItemFilter(StaticPattern item) {
+        // 在排序时，将消息资源ID转化成字符串
+        item.tryMessageId(input.getContext());
         if (StaticPattern.Required.equals(item)){
             this.patterns.add(0, item);
             return true;
