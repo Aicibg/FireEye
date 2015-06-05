@@ -10,6 +10,7 @@ import com.github.yoojia.fireeye.testers.MaxLengthTester;
 import com.github.yoojia.fireeye.testers.MaxValueTester;
 import com.github.yoojia.fireeye.testers.MinLengthTester;
 import com.github.yoojia.fireeye.testers.MinValueTester;
+import com.github.yoojia.fireeye.testers.NotEqualsToTester;
 import com.github.yoojia.fireeye.testers.RangeLengthTester;
 import com.github.yoojia.fireeye.testers.RangeValueTester;
 import com.github.yoojia.fireeye.testers.RequiredValueTester;
@@ -91,6 +92,20 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
                         break;
                 }
                 return equalsToTester;
+            case NotEqualsTo:
+                NotEqualsToTester notEqualsToTester = new NotEqualsToTester();
+                switch (meta.valueType){
+                    case Float:
+                        notEqualsToTester.setFloatValue(Double.valueOf(meta.value));
+                        break;
+                    case Int:
+                        notEqualsToTester.setIntValue(Long.valueOf(meta.value));
+                        break;
+                    case String:
+                        notEqualsToTester.setStringValue(meta.value);
+                        break;
+                }
+                return notEqualsToTester;
             case MinLength:
                 MinLengthTester minLengthTester = new MinLengthTester();
                 minLengthTester.setIntValue(Long.parseLong(meta.value));

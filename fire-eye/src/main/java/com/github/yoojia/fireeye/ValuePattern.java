@@ -18,7 +18,8 @@ public enum ValuePattern {
     MinValue("数值不能小于{0}"),
     RangeValue("数值必须在[{0},{1}]之间"),
 
-    EqualsTo("必须输入相同内容");
+    EqualsTo("必须输入相同内容"),
+    NotEqualsTo("必须输入不相同内容");
 
     private final String mDefMessage;
     private String mMessage;
