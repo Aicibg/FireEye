@@ -30,6 +30,7 @@ public class FireEye {
 
         @Override
         public void show(TextView input, String message) {
+            input.requestFocus();
             input.setError(message);
         }
 

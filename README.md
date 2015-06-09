@@ -16,7 +16,7 @@ FireEye 2.0 在 1.0 的基础上，全部重写了代码，并优化了架构，
 Add dependency
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:2.1@aar'
+        compile 'com.github.yoojia:fire-eye:2.2@aar'
     }
 
 Maven
@@ -24,7 +24,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>2.0</version>
+        <version>2.2</version>
         <type>aar</type>
     </dependency>
 
