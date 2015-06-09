@@ -16,7 +16,7 @@ FireEye 2.0 在 1.0 的基础上，全部重写了代码，并优化了架构，
 Add dependency
 
     dependencies {
-        compile 'com.github.yoojia:fire-eye:2.0@aar'
+        compile 'com.github.yoojia:fire-eye:2.2@aar'
     }
 
 Maven
@@ -24,7 +24,7 @@ Maven
     <dependency>
         <groupId>com.github.yoojia</groupId>
         <artifactId>fire-eye</artifactId>
-        <version>2.0</version>
+        <version>2.2</version>
         <type>aar</type>
     </dependency>
 
@@ -51,7 +51,8 @@ Maven
 
 数值模式是指需要额外参数来完成对输入内容的校验过程的模式。如判断内容是否与另一个相同等。
 
-* **EqualTo** 与指定值相同
+* **EqualsTo** 与指定值相同
+* **NotEqualsTo** 与指定值不相同
 * **RangeLength** 指定长度范围
 * **MinLength** 最小长度
 * **MaxLength** 最大长度
@@ -61,7 +62,7 @@ Maven
 
 
 
-## How to use - 如何使用
+## Usage - 如何使用
 
 #### 对表单内各个EditText绑定其校验配置
 
