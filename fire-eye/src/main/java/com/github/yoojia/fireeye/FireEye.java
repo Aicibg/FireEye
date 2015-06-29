@@ -20,26 +20,27 @@ public class FireEye {
     private final Context mContext;
     private final List<TypeWrapper> mOrderedFields = new ArrayList<>();
     private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<StaticPatternInvoker>();
-    private final SparseArray<ValuePatternInvoker> mValuePatterns = new SparseArray<ValuePatternInvoker>();
-    private final MessageDisplay mDefaultMessageDisplay = new MessageDisplay() {
+    private final SparseArray<ValuePatternInvoker> mValuePatterns = new SparseArray<>();
 
-        @Override
-        public void dismiss(TextView input) {
-            input.setError(null);
-        }
+    private MessageDisplay mMessageDisplay;
 
-        @Override
-        public void show(TextView input, String message) {
-            input.requestFocus();
-            input.setError(message);
-        }
-
-    };
-
-    private MessageDisplay mMessageDisplay = mDefaultMessageDisplay;
+    public FireEye(Context context, MessageDisplay display){
+        mContext = context;
+        mMessageDisplay = display;
+    }
 
     public FireEye(Context context) {
-        mContext = context;
+        this(context, new MessageDisplay() {
+            @Override
+            public void dismiss(TextView input) {
+                input.setError(null);
+            }
+
+            @Override
+            public void show(TextView input, String message) {
+                input.setError(message);
+            }
+        });
     }
 
     /**
@@ -99,7 +100,17 @@ public class FireEye {
      * @return 校验结果
      */
     public Result test(){
+        return test(false);
+    }
+
+    /**
+     * 校验输入，当检测到校验失败时中断校验。
+     * @return 校验结果
+     */
+    public Result test(boolean testAll){
         // 校验时，按保存的的输入框顺序来校验
+        boolean testPassed = true;
+        Result lastFail = null;
         for (TypeWrapper typeWrapper : mOrderedFields){
             final PatternInvoker invoker;
             if (typeWrapper.isStaticPattern){
@@ -107,10 +118,20 @@ public class FireEye {
             }else{
                 invoker = mValuePatterns.get(typeWrapper.viewKey);
             }
-            final Result result = testPattern(invoker);
-            if (result != null) return result;
+            final Result ret = testPattern(invoker);
+            if(ret != null){
+                lastFail = ret;
+                testPassed = false;
+            }
+            if (!testPassed && !testAll){
+                return ret;
+            }
         }
-        return Result.passed(null);
+        if (testPassed){
+            return Result.passed(null);
+        }else{
+            return Result.reject(lastFail.message, lastFail.value);
+        }
     }
 
     public final void dump(){
@@ -123,33 +144,6 @@ public class FireEye {
             }
             Log.d("FireEye", invoker.dump());
         }
-    }
-
-    /**
-     * 获取输入框的字符串内容
-     * @param input 输入框
-     * @return 字符串内容
-     */
-    public static String getStringValue(TextView input){
-        return String.valueOf(input.getText());
-    }
-
-    /**
-     * 获取输入框的整型值内容
-     * @param input 输入框
-     * @return 整型值
-     */
-    public static long getIntValue(TextView input){
-        return Long.valueOf(getStringValue(input));
-    }
-
-    /**
-     * 获取输入框的浮点值内容
-     * @param input 输入框
-     * @return 浮点值
-     */
-    public static double getFloatValue(TextView input){
-        return Double.valueOf(getStringValue(input));
     }
 
     /**
@@ -189,4 +183,50 @@ public class FireEye {
         }
 
     }
+
+    /**
+     * 获取输入框的字符串内容
+     * @param input 输入框
+     * @return 字符串内容
+     */
+    public static String getStringValue(TextView input){
+        return String.valueOf(input.getText());
+    }
+
+    /**
+     * 获取输入框的整型值内容
+     * @param input 输入框
+     * @return 整型值
+     */
+    public static long getLongValue(TextView input){
+        return Long.valueOf(getStringValue(input));
+    }
+
+    /**
+     * 获取输入框的整型值内容
+     * @param input 输入框
+     * @return 整型值
+     */
+    public static long getIntValue(TextView input){
+        return Integer.valueOf(getStringValue(input));
+    }
+
+    /**
+     * 获取输入框的浮点值内容
+     * @param input 输入框
+     * @return 浮点值
+     */
+    public static double getDoubleValue(TextView input){
+        return Double.valueOf(getStringValue(input));
+    }
+
+    /**
+     * 获取输入框的浮点值内容
+     * @param input 输入框
+     * @return 浮点值
+     */
+    public static float getFloatValue(TextView input){
+        return Float.valueOf(getStringValue(input));
+    }
+
 }

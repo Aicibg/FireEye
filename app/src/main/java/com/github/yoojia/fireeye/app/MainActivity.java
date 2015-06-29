@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 fireEye.dump();
-                int color = fireEye.test().passed ?
+                int color = fireEye.test(true).passed ?
                         android.R.color.holo_green_dark : android.R.color.holo_red_dark;
                 formCommit.setTextColor(getResources().getColor(color));
                 formCommit.setTag(color);
