@@ -144,7 +144,7 @@ public class FireEye {
             }else{
                 invoker = mValuePatterns.get(wrapper.viewKey);
             }
-            FireEyeEnv.log(TAG, invoker.dump());
+            Log.e(TAG, "[D] " + invoker.dump());
         }
     }
 
@@ -154,10 +154,8 @@ public class FireEye {
     private Result testPattern(PatternInvoker invoker){
         mMessageDisplay.dismiss(invoker.input);
         final Result result = invoker.performTest();
-        if (FireEyeEnv.isVerbose) {
-            FireEyeEnv.log(TAG, "> Testing.item: " + invoker.dump());
-            FireEyeEnv.log(TAG, "> Testing.result: " + result.toString());
-        }
+        FireEyeEnv.verbose(TAG, "[v] Testing.item: " + invoker.dump());
+        FireEyeEnv.verbose(TAG, "[v] Testing.result: " + result.toString());
         if (!result.passed){
             mMessageDisplay.show(invoker.input, result.message);
         }

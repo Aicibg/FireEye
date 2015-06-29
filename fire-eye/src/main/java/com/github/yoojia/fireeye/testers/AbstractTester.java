@@ -29,7 +29,6 @@ public abstract class AbstractTester {
      * @return 如果校验通过返回True，否则返回False。
      */
     public final boolean performTest(String content){
-        FireEyeEnv.log(TAG, "Performing tester: " + this);
         try{
             mExceptionMessage = null;
             return test(content);

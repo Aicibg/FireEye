@@ -45,16 +45,18 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
             final AbstractValuesTester tester = findTester(meta);
             final boolean passed = tester.performTest(value);
             if (!passed){
-                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: NO, value: " + value + ", message: " + meta.getMessage());
+                FireEyeEnv.verbose(TAG,
+                        "[v] Performing: passed: NO, " + inputKey + "value: " + value + ", message: " + meta.message + ", tester: " + tester.getName());
                 // 如果校验器发生异常，取异常消息返回
                 String message = tester.getExceptionMessage();
                 if (message == null) message = meta.getMessage();
                 return Result.reject(message, value);
-            }else{
-                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: YES, value: " + value);
+            } else{
+                FireEyeEnv.verbose(TAG,
+                        "[v] Performing: passed: YES, " + inputKey + "value: " + value + ", message: " + meta.message + ", tester: " + tester.getName());
             }
         }
-        FireEyeEnv.log(TAG, inputKey + " -> passed: YES, value: " + value);
+        FireEyeEnv.log(TAG, "[D] " + inputKey + " -> passed: YES, value: " + value);
         return Result.passed(value);
     }
 
@@ -72,7 +74,7 @@ final class ValuePatternInvoker extends PatternInvoker<ValuePatternMeta, ValuePa
     protected ValuePatternMeta convert(ValuePattern item) {
         final ValuePatternMeta meta = ValuePatternMeta.parse(item);
         meta.convertMessage(context);
-        FireEyeEnv.log(TAG, "Value pattern meta -> " + meta.toString());
+        FireEyeEnv.log(TAG, "[D] Value pattern meta -> " + meta.toString());
         return meta;
     }
 
