@@ -44,7 +44,9 @@ public class MainActivity extends ActionBarActivity {
         fireEye.add(form.byId(R.id.form_field_13), ValuePattern.MaxValue.setValue(100));
         fireEye.add(form.byId(R.id.form_field_14), ValuePattern.MinValue.setValue(20));
         fireEye.add(form.byId(R.id.form_field_15), ValuePattern.RangeValue.setFirstValue(18L).setSecondValue(30L));
-        FireEyeEnv.isDebug = true;
+
+        FireEyeEnv.setDebug(true);
+        FireEyeEnv.setVerbose(true);
 
         final Button formCommit = (Button) findViewById(R.id.form_commit);
         formCommit.setOnClickListener(new View.OnClickListener() {
