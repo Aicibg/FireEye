@@ -20,7 +20,8 @@ public enum StaticPattern {
     BankCard("银行卡/信用卡号码错误"),
     IDCard("身份证号错误"),
     Mobile("手机号错误"),
-    VehicleNumber("车牌号错误");
+    VehicleNumber("车牌号错误"),
+    VIN("车架号错误");
 
     private final String mDefMessage;
 

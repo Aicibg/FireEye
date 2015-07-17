@@ -16,6 +16,7 @@ import com.github.yoojia.fireeye.testers.NotBlankTester;
 import com.github.yoojia.fireeye.testers.NumericTester;
 import com.github.yoojia.fireeye.testers.RequiredTester;
 import com.github.yoojia.fireeye.testers.URLTester;
+import com.github.yoojia.fireeye.testers.VINTester;
 import com.github.yoojia.fireeye.testers.VehicleNumberTester;
 
 /**
@@ -87,6 +88,7 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
             case Required: return new RequiredTester();
             case URL: return new URLTester();
             case VehicleNumber: return new VehicleNumberTester();
+            case VIN: return new VINTester();
             default: return new AbstractTester() {
                 @Override
                 public boolean test(String content) {
