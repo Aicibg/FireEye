@@ -46,6 +46,7 @@ Maven
 * **Mobile** 中国的手机号码
 * **VehicleNumber** 中国的民用车辆号牌
 * **IDCard** 中国的身份证号（15位和18位）
+* **VIN** 车架号校验（17位）
 
 ### 数值模式 - ValuePattern
 

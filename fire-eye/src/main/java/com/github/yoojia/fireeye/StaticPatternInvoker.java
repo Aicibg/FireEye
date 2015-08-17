@@ -16,6 +16,7 @@ import com.github.yoojia.fireeye.testers.NotBlankTester;
 import com.github.yoojia.fireeye.testers.NumericTester;
 import com.github.yoojia.fireeye.testers.RequiredTester;
 import com.github.yoojia.fireeye.testers.URLTester;
+import com.github.yoojia.fireeye.testers.VINTester;
 import com.github.yoojia.fireeye.testers.VehicleNumberTester;
 
 /**
@@ -45,15 +46,13 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
         final String inputKey = input.getClass().getSimpleName() + "@{" + input.getHint() + "}";
         for (StaticPatternMeta meta : patterns){
             final AbstractTester tester = findTester(meta);
+            FireEyeEnv.verbose(TAG, "[v] Testing.meta: " + inputKey + "value: " + value + ", tester: " + tester.getName());
             final boolean passed = tester.performTest(value);
             if (!passed){
-                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: NO, value: " + value + ", message: " + meta.message);
                 return Result.reject(meta.message, value);
-            }else{
-                FireEyeEnv.log(TAG, tester.getName() + " :: " + inputKey + " -> passed: YES, value: " + value);
             }
         }
-        FireEyeEnv.log(TAG, inputKey + " -> passed: YES, value: " + value);
+        FireEyeEnv.log(TAG, "[D] " + inputKey + " -> passed: YES, value: " + value);
         return Result.passed(value);
     }
 
@@ -71,7 +70,7 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
     protected StaticPatternMeta convert(StaticPattern item) {
         final StaticPatternMeta meta = StaticPatternMeta.parse(item);
         meta.convertMessage(context);
-        FireEyeEnv.log(TAG, "Static pattern meta -> " + meta.toString());
+        FireEyeEnv.verbose(TAG, "[v] Static pattern meta -> " + meta.toString());
         return meta;
     }
 
@@ -89,6 +88,7 @@ final class StaticPatternInvoker extends PatternInvoker<StaticPatternMeta, Stati
             case Required: return new RequiredTester();
             case URL: return new URLTester();
             case VehicleNumber: return new VehicleNumberTester();
+            case VIN: return new VINTester();
             default: return new AbstractTester() {
                 @Override
                 public boolean test(String content) {

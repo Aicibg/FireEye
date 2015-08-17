@@ -116,6 +116,13 @@
             android:layout_height="wrap_content"
             android:hint="最值区间：[18,30]"
             />
+        <EditText
+            android:id="@+id/form_field_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textVisiblePassword"
+            android:hint="17位的车架号"
+            />
 
         <Button
             android:id="@+id/form_commit"

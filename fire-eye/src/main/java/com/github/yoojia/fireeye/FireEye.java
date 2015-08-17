@@ -17,9 +17,11 @@ import java.util.List;
  */
 public class FireEye {
 
+    private static final String TAG = FireEye.class.getSimpleName();
+
     private final Context mContext;
     private final List<TypeWrapper> mOrderedFields = new ArrayList<>();
-    private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<StaticPatternInvoker>();
+    private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<>();
     private final SparseArray<ValuePatternInvoker> mValuePatterns = new SparseArray<>();
 
     private MessageDisplay mMessageDisplay;
@@ -142,7 +144,7 @@ public class FireEye {
             }else{
                 invoker = mValuePatterns.get(wrapper.viewKey);
             }
-            Log.d("FireEye", invoker.dump());
+            Log.e(TAG, "[D] " + invoker.dump());
         }
     }
 
@@ -152,6 +154,8 @@ public class FireEye {
     private Result testPattern(PatternInvoker invoker){
         mMessageDisplay.dismiss(invoker.input);
         final Result result = invoker.performTest();
+        FireEyeEnv.verbose(TAG, "[v] Testing.item: " + invoker.dump());
+        FireEyeEnv.verbose(TAG, "[v] Testing.result: " + result.toString());
         if (!result.passed){
             mMessageDisplay.show(invoker.input, result.message);
         }

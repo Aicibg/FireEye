@@ -14,9 +14,9 @@ import java.util.List;
  * @version version 2015-05-21
  * @since   2.3
  */
-abstract class PatternInvoker<P, E> {
+abstract class PatternInvoker<Patt, Meta> {
 
-    protected final List<P> patterns = new ArrayList<>();
+    protected final List<Patt> patterns = new ArrayList<>();
     protected final Context context;
 
     public final TextView input;
@@ -32,9 +32,9 @@ abstract class PatternInvoker<P, E> {
      * 添加匹配模式列表
      * @param patterns 匹配模式列表
      */
-    public final void addPatterns(E[] patterns){
-        for (E item : Arrays.asList(patterns)){
-            final P pattern = convert(item);
+    public final void addPatterns(Meta[] patterns){
+        for (Meta item : Arrays.asList(patterns)){
+            final Patt pattern = convert(item);
             if (!onFilter(pattern, item)){
                 this.patterns.add(pattern);
             }
@@ -43,10 +43,9 @@ abstract class PatternInvoker<P, E> {
 
     public final String dump(){
         StringBuilder buf = new StringBuilder(input.toString());
-        buf.append('@').append(input.getHint())
-                .append(':').append(input.getText());
+        buf.append('@').append(input.getHint()).append(':').append(input.getText());
         buf.append("\n -> patterns:\n");
-        for (P pattern : patterns){
+        for (Patt pattern : patterns){
             buf.append("\t").append(pattern.toString()).append(" ,\n");
         }
         return buf.toString();
@@ -64,12 +63,10 @@ abstract class PatternInvoker<P, E> {
      * @param item 配置项目
      * @return 如果配置项手动排序，则返回True。否则返回False。
      */
-    protected abstract boolean onFilter(P pattern, E item);
+    protected abstract boolean onFilter(Patt pattern, Meta item);
 
     /**
-     * 将配置项 E 转换成储存项 P
-     * @param item 配置项 E
-     * @return 储存项 P
+     * 将配置项 Meta 转换成储存项 P
      */
-    protected abstract P convert(E item);
+    protected abstract Patt convert(Meta item);
 }
