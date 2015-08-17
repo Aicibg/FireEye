@@ -21,7 +21,7 @@ public class FireEye {
 
     private final Context mContext;
     private final List<TypeWrapper> mOrderedFields = new ArrayList<>();
-    private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<StaticPatternInvoker>();
+    private final SparseArray<StaticPatternInvoker> mStaticPatterns = new SparseArray<>();
     private final SparseArray<ValuePatternInvoker> mValuePatterns = new SparseArray<>();
 
     private MessageDisplay mMessageDisplay;

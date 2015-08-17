@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.github.yoojia.fireeye.FireEye;
 import com.github.yoojia.fireeye.FireEyeEnv;
